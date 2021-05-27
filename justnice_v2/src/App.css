@@ -1,0 +1,65 @@
+.row-header{
+  margin:0px auto;
+  padding:0px auto;
+}
+
+.row-content {
+  margin:0px auto;
+  padding: 50px 0px 50px 0px;
+  border-bottom: 1px ridge;
+  min-height:400px;
+}
+
+.footer{
+  background-color: #D1C4E9;
+  margin:0px auto;
+  padding: 20px 0px 20px 0px;
+}
+
+.jumbotron {
+  padding:70px 30px 70px 30px;
+  margin:0px auto;
+  background: #9575CD ;
+  color:floralwhite;
+}
+
+.address{
+  font-size:80%;
+  margin:0px;
+  color:#0f0f0f;
+}
+
+.navbar-dark {
+  background-color: #ff6b6b;
+}
+
+.btn-circle {
+  /* width: 30px;
+  height: 30px;
+  padding: 6px 0px; */
+  /* border-radius: 50%;
+  text-align: center; */
+  /* font-size: 12px; */
+  /* line-height: 1.42857; */
+}
+
+/* .active {
+  background-color: #1a535c;
+} */
+
+@media (max-width: 767px) {
+  .navbar-brand-mobile {
+    position: absolute;
+    left: 50%;
+    top: 10px;
+    transform: translateX(-50%);
+  }
+}
+
+.profile-icon {
+  position: absolute;
+  right: 2%;
+  top: 10px;
+  /* transform: translateX(-50%); */
+}
+
