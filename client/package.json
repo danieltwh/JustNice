@@ -1,5 +1,5 @@
 {
-  "name": "justnice_v1",
+  "name": "justnice",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -27,8 +27,7 @@
 
   "proxy" : "http://localhost:5000",
   "scripts": {
-    "start": "node index.js",
-    "heroku-postbuild": "cd justnice_v2 && yarn && yarn run build",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

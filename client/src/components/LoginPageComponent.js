@@ -25,8 +25,8 @@ class LoginPage extends Component {
     handleLogin(event) {
         event.preventDefault();
 
-        console.log("Username: " + this.state.username + " Password: " + this.state.password);
-        alert("Username: " + this.state.username + " Password: " + this.state.password);
+        // console.log("Username: " + this.state.username + " Password: " + this.state.password);
+        // alert("Username: " + this.state.username + " Password: " + this.state.password);
         this.props.login_attempt(this.state.username, this.state.password);
         
     }
