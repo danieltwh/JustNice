@@ -52,7 +52,7 @@ app.post("/users", function(req, res) {
     fs.writeFile("./database/users.json", JSON.stringify(users), "utf8", callback);
 
     // Return the new user
-    res.send(user);
+    res.json(user);
 })
 
 app.put("/users/:id", function(req, res) {
@@ -76,13 +76,13 @@ app.put("/users/:id", function(req, res) {
         user = newUser;
 
         //return the updated user
-        res.send(user)
+        res.json(user)
     }
 }) 
 
 
 
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
     console.log(`Listening at http://localhost:${port}`)

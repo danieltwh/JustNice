@@ -22,7 +22,7 @@ export const login_attempt = (username, password) => (dispatch) =>  {
     //     return login_failed();
     // }
 
-    return fetch(baseUrl + "users")
+    return fetch("users/")
         .then(response => response.json())
         // .then(users => console.log(JSON.stringify(users)))
         .then(users => users.filter((user) => (user.username===username && user.password===password)))
@@ -34,7 +34,7 @@ export const login_attempt = (username, password) => (dispatch) =>  {
                 dispatch(login_failed());
             }
         })
-        .catch(error => console.log(error));
+        .catch(error => console.log(error.message));
 
 
     // console.log(JSON.stringify(users_data))
