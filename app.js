@@ -1,5 +1,6 @@
 // import {USERS} from users.js;
 const fs = require("fs");
+const path = require('path');
 
 const callback = function(err) {
     if (err) throw err;
@@ -15,15 +16,15 @@ app.use(express.json());
 
 const users = require("./database/users.json");
 
-app.get('/', function(req, res) {
-    res.send("Hello World");
-})
+// app.get('/', function(req, res) {
+//     res.send("Hello World");
+// })
 
-app.get('/users', function(req, res) {
+app.get('/api/users', function(req, res) {
     res.send(users);
 })
 
-app.get('/users/:id', function(req, res) {
+app.get('/api/users/:id', function(req, res) {
     const user = users.find(user => user.id === parseInt(req.params.id))
 
     if (!user) {
@@ -33,7 +34,7 @@ app.get('/users/:id', function(req, res) {
     }
 })
 
-app.post("/users", function(req, res) {
+app.post("/api/users", function(req, res) {
     const user = {
         id: users.length + 1,
         name: req.body.name,
@@ -55,7 +56,7 @@ app.post("/users", function(req, res) {
     res.json(user);
 })
 
-app.put("/users/:id", function(req, res) {
+app.put("/api/users/:id", function(req, res) {
     var user = users.find(user => user.id === parseInt(req.params.id));
 
     if (!user) {
@@ -80,6 +81,22 @@ app.put("/users/:id", function(req, res) {
     }
 }) 
 
+if (process.env.NODE_ENV === "production") {
+    // Serve any static files
+    app.use(express.static(path.join(__dirname, "client/build")));
+
+    // Handle React routing, return all requests to React app
+    app.get("*", function(req, res) {
+        res.sendFile(path.join(__dirname, "client/build", "index.html"));
+    });
+}
+
+app.use(express.static(path.join(__dirname, "client/build")));
+
+// Handle React routing, return all requests to React app
+app.get("*", function(req, res) {
+    res.sendFile(path.join(__dirname, "client/build", "index.html"));
+});
 
 
 const port = process.env.PORT || 5000;

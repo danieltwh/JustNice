@@ -22,7 +22,7 @@ export const login_attempt = (username, password) => (dispatch) =>  {
     //     return login_failed();
     // }
 
-    return fetch("users/")
+    return fetch("api/users/")
         .then(response => response.json())
         // .then(users => console.log(JSON.stringify(users)))
         .then(users => users.filter((user) => (user.username===username && user.password===password)))
