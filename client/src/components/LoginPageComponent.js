@@ -33,7 +33,7 @@ class LoginPage extends Component {
 
     renderLoginForm() {
         return (
-            <div className="container">
+            <div className="container login-form">
                 <div className="row">
                     <Form className="col-6 offset-3" onSubmit={(event) => this.handleLogin(event)}>
                         <FormGroup>

@@ -36,7 +36,7 @@ class Header extends Component {
         return (
             <div>
               <Navbar dark expand="md">
-                <NavbarToggler onClick={this.toggleNav} />
+                <NavbarToggler onClick={this.toggleNav} onBlur={this.toggleNav}/>
                 
                 <NavLink to="/explore">
                   <NavbarBrand className="navbar-brand-mobile">JustNice</NavbarBrand>
@@ -51,7 +51,7 @@ class Header extends Component {
                             {/* <DropdownItem header>Profile</DropdownItem> */}
                             {/* <DropdownItem disabled>Action</DropdownItem> */}
                             <DropdownItem>Account</DropdownItem>
-                            <DropdownItem>Account</DropdownItem>
+                            <DropdownItem>Settings</DropdownItem>
                             <DropdownItem divider />
                             <DropdownItem onClick={this.props.signout}>Sign Out</DropdownItem>
                         </DropdownMenu>

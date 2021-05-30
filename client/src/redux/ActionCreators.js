@@ -22,7 +22,14 @@ export const login_attempt = (username, password) => (dispatch) =>  {
     //     return login_failed();
     // }
 
-    return fetch(baseUrl + "leads/api/user/", {
+    return fetch(baseUrl + "api/users/"
+        // , {
+        //     method: "POST",
+        //     body: JSON.stringify({
+        //         "username": username,
+        //         "password": password
+        //     })
+        // }
         // mode: "no-cors",
         // credentials: "include",
         // header: {
@@ -35,13 +42,13 @@ export const login_attempt = (username, password) => (dispatch) =>  {
         //     "Accept": "application/json",
         //     "Content-Type": "application/json"
         // }
-    })
+        )
         .then(response => {
-            console.log(JSON.stringify(response.json));
+            // console.log(response);
+            // console.log(JSON.stringify(response.json()));
             return response.json()
         })
-        // .then(users => console.log(JSON.stringify(users)))
-        .then(users => users.filter((user) => (user.username===username && user.password===password)))
+        .then(users => users.filter((user) => (user.username===username && user.password === password)))
         .then(users => {
             if (users.length > 0) {
                 // return add_users(users);
@@ -51,15 +58,6 @@ export const login_attempt = (username, password) => (dispatch) =>  {
             }
         })
         .catch(error => console.log(error.message));
-
-
-    // console.log(JSON.stringify(users_data))
-    // const profile = users_data.filter((user) => (user.username===username && user.password===password));
-    // if (profile.length > 0) {
-    //     return login_success();
-    // } else {
-    //     return login_failed();
-    // }
 };
 
 export const login_inProgress = () => ({

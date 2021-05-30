@@ -36,14 +36,14 @@ class PublicHeader extends Component {
         return (
             <div>
               <Navbar dark expand="md">
-                <NavbarToggler onClick={this.toggleNav} />
+                <NavbarToggler onClick={this.toggleNav} onBlur={this.toggleNav}/>
                 
                 <NavLink to="/explore">
                   <NavbarBrand className="navbar-brand-mobile">JustNice</NavbarBrand>
                 </NavLink>
                 <div className="public-signup-login">
-                  <div className="public-signup"><NavLink to="/signup"><Button color="info">Sign Up</Button></NavLink></div>
-                  <div className="public-login ml-2"><NavLink to="/login"><Button color="success">Login</Button></NavLink></div>
+                  <div className="public-signup"><NavLink to="/signup"><Button className="border-light" color="info" >Sign Up</Button></NavLink></div>
+                  <div className="public-login ml-2"><NavLink to="/login"><Button className="border-light" color="success">Login</Button></NavLink></div>
                 </div>
                 
                 {/* <div className="public-signup-login">
@@ -58,6 +58,10 @@ class PublicHeader extends Component {
                 </div> */}
                 <Collapse isOpen={this.state.isNavOpen} navbar>
                   <Nav className="mr-auto" navbar>
+                    <NavItem>
+                      <NavLink className="nav-link" to="/home">Home</NavLink>
+                    </NavItem>
+
                     <NavItem>
                       <NavLink className="nav-link" to="/aboutus">About Us</NavLink>
                     </NavItem>

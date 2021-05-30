@@ -10,14 +10,18 @@ import LoginPage from "./LoginPageComponent";
 import Header from "./HeaderComponent";
 import ExplorePage from "./ExploreComponent";
 import MyRecipePage from './MyRecipeComponent';
+import GroceryListPage from './GroceryListComponent';
 import {PrivateRoute} from "./PrivateRoute";
 
 // Public Pages
 import PublicHeader from "./PublicHeaderComponent";
+import PublicHomePage from './PublicHomePageComponent';
 import PublicAboutUsPage from "./PublicAboutUsComponent";
 import SignupPage from "./SignupPageComponent";
 
 import {login_attempt, signout} from "../redux/ActionCreators";
+
+
 
 
 const mapStateToProps = state => {
@@ -58,21 +62,9 @@ class Main extends Component {
             
               <Route path="/explore" component={() => <ExplorePage recipes={this.props.recipes.recipes} />} />
               <Route path="/myrecipes" component={() => <MyRecipePage recipes={this.props.my_recipes.my_recipes} />} />
-              <Route path="/grocerylist" component={() => <MyRecipePage recipes={this.props.my_recipes.my_recipes}/> } />
+              <Route path="/grocerylist" component={() => <GroceryListPage recipes={this.props.my_recipes.my_recipes}/> } />
               <Redirect to="/explore" />
             </Switch>
-      
-              <p>
-                Edit <code>src/App.js</code> and save to reload.
-              </p>
-              <a
-                className="App-link"
-                href="https://reactjs.org"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn React
-              </a>
           </div>
         );
       } else {
@@ -82,9 +74,10 @@ class Main extends Component {
             <PublicHeader/>
             <Switch>
               <Route path="/login" component={() => <LoginPage login_attempt={this.props.login_attempt} />} />
+              <Route path="/home" component={() => <PublicHomePage />} />
               <Route path="/aboutus" component={() => <PublicAboutUsPage />} />
               <Route path="/signup" component={() => <SignupPage />} />
-              <Redirect to="/login" />
+              <Redirect to="/home" />
             </Switch>
           </div>
         )

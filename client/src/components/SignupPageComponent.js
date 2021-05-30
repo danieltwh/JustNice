@@ -19,15 +19,17 @@ class SignupPage extends Component {
 
         // console.log("Username: " + this.state.username + " Password: " + this.state.password);
         // alert("Username: " + this.state.username + " Password: " + this.state.password);
-        this.props.login_attempt(this.state.username, this.state.password);
+        this.props.signup_attempt(
+            this.state.firstname, this.state.lastname, this.state.email,
+            this.state.username, this.state.password);
         
     }
 
     renderSignupForm() {
         return (
-            <div className="container">
+            <div className="container signup-form">
                 <div className="row">
-                    <Form className="container col-10 col-md-6 offset-md-3" onSubmit={(event) => this.handleLogin(event)}>
+                    <Form className="container-fluid col-10 col-lg-6 offset-lg-3" onSubmit={(event) => this.handleLogin(event)}>
                         <FormGroup className="row">
                             <Label className="col-2" htmlFor="firstname">Firstname</Label>
                             <Input className="col-9 offset-1" type='text' id='firstname' name='firstname'
@@ -62,7 +64,12 @@ class SignupPage extends Component {
                                 onChange={(event) => this.setState({password: event.target.value})}
                             />
                         </FormGroup>
-                        <Button type="Submit" value="submit" className="bg-primary">Submit</Button>
+                        <FormGroup className="row">
+                            <div className="col-3 offset-9">
+                                <Button  type="Submit" value="submit" className="bg-primary">Submit</Button>
+                            </div>
+                        </FormGroup>
+                        
                     </Form>
                 </div>
             </div>
