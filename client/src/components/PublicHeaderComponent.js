@@ -41,10 +41,7 @@ class PublicHeader extends Component {
                 <NavLink to="/explore">
                   <NavbarBrand className="navbar-brand-mobile">JustNice</NavbarBrand>
                 </NavLink>
-                <div className="public-signup-login">
-                  <div className="public-signup"><NavLink to="/signup"><Button className="border-light" color="info" >Sign Up</Button></NavLink></div>
-                  <div className="public-login ml-2"><NavLink to="/login"><Button className="border-light" color="success">Login</Button></NavLink></div>
-                </div>
+                
                 
                 {/* <div className="public-signup-login">
                   <div className="container-fluid">
@@ -73,7 +70,12 @@ class PublicHeader extends Component {
                     <NavItem>
                       <NavLink className="nav-link" to="/grocerylist" >Grocery List</NavLink>
                     </NavItem> */}
+                    
                   </Nav>
+                  <div className="public-signup-login">
+                      <div className="public-signup"><NavLink to="/signup"><Button className="border-light" color="info" >Sign Up</Button></NavLink></div>
+                      <div className="public-login ml-2"><NavLink to="/login"><Button className="border-light" color="success">Login</Button></NavLink></div>
+                  </div>
                   
                 </Collapse>
                 

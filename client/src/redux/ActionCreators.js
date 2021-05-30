@@ -22,7 +22,7 @@ export const login_attempt = (username, password) => (dispatch) =>  {
     //     return login_failed();
     // }
 
-    return fetch("api/users/"
+    return fetch(baseUrl + "api/users/"
         // , {
         //     method: "POST",
         //     body: JSON.stringify({
