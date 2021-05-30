@@ -1,6 +1,7 @@
 // import {USERS} from users.js;
 const fs = require("fs");
 const path = require('path');
+const cors = require("cors");
 
 const callback = function(err) {
     if (err) throw err;
@@ -10,6 +11,7 @@ const callback = function(err) {
 const express = require('express'); // Returns an object of type express
 
 const app = express();
+app.use(cors())
 
 // Adding a piece of middleware to allow us to parse json object
 app.use(express.json());

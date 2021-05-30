@@ -22,8 +22,24 @@ export const login_attempt = (username, password) => (dispatch) =>  {
     //     return login_failed();
     // }
 
-    return fetch("api/users/")
-        .then(response => response.json())
+    return fetch(baseUrl + "api/users/", {
+        // mode: "no-cors",
+        // credentials: "include",
+        // header: {
+        //     origin: "http://hiredone.pythonanywhere.com/"
+        // }
+        // method: "get",
+        // credentials: "same-origin",
+        // headers: {
+        //     "X-CSRFToken": getCookie("csrftoken"),
+        //     "Accept": "application/json",
+        //     "Content-Type": "application/json"
+        // }
+    })
+        .then(response => {
+            console.log(JSON.stringify(response.json));
+            return response.json()
+        })
         // .then(users => console.log(JSON.stringify(users)))
         .then(users => users.filter((user) => (user.username===username && user.password===password)))
         .then(users => {
