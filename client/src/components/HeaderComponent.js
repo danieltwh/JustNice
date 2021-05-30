@@ -21,19 +21,27 @@ function DropDownMenu(props) {
       <div className="profile-tab">
         
         <a className="profile-item">
-          <span className="icon-button"><i class="fa fa-user-circle fa-lg" /></span>
-          <span className="icon-right">Account</span>
+          <button type="button" className="profile-button">
+            <span className="icon-button"><i className="fa fa-user-circle fa-lg" /></span>
+            <span className="icon-right">Account</span>
+          </button>
         </a>
 
         <a className="profile-item">
-          <span className="icon-button"><i className="fa fa-cog fa-lg" /></span>
-          <span className="icon-right">Settings</span>
+          <button type="button" className="profile-button"> 
+            <span className="icon-button"><i className="fa fa-cog fa-lg" /></span>
+            <span className="icon-right">Settings</span>
+          </button>
         </a>
 
         <hr className="profile-line"/>
-        <a className="profile-item">
-          <span className="icon-button"><i class="fa fa-sign-out" /></span>
-          <span className="icon-right">Sign Out</span>
+        
+        <a className="profile-item" >
+          <button type="button" className="profile-button" onClick={props.signout}> 
+            <span className="icon-button"><i className="fa fa-sign-out fa-lg" /></span>
+            <span className="icon-right">Sign Out</span>
+          </button>
+          
         </a>
 
         
@@ -70,6 +78,8 @@ class Header extends Component {
     }
 
     blurToggleNav() {
+
+      console.log("triggered");
       if (this.state.isNavOpen) {
         this.setState({isNavOpen:!this.state.isNavOpen});
       }
@@ -129,7 +139,7 @@ class Header extends Component {
                 
                 
                 
-                <div className="profile-icon">
+                <div className="profile-icon" onClick={this.toggleProfile} onBlur={this.blurToggleProfile}>
                     {/* <ButtonDropdown className="" isOpen={this.state.isProfileOpen} toggle={this.toggleProfile}>
                         <DropdownToggle as={<button className="btn btn-primary btn-circle btn-md" onClick={this.toggleProfile}>Hello</button>}>
                         P</DropdownToggle>
@@ -143,8 +153,9 @@ class Header extends Component {
                             <DropdownItem onClick={this.props.signout}>Sign Out</DropdownItem>
                         </DropdownMenu>
                     </ButtonDropdown> */}
-                    <button className="btn btn-primary btn-circle btn-md" onClick={this.toggleProfile} onBlur={this.blurToggleProfile}>HZ</button>
-                    
+                    <button className="btn btn-primary btn-circle btn-md" >HZ</button>
+                    <DropDownMenu isProfileOpen={this.state.isProfileOpen} blurToggleProfile={this.state.blurToggleProfile}
+                    signout={this.props.signout}/>
                 </div>
 
                 
@@ -206,7 +217,7 @@ class Header extends Component {
                      
                 </Collapse>
 
-                <DropDownMenu isProfileOpen={this.state.isProfileOpen} />
+                
                 
 
 

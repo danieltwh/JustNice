@@ -104,7 +104,7 @@
 
 .profile-tab {
   position: absolute;
-  top:50px;
+  top:45px;
   right: 2%;
   /* display:inline-block; */
   
@@ -132,12 +132,14 @@
   background-clip: padding-box;
 }
 
+
+
 .profile-item {
   height: 43px;
   display: flex;
   align-items: center;
   color: black;
-  padding:0 0.5rem;
+  padding:0px 0px 0px 0.5em;
 
   font-weight: 400;
   color: #212529;
@@ -156,10 +158,32 @@
   border-color: rgba(0, 0, 0, 0.15);
 }
 
+
+
 .icon-right {
-  margin-left: auto;
-  width: 4em;
+  width: 10em;
+  text-align: center;
+  overflow: hidden;
 }
+
+.icon-button {
+  margin-right: 1em;
+  width: 2em;
+}
+
+.profile-button {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+	/* color: inherit;
+	border: none;
+
+	font: inherit; */
+	cursor: pointer;
+	outline: inherit;
+}
+
 
 .public-signup-login {
   /* position: absolute; */
