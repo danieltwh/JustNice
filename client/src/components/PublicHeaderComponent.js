@@ -38,8 +38,10 @@ class PublicHeader extends Component {
               <Navbar dark expand="md">
                 <NavbarToggler onClick={this.toggleNav} onBlur={this.toggleNav}/>
                 
-                <NavLink to="/explore">
-                  <NavbarBrand className="navbar-brand-mobile">JustNice</NavbarBrand>
+                <NavLink to="/home">
+                  <NavbarBrand className="navbar-brand-mobile">
+                    <img src="/JustNiceLogo-3.png" width="30px" height="30px" />JustNice
+                  </NavbarBrand>
                 </NavLink>
                 
                 

@@ -110,7 +110,9 @@ class Header extends Component {
                 <NavbarToggler onClick={this.toggleNav} onBlur={this.blurToggleNav}/>
                 
                 <NavLink to="/explore">
-                  <NavbarBrand className="navbar-brand-mobile">JustNice</NavbarBrand>
+                  <NavbarBrand className="navbar-brand-mobile">
+                    <img src="/JustNiceLogo-3.png" width="30px" height="30px" />JustNice
+                  </NavbarBrand>
                 </NavLink>
 
                 {/* <div className="btn-group">
