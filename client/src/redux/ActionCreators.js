@@ -22,7 +22,7 @@ export const login_attempt = (username, password) => (dispatch) =>  {
     //     return login_failed();
     // }
 
-    return fetch("api/users/"
+    return fetch(baseUrl+ "api/users/"
         // , {
         //     method: "POST",
         //     body: JSON.stringify({
@@ -81,6 +81,12 @@ export const add_users = (users) => ({
 
 
 
-export const signout = () => ({
+export const signout = () => {
+
+
+    console.log("signout triggered")
+    
+    return ({
     type: ActionTypes.SIGNOUT
-});
+    });
+}

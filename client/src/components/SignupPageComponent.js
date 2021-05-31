@@ -19,9 +19,15 @@ class SignupPage extends Component {
 
         // console.log("Username: " + this.state.username + " Password: " + this.state.password);
         // alert("Username: " + this.state.username + " Password: " + this.state.password);
-        this.props.signup_attempt(
-            this.state.firstname, this.state.lastname, this.state.email,
-            this.state.username, this.state.password);
+
+        console.log("Firstname: " + this.state.firstname + " Lastname: " + this.state.lastname + " Email: " + this.state.email +
+        " Username: " + this.state.username + " Password: " + this.state.password)
+
+        alert("Firstname: " + this.state.firstname + " Lastname: " + this.state.lastname + " Email: " + this.state.email +
+        " Username: " + this.state.username + " Password: " + this.state.password)
+        // this.props.signup_attempt(
+        //     this.state.firstname, this.state.lastname, this.state.email,
+        //     this.state.username, this.state.password);
         
     }
 
@@ -29,7 +35,7 @@ class SignupPage extends Component {
         return (
             <div className="container signup-form">
                 <div className="row">
-                    <Form className="container-fluid col-10 col-lg-6" onSubmit={(event) => this.handleLogin(event)}>
+                    <Form className="container-fluid col-10 col-lg-6" onSubmit={(event) => this.handleSignup(event)}>
                         <FormGroup className="row">
                             <Label className="col-3" htmlFor="firstname">Firstname</Label>
                             <Input className="col-7 offset-2" type='text' id='firstname' name='firstname'

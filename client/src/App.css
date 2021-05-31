@@ -17,7 +17,8 @@
 
 .recipe-tile-img {
   width: 100%;
-  height: 20vh;
+  /* height: 20vh; */
+  aspect-ratio: 1/1;
   object-fit: cover;
   }
 
@@ -94,12 +95,19 @@
   text-align: center;
 }
 
+.dropdown-toggle::after {
+  display: none;
+}
 
 .profile-icon {
   position: absolute;
   right: 2%;
   top: 5px;
   /* transform: translateX(-50%); */
+}
+
+.profile-pic {
+
 }
 
 .profile-tab {
@@ -167,8 +175,8 @@
 }
 
 .icon-button {
-  margin-right: 1em;
-  width: 2em;
+  margin-right: 0.75em;
+  width: 1em;
 }
 
 .profile-button {
