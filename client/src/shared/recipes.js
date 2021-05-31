@@ -52,6 +52,36 @@ export const RECIPES =
         author: "Tom",
         img: "/assets/recipe-1.jpeg",
         rating: 4
+    },
+
+    // Recipe 7
+    {
+        id: 7,
+        name: "Food",
+        author: "Tom",
+        img: "/assets/recipe-1.jpeg",
+        rating: 4
+    },
+    {
+        id: 8,
+        name: "Food",
+        author: "Tom",
+        img: "/assets/recipe-1.jpeg",
+        rating: 4
+    },
+    {
+        id: 9,
+        name: "Food",
+        author: "Tom",
+        img: "/assets/recipe-1.jpeg",
+        rating: 4
+    },
+    {
+        id: 10,
+        name: "Food",
+        author: "Tom",
+        img: "/assets/recipe-1.jpeg",
+        rating: 4
     }
     
 ]

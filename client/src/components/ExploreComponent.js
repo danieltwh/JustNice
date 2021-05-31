@@ -10,9 +10,9 @@ class ExplorePage extends Component {
     renderRecipes(recipes) {
         const recipesTiles = recipes.map(recipe => {
             return (
-                <div key={recipe.id} className="col-6 col-md-4 col-lg-3">
-                    <Card>
-                        <CardImg width="100%" src={recipe.img} alt={recipe.name} />
+                <div key={recipe.id} className="col-6 col-sm-4 col-lg-3 col-xl-2">
+                    <Card className="recipe-tile">
+                        <CardImg className="recipe-tile-img" src={recipe.img} alt={recipe.name} />
                         <CardTitle>{recipe.name}</CardTitle>
                     </Card>
                 </div>
@@ -24,7 +24,7 @@ class ExplorePage extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div className="container-fluid">
                 <div className="row">
                     {this.renderRecipes(this.props.recipes)}
                 </div>

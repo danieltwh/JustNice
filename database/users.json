@@ -6,7 +6,8 @@
         "firstname": "Tom",
         "lastname": "Lim",
         "email": "tomlim@gmail.com",
-        "token": "test123"
+        "token": "test123",
+        "img": "/assets/profilepic/profilepic-1.png"
     },
     {
         "id": 2,

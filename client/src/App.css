@@ -4,11 +4,28 @@
 }
 
 .row-content {
-  margin:0px auto;
+  margin: 0px auto;
+  margin-bottom: 20px;
   padding: 50px 0px 50px 0px;
   border-bottom: 1px ridge;
   min-height:400px;
 }
+
+.recipe-tile {
+  margin: 5% 0;
+}
+
+.recipe-tile-img {
+  width: 100%;
+  /* height: 20vh; */
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  }
+
+/* .recipe-tile-img {
+  width: 171px;
+  height: 171px
+} */
 
 .footer{
   background-color: #D1C4E9;
@@ -19,8 +36,9 @@
 .jumbotron {
   padding:70px 30px 70px 30px;
   margin:0px auto;
-  background: #9575CD ;
+  background: #1a535c ;
   color:floralwhite;
+  border-radius: 0px;
 }
 
 .address{
@@ -31,6 +49,24 @@
 
 .navbar-dark {
   background-color: #ff6b6b;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.navbar-brand > img {
+  margin-right: 0.3em;
+}
+
+.navbar > a {
+  text-decoration: none;
+}
+
+a.nav-link:hover {
+  text-decoration: underline;
 }
 
 .btn-circle {
@@ -47,6 +83,188 @@
   background-color: #1a535c;
 } */
 
+.btn-circle.btn-sm {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  font-size: 8px;
+  text-align: center;
+}
+
+.btn-circle.btn-md {
+  /* width: 50px;
+  height: 50px; */
+
+  min-width: 45px;
+  min-height: 45px;
+  /* padding: 7px 10px; */
+  border-radius: 25px;
+  font-size: 10px;
+  text-align: center;
+}
+
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  border-radius: 35px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.profile-icon {
+  position: absolute;
+  right: 2%;
+  top: 5px;
+  /* transform: translateX(-50%); */
+}
+
+.profile-pic {
+
+}
+
+.profile-tab {
+  position: absolute;
+  top:45px;
+  right: 2%;
+  /* display:inline-block; */
+  
+  visibility: visible;
+  width: 130px;
+  /* transform: translateX(100%); */
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+  /* border: var(--border);
+  border-radius: var(--border-radius); */
+  padding: 0.5rem;
+  overflow: hidden; 
+
+
+  /* z-index: 1000;
+  display: none;
+  min-width: 10rem;
+  padding: 0.5rem 0;
+  margin: 0; */
+
+  z-index: 1000;
+  font-size: 1rem;
+  color: #212529;
+  background-clip: padding-box;
+}
+
+
+
+.profile-item {
+  height: 43px;
+  display: flex;
+  align-items: center;
+  color: black;
+  padding:0px 0px 0px 0.5em;
+
+  font-weight: 400;
+  color: #212529;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
+
+.profile-item:hover {
+  background-color: #e9ecef;
+  text-decoration: none;
+}
+
+.profile-line {
+  margin: 0.5em 0px 0px 0px;
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+
+
+.icon-right {
+  width: 10em;
+  text-align: center;
+  overflow: hidden;
+}
+
+.icon-button {
+  margin-right: 0.75em;
+  width: 1em;
+}
+
+.profile-button {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+	/* color: inherit;
+	border: none;
+
+	font: inherit; */
+	cursor: pointer;
+	outline: inherit;
+}
+
+
+.public-signup-login {
+  /* position: absolute; */
+  float: right;
+  right: 2%;
+  /* top: 10px; */
+  width: auto;
+  
+}
+
+.public-signup {
+  float:left;
+  width:auto;
+  font-size: 20%;
+  color: #f7fff7;
+}
+
+.public-login {
+  float:right;
+  width:auto;
+  border-color: #f7fff7;
+}
+
+#publicpage-learnmore {
+  background-color: #4ecdc4;
+  border-color: #f7fff7;
+  color: #f7fff7
+}
+
+.signup-form {
+  margin-top: 30px;
+}
+
+.login-form {
+  margin-top: 30px
+}
+
+
+
+.search-bar-input {
+  /* width:280px; */
+  /* max-width:100px; */
+  /* display:inline-block */
+}
+
+.search-bar-btn {
+  /* margin-left:-8px;
+  margin-top:-2px;
+  min-height:36px; */
+  /* width:10px; */
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+
 @media (max-width: 767px) {
   .navbar-brand-mobile {
     position: absolute;
@@ -54,12 +272,12 @@
     top: 10px;
     transform: translateX(-50%);
   }
+
+
 }
 
-.profile-icon {
-  position: absolute;
-  right: 2%;
-  top: 10px;
-  /* transform: translateX(-50%); */
+@media (min-width: 768px) {
+  .search-bar {
+    margin-left: 15px;
+  }
 }
-

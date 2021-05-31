@@ -22,10 +22,33 @@ export const login_attempt = (username, password) => (dispatch) =>  {
     //     return login_failed();
     // }
 
-    return fetch("api/users/")
-        .then(response => response.json())
-        // .then(users => console.log(JSON.stringify(users)))
-        .then(users => users.filter((user) => (user.username===username && user.password===password)))
+    return fetch("api/users/"
+        // , {
+        //     method: "POST",
+        //     body: JSON.stringify({
+        //         "username": username,
+        //         "password": password
+        //     })
+        // }
+        // mode: "no-cors",
+        // credentials: "include",
+        // header: {
+        //     origin: "http://hiredone.pythonanywhere.com/"
+        // }
+        // method: "get",
+        // credentials: "same-origin",
+        // headers: {
+        //     "X-CSRFToken": getCookie("csrftoken"),
+        //     "Accept": "application/json",
+        //     "Content-Type": "application/json"
+        // }
+        )
+        .then(response => {
+            // console.log(response);
+            // console.log(JSON.stringify(response.json()));
+            return response.json()
+        })
+        .then(users => users.filter((user) => (user.username===username && user.password === password)))
         .then(users => {
             if (users.length > 0) {
                 // return add_users(users);
@@ -35,15 +58,6 @@ export const login_attempt = (username, password) => (dispatch) =>  {
             }
         })
         .catch(error => console.log(error.message));
-
-
-    // console.log(JSON.stringify(users_data))
-    // const profile = users_data.filter((user) => (user.username===username && user.password===password));
-    // if (profile.length > 0) {
-    //     return login_success();
-    // } else {
-    //     return login_failed();
-    // }
 };
 
 export const login_inProgress = () => ({
@@ -67,6 +81,12 @@ export const add_users = (users) => ({
 
 
 
-export const signout = () => ({
+export const signout = () => {
+
+
+    console.log("signout triggered")
+    
+    return ({
     type: ActionTypes.SIGNOUT
-});
+    });
+}

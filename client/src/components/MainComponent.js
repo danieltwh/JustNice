@@ -5,13 +5,23 @@ import {connect} from "react-redux";
 import {RECIPES} from "../shared/recipes";
 import {MY_RECIPES} from "../shared/my_recipes";
 
+// In App Pages
 import LoginPage from "./LoginPageComponent";
 import Header from "./HeaderComponent";
 import ExplorePage from "./ExploreComponent";
 import MyRecipePage from './MyRecipeComponent';
+import GroceryListPage from './GroceryListComponent';
 import {PrivateRoute} from "./PrivateRoute";
 
+// Public Pages
+import PublicHeader from "./PublicHeaderComponent";
+import PublicHomePage from './PublicHomePageComponent';
+import PublicAboutUsPage from "./PublicAboutUsComponent";
+import SignupPage from "./SignupPageComponent";
+
 import {login_attempt, signout} from "../redux/ActionCreators";
+
+
 
 
 const mapStateToProps = state => {
@@ -52,47 +62,23 @@ class Main extends Component {
             
               <Route path="/explore" component={() => <ExplorePage recipes={this.props.recipes.recipes} />} />
               <Route path="/myrecipes" component={() => <MyRecipePage recipes={this.props.my_recipes.my_recipes} />} />
-              <Route path="/grocerylist" component={() => <MyRecipePage recipes={this.props.my_recipes.my_recipes}/> } />
+              <Route path="/grocerylist" component={() => <GroceryListPage recipes={this.props.my_recipes.my_recipes}/> } />
               <Redirect to="/explore" />
             </Switch>
-      
-              <p>
-                Edit <code>src/App.js</code> and save to reload.
-              </p>
-              <a
-                className="App-link"
-                href="https://reactjs.org"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn React
-              </a>
           </div>
         );
       } else {
         console.log("Not Login")
         return (
           <div >
-            <Header />
+            <PublicHeader/>
             <Switch>
-              {/* <Route path="/explore" component={() => <ExplorePage recipes={this.props.recipes.recipes} />} />
-              <Route path="/myrecipes" component={() => <MyRecipePage recipes={this.props.my_recipes.my_recipes} />} />
-              <Route path="/grocerylist" component={() => <MyRecipePage recipes={this.props.my_recipes.my_recipes}/> } /> */}
               <Route path="/login" component={() => <LoginPage login_attempt={this.props.login_attempt} />} />
-              <Redirect to="/login" />
+              <Route path="/home" component={() => <PublicHomePage />} />
+              <Route path="/aboutus" component={() => <PublicAboutUsPage />} />
+              <Route path="/signup" component={() => <SignupPage />} />
+              <Redirect to="/home" />
             </Switch>
-      
-              <p>
-                Edit <code>src/App.js</code> and save to reload.
-              </p>
-              <a
-                className="App-link"
-                href="https://reactjs.org"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn React
-              </a>
           </div>
         )
       }
