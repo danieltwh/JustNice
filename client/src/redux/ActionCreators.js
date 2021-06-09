@@ -22,7 +22,7 @@ export const login_attempt = (username, password) => (dispatch) =>  {
     //     return login_failed();
     // }
 
-    return fetch("api/users/"
+    return fetch(baseUrl + "leads/api/user/"
         // , {
         //     method: "POST",
         //     body: JSON.stringify({
@@ -48,7 +48,7 @@ export const login_attempt = (username, password) => (dispatch) =>  {
             // console.log(JSON.stringify(response.json()));
             return response.json()
         })
-        .then(users => users.filter((user) => (user.username===username && user.password === password)))
+        .then(users => users.filter((user) => (user.username===username)))
         .then(users => {
             if (users.length > 0) {
                 // return add_users(users);
