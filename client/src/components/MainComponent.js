@@ -10,7 +10,12 @@ import LoginPage from "./LoginPageComponent";
 import Header from "./HeaderComponent";
 import ExplorePage from "./ExploreComponent";
 import MyRecipePage from './MyRecipeComponent';
-import GroceryListPage from './GroceryListComponent';
+
+
+import RecipeDetailsPage from './RecipeDetailsComponent';
+
+import MyGroceryListPage from "./MyGroceryListPageComponent";
+import GroceryList from './GroceryListComponent';
 import {PrivateRoute} from "./PrivateRoute";
 
 // Public Pages
@@ -20,6 +25,7 @@ import PublicAboutUsPage from "./PublicAboutUsComponent";
 import SignupPage from "./SignupPageComponent";
 
 import {login_attempt, signout} from "../redux/ActionCreators";
+
 
 
 
@@ -61,8 +67,14 @@ class Main extends Component {
               {/* <Route path="/login" component={() => <LoginPage login_attempt={this.props.login_attempt} />} /> */}
             
               <Route path="/explore" component={() => <ExplorePage recipes={this.props.recipes.recipes} />} />
-              <Route path="/myrecipes" component={() => <MyRecipePage recipes={this.props.my_recipes.my_recipes} />} />
-              <Route path="/grocerylist" component={() => <GroceryListPage recipes={this.props.my_recipes.my_recipes}/> } />
+              
+              <Route exact path="/myrecipes" component={() => <MyRecipePage recipes={this.props.my_recipes.my_recipes} />} />
+              <Route exact path="/myrecipes/:recipeID" component={({match}) => <RecipeDetailsPage
+              recipe = {this.props.my_recipes.my_recipes.filter((recipe) => recipe.id == parseInt(match.params.recipeID, 10))[0]} />} />
+                            
+              <Route exact path="/grocerylist" component={() => <MyGroceryListPage groceryLists={this.props.my_recipes.my_recipes}/> } />
+              <Route exact path="/grocerylist/:groceryListID" component={() => <GroceryList recipes={this.props.my_recipes.my_recipes}/> } />
+              
               <Redirect to="/explore" />
             </Switch>
           </div>
