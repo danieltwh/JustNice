@@ -10,7 +10,7 @@ export const Login = (state = {
                 return {...state, inProgress: false, user: action.payload, errMess: null};
                 
             case ActionTypes.LOGIN_SUCCESS:
-                return {...state, inProgress: false, user: true, errMess: null};
+                return {...state, inProgress: false, user: action.payload, errMess: null};
             
             case ActionTypes.LOGIN_IN_PROGRESS:
                 return {...state, inProgress: true, user: false, errMess: null};
