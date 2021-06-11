@@ -258,6 +258,26 @@ a.nav-link:hover {
   margin-top: 30px
 }
 
+/********* Public Signup Form  *********/ 
+.signup-bg{
+  background-color: #4ecdc4;
+  min-height: 100vh;
+  padding: 0 20px 50px 20px;
+  overflow: auto;
+}
+
+.signup-form {
+  background-color: #fff;
+  padding: 50px 20px;
+  width: 60%;
+  min-height: 80vh;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: auto;
+  border-radius: 20px;
+  box-shadow: 0px 2px 2px rgb(0 0 0 / 40%);
+}
+
 /********* Search Bar *********/ 
 .search-bar-input {
   /* width:280px; */
@@ -446,6 +466,61 @@ input[type=checkbox]:checked + label.strikethrough{
   border-radius: 20px;
 }
 
+/********* Recipe Details Page *********/ 
+.recipe-details-title {
+  background-color:#f7fff7;
+  border: 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.recipe-details-left-box {
+  padding: 0;
+  border: 10px solid #4ecdc4;
+  background-color: #4ecdc4;
+}
+
+.recipe-details-ingredient-box {
+
+}
+
+.recipe-details-ingredient-title {
+  background-color: #4ecdc4;
+  color: #1a535c;
+  padding: 10px 0 5px 5px;
+  align-items: center;
+}
+
+.recipe-details-ingredient {
+  height: 100%;
+  background-color: #f7fff7;
+  padding: 5px 10px 5px 10px;
+  font-size: calc(1em + 0.4vw);
+  border-radius: 10px;
+}
+
+
+.recipe-details-steps-box {
+  padding: 0;
+  border: 10px solid #4ecdc4;
+  background-color: #4ecdc4;
+}
+
+.recipe-details-steps-title {
+  background-color: #4ecdc4;
+  color: #1a535c;
+  padding: 0 0 5px 5px;
+  align-items: center;
+}
+
+.recipe-details-steps {
+  height: 100%;
+  background-color: #f7fff7;
+  padding: 5px 10px 5px 10px;
+  font-size: calc(1em + 0.4vw);
+  border-radius: 10px;
+}
+
 /********* Media Queries *********/ 
 @media (max-width: 767px) {
   .navbar-brand-mobile {
@@ -455,6 +530,14 @@ input[type=checkbox]:checked + label.strikethrough{
     transform: translateX(-50%);
   }
 
+  .recipe-details-left-box{
+    border-bottom: 0px;
+  }
+
+  .signup-form {
+    background-color: #fff;
+    width: 100%;
+  }
 
 }
 

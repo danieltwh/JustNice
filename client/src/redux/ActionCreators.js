@@ -22,14 +22,15 @@ export const login_attempt = (username, password) => (dispatch) =>  {
     //     return login_failed();
     // }
 
-    return fetch(baseUrl + "leads/api/user/"
-        // , {
-        //     method: "POST",
-        //     body: JSON.stringify({
-        //         "username": username,
-        //         "password": password
-        //     })
-        // }
+    return fetch(baseUrl + "user/login/"
+        , {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                "username": username,
+                "password": password
+            })
+        }
         // mode: "no-cors",
         // credentials: "include",
         // header: {
@@ -48,16 +49,26 @@ export const login_attempt = (username, password) => (dispatch) =>  {
             // console.log(JSON.stringify(response.json()));
             return response.json()
         })
-        .then(users => users.filter((user) => (user.username===username)))
-        .then(users => {
-            if (users.length > 0) {
+        .then(resp => {
+            console.log(resp);
+            if (resp.status == 1) {
                 // return add_users(users);
-                dispatch(login_success(users[0]));
+                dispatch(login_success(resp.user));
             } else {
                 dispatch(login_failed());
             }
         })
         .catch(error => console.log(error.message));
+        // .then(users => users.filter((user) => (user.username===username)))
+        // .then(users => {
+        //     if (users.length > 0) {
+        //         // return add_users(users);
+        //         dispatch(login_success(users[0]));
+        //     } else {
+        //         dispatch(login_failed());
+        //     }
+        // })
+        // .catch(error => console.log(error.message));
 };
 
 export const login_inProgress = () => ({
@@ -77,6 +88,42 @@ export const login_failed = (errMess) => ({
 export const add_users = (users) => ({
     type: ActionTypes.ADD_USERS,
     payload: users
+});
+
+export const signup_attempt = (first_name, last_name, email, username, password) => (dispatch) =>  {
+    // dispatch(login_inProgress())
+
+    return fetch(baseUrl + "user/"
+        , {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                "first_name":first_name, 
+                "last_name": last_name,
+                "email": email,
+                "username": username,
+                "password": password
+            })
+        }
+        )
+        .then(response => {
+            return response.json()
+        })
+        .catch(error => console.log(error.message));
+};
+
+export const signup_inProgress = () => ({
+    type: ActionTypes.SIGNUP_IN_PROGRESS,
+});
+
+export const signup_success = (user) => ({
+    type: ActionTypes.SIGNUP_SUCCESS,
+    payload: user
+});
+
+export const signup_failed = (errMess) => ({
+    type: ActionTypes.SIGNUP_FAILED,
+    payload: "Failed"
 });
 
 

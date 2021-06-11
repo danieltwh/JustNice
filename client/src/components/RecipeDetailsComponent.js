@@ -14,11 +14,17 @@ class RecipeDetailsPage extends Component {
 
     renderTitle() {
         const recipeTiles = (
-                <div key={this.props.recipe.id} className="row">
-                    <img className="recipe-tile-img col-6" src={this.props.recipe.img} alt={this.props.recipe.name} />
-                    <div className="col-6">
-                        <h3 >{this.props.recipe.name}</h3>
+                <div key={this.props.recipe.id} className="recipe-details-title">
+                    <div className="row">
+                        <img className="recipe-tile-img col-6" src={this.props.recipe.img} alt={this.props.recipe.name} />
+                        <div className="col-6" style={{display:"flex",alignItems:"center", flexWrap:"wrap"}}>
+                            <div>
+                                <h3 style={{verticalAlign:"middle", margin:"0"}}>{this.props.recipe.name}</h3>
+                            </div>
+                            
+                        </div>
                     </div>
+                    
                 </div>
         )
         
@@ -37,12 +43,20 @@ class RecipeDetailsPage extends Component {
         const ingredients = this.props.recipe.ingredients.map(mapIngredientToList)
 
         return (
-            <div>
-                <h4>Ingredients</h4>
-                <ol>
-                    {ingredients}
-                </ol>
+            <div className="recipe-details-ingredient-box">
+                
+                <div className="recipe-details-ingredient-title">
+                    <h4 style={{verticalAlign:"middle", margin:"0"}}>Ingredients</h4>
+                </div>
+                <div className="recipe-details-ingredient">
+                    <ol>
+                        {ingredients}
+                    </ol>
+                </div>
+                
+                
             </div>
+            
         );
     }
 
@@ -57,9 +71,12 @@ class RecipeDetailsPage extends Component {
 
         const steps = this.props.recipe.steps
         return (
-            <p style={{"white-space": "pre-line"}}>
-                {steps}
-            </p>)
+            <div className="recipe-details-steps">
+                <p style={{"white-space": "pre-line"}}>
+                    {steps}
+                </p>
+            </div>
+        )   
     }
 
     render() {
@@ -67,15 +84,19 @@ class RecipeDetailsPage extends Component {
             <div className="container-fluid">
 
                 <div className="row">
-                    <div className="col-12 col-md-6">
+                    <div className="col-12 col-md-6 recipe-details-left-box">
                         {this.renderTitle()}
 
                         {this.renderIngredients()}
                     </div>
 
-                    <div className="col-12 col-md-6">
-                        <div><h4>Recipe</h4></div>
-                        {this.renderSteps()}
+                    <div className="col-12 col-md-6 recipe-details-steps-box">
+                        <div>
+                            <div className="recipe-details-steps-title">
+                                <h4 style={{verticalAlign:"middle", margin:"0"}}>Recipe</h4>
+                            </div>
+                            {this.renderSteps()}
+                        </div>
                     </div>
                     
                 </div>

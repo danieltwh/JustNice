@@ -24,7 +24,7 @@ import PublicHomePage from './PublicHomePageComponent';
 import PublicAboutUsPage from "./PublicAboutUsComponent";
 import SignupPage from "./SignupPageComponent";
 
-import {login_attempt, signout} from "../redux/ActionCreators";
+import {login_attempt, login_success, signout} from "../redux/ActionCreators";
 
 
 
@@ -40,6 +40,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => ({
   login_attempt: (username, password) => dispatch(login_attempt(username, password)),
+  signup_success: (user) => dispatch(login_success(user)),
   signout: () => dispatch(signout())
 });
 
@@ -82,13 +83,13 @@ class Main extends Component {
       } else {
         console.log("Not Login")
         return (
-          <div >
+          <div style={{padding:"0"}}>
             <PublicHeader/>
             <Switch>
               <Route path="/login" component={() => <LoginPage login_attempt={this.props.login_attempt} />} />
               <Route path="/home" component={() => <PublicHomePage />} />
               <Route path="/aboutus" component={() => <PublicAboutUsPage />} />
-              <Route path="/signup" component={() => <SignupPage />} />
+              <Route path="/signup" component={() => <SignupPage signup_success={this.props.signup_success}/>} />
               <Redirect to="/home" />
             </Switch>
           </div>
