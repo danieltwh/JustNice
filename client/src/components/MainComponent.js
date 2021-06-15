@@ -13,6 +13,7 @@ import MyRecipePage from './MyRecipeComponent';
 
 
 import RecipeDetailsPage from './RecipeDetailsComponent';
+import RecipeCreationPage from "./RecipeCreationComponent"
 
 import MyGroceryListPage from "./MyGroceryListPageComponent";
 import GroceryList from './GroceryListComponent';
@@ -68,6 +69,8 @@ class Main extends Component {
               {/* <Route path="/login" component={() => <LoginPage login_attempt={this.props.login_attempt} />} /> */}
             
               <Route path="/explore" component={() => <ExplorePage recipes={this.props.recipes.recipes} />} />
+
+              <Route exact path="/edit" component={() => <RecipeCreationPage recipe={this.props.my_recipes.my_recipes[0]} />} />
               
               <Route exact path="/myrecipes" component={() => <MyRecipePage recipes={this.props.my_recipes.my_recipes} />} />
               <Route exact path="/myrecipes/:recipeID" component={({match}) => <RecipeDetailsPage

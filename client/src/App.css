@@ -521,6 +521,34 @@ input[type=checkbox]:checked + label.strikethrough{
   border-radius: 10px;
 }
 
+/********* Recipe Creation Page *********/ 
+.recipe-creation-name-box {
+  vertical-align: middle ;
+  margin: 0
+}
+
+.recipe-creation-name{
+  max-height: 25vh;
+}
+
+.confirm-cancel-button {
+  position: absolute;
+  right: 2%;
+  bottom: 20px;
+}
+
+.confirm-button {
+  width: 80px;
+  height: 40px;
+  border-radius: 20px;
+}
+
+.cancel-button {
+  width: 80px;
+  height: 40px;
+  border-radius: 20px;
+}
+
 /********* Media Queries *********/ 
 @media (max-width: 767px) {
   .navbar-brand-mobile {
@@ -537,6 +565,10 @@ input[type=checkbox]:checked + label.strikethrough{
   .signup-form {
     background-color: #fff;
     width: 100%;
+  }
+
+  .recipe-creation-name{
+    max-height: 20vh;
   }
 
 }

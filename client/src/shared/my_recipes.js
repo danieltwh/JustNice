@@ -10,9 +10,7 @@ export const MY_RECIPES =
         ingredients: [ 
             "chicken breast", "sesame oil", "soy sauce", "Sake/Mirin"
         ],
-        steps: "1. Pat the chicken breast peices dry with paper towels\n\
-        2. Slice the chicken breast into bit size pieces. Place the pieces in a large bowl.\n \
-        3. Add sesame oil and soy sauce to the bowl and mix well.\n\
+        steps: "1. Pat the chicken breast peices dry with paper towels\n2. Slice the chicken breast into bit size pieces. Place the pieces in a large bowl.\n3. Add sesame oil and soy sauce to the bowl and mix well.\n\
         4. Heat a large frying pan over high heat.\n\
         5. Heat the garlic cloves in the frying pan for 15 seconds.\n\
         6. Add teh fresh ginger into the frying pan and mix well for 10 seconds.\n\
