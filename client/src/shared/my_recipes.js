@@ -7,8 +7,31 @@ export const MY_RECIPES =
         author: "Tom",
         img: "/assets/my_recipe-1.jpeg",
         rating: 4,
-        ingredients: [ 
-            "chicken breast", "sesame oil", "soy sauce", "Sake/Mirin"
+        ingredients: [ {
+            id: 1,
+            name: "chicken breast",
+            category: "food",
+            quantity: 13,
+            unit: "g"
+        }, {
+            id: 2,
+            name: "sesame oil",
+            category: "food",
+            quantity: 13,
+            unit: "ml"
+        }, {
+            id: 3,
+            name: "soy sauce",
+            category: "food",
+            quantity: 13,
+            unit: "ml"
+        }, {
+            id: 4,
+            name: "Sake/Mirin",
+            category: "food",
+            quantity: 13,
+            unit: "ml"
+        }
         ],
         steps: "1. Pat the chicken breast peices dry with paper towels\n2. Slice the chicken breast into bit size pieces. Place the pieces in a large bowl.\n3. Add sesame oil and soy sauce to the bowl and mix well.\n\
         4. Heat a large frying pan over high heat.\n\
@@ -25,7 +48,31 @@ export const MY_RECIPES =
         img: "/assets/recipe-2.jpeg",
         rating: 4,
         ingredients: [
-            "boneless skinless chicken breast", "sesame oil", "soy sauce", "Sake/Mirin"
+            {
+                id: 1,
+                name: "chicken breast",
+                category: "food",
+                quantity: 13,
+                unit: "g"
+            }, {
+                id: 2,
+                name: "sesame oil",
+                category: "food",
+                quantity: 13,
+                unit: "ml"
+            }, {
+                id: 3,
+                name: "soy sauce",
+                category: "food",
+                quantity: 13,
+                unit: "ml"
+            }, {
+                id: 4,
+                name: "Sake/Mirin",
+                category: "food",
+                quantity: 13,
+                unit: "ml"
+            }
         ],
         steps: "1. Pat the chicken breast peices dry with paper towels\n \
         2. Slice the chicken breast into bit size pieces. Place the pieces in a large bowl.\n \
@@ -44,7 +91,31 @@ export const MY_RECIPES =
         img: "/assets/recipe-3.jpeg",
         rating: 4,
         ingredients: [
-            "boneless skinless chicken breast", "sesame oil", "soy sauce", "Sake/Mirin"
+            {
+                id: 1,
+                name: "chicken breast",
+                category: "food",
+                quantity: 13,
+                unit: "g"
+            }, {
+                id: 2,
+                name: "sesame oil",
+                category: "food",
+                quantity: 13,
+                unit: "ml"
+            }, {
+                id: 3,
+                name: "soy sauce",
+                category: "food",
+                quantity: 13,
+                unit: "ml"
+            }, {
+                id: 4,
+                name: "Sake/Mirin",
+                category: "food",
+                quantity: 13,
+                unit: "ml"
+            }
         ],
         steps: "1. Pat the chicken breast peices dry with paper towels\n \
         2. Slice the chicken breast into bit size pieces. Place the pieces in a large bowl.\n \
@@ -63,7 +134,31 @@ export const MY_RECIPES =
         img: "/assets/recipe-4.jpeg",
         rating: 4,
         ingredients: [
-            "boneless skinless chicken breast", "sesame oil", "soy sauce", "Sake/Mirin"
+            {
+                id: 1,
+                name: "chicken breast",
+                category: "food",
+                quantity: 13,
+                unit: "g"
+            }, {
+                id: 2,
+                name: "sesame oil",
+                category: "food",
+                quantity: 13,
+                unit: "ml"
+            }, {
+                id: 3,
+                name: "soy sauce",
+                category: "food",
+                quantity: 13,
+                unit: "ml"
+            }, {
+                id: 4,
+                name: "Sake/Mirin",
+                category: "food",
+                quantity: 13,
+                unit: "ml"
+            }
         ],
         steps: "1. Pat the chicken breast peices dry with paper towels\n \
         2. Slice the chicken breast into bit size pieces. Place the pieces in a large bowl.\n \
@@ -82,7 +177,31 @@ export const MY_RECIPES =
         img: "/assets/recipe-5.jpeg",
         rating: 4,
         ingredients: [
-            "boneless skinless chicken breast", "sesame oil", "soy sauce", "Sake/Mirin"
+            {
+                id: 1,
+                name: "chicken breast",
+                category: "food",
+                quantity: 13,
+                unit: "g"
+            }, {
+                id: 2,
+                name: "sesame oil",
+                category: "food",
+                quantity: 13,
+                unit: "ml"
+            }, {
+                id: 3,
+                name: "soy sauce",
+                category: "food",
+                quantity: 13,
+                unit: "ml"
+            }, {
+                id: 4,
+                name: "Sake/Mirin",
+                category: "food",
+                quantity: 13,
+                unit: "ml"
+            }
         ],
         steps: "1. Pat the chicken breast peices dry with paper towels\n \
         2. Slice the chicken breast into bit size pieces. Place the pieces in a large bowl.\n \

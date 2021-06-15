@@ -5,6 +5,8 @@ import { Modal, ModalBody, ModalHeader, ModalFooter} from 'reactstrap';
 import { Col, Row, Navbar, NavbarBrand, Button, Form, FormGroup, FormFeedback, FormText, Label, Input } from 'reactstrap';
 import {LocalForm, Control, Errors} from 'react-redux-form'
 
+import RecipeIngredients from "./RecipeCreationgIngredientComponent"
+
 
 class RecipeCreationPage extends Component {
     constructor(props) {
@@ -32,6 +34,7 @@ class RecipeCreationPage extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.trackContent = this.trackContent.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleIngredient = this.handleIngredient.bind(this);
     }
 
     componentDidMount() {
@@ -43,6 +46,11 @@ class RecipeCreationPage extends Component {
         }
     }
 
+    handleIngredient(newIngredients) {
+        this.setState({
+            "ingredients": newIngredients
+        })
+    }
 
     handleChange(event) {
         const { target } = event;
@@ -149,7 +157,10 @@ class RecipeCreationPage extends Component {
                         <div className="col-12 col-md-6 recipe-details-left-box">
                             {this.renderTitle()}
 
-                            {this.renderIngredients()}
+                            {/* {this.renderIngredients()} */}
+                            <RecipeIngredients ingredients={this.props.recipe.ingredients} 
+                                handleIngredient= {this.handleIngredient}
+                            />
                         </div>
 
                         <div className="col-12 col-md-6 recipe-details-steps-box">

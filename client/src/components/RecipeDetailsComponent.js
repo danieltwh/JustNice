@@ -35,7 +35,7 @@ class RecipeDetailsPage extends Component {
         const mapIngredientToList = (ingredient) => {
             return (
                 <li>
-                    {ingredient}
+                    {`${ingredient.name} ${ingredient.quantity}${ingredient.unit}`}
                 </li>
             )
         }

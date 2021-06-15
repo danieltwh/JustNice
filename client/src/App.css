@@ -549,6 +549,34 @@ input[type=checkbox]:checked + label.strikethrough{
   border-radius: 20px;
 }
 
+.delete-ingredient {
+  background-color: transparent;
+  border: 0;
+}
+
+.delete-ingredient-icon {
+  color: #ff6b6b;
+}
+
+.ingredient-input {
+  margin: 10px 0px;
+  /* padding-left: 0; */
+}
+
+.ingredient-unit {
+  justify-content: center;
+}
+
+.ingredient-handle {
+  background-color: transparent;
+}
+
+.add-ingredient-button {
+  color:#27A745;
+  border: 0;
+  background-color: transparent;
+}
+
 /********* Media Queries *********/ 
 @media (max-width: 767px) {
   .navbar-brand-mobile {
