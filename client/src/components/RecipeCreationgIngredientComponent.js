@@ -68,20 +68,43 @@ class RecipeIngredients extends Component {
         this.props.handleIngredient(items);
     }
 
-    handleIngredientChange(id, field, newValue) {
+    handleIngredientNameChange(id, name, isValid, newValue) {
         var newList  = this.state.ingredients.map(ingredient => {
             if (ingredient.id === id) {
-                return ({...ingredient, [field]: newValue});
+                var validity;
+                if (isValid === "invalid" && newValue !== "") {
+                    validity = "invalid";
+                } else if (newValue === "") {
+                    validity = "required"
+                } else {
+                    validity = "no-action"
+                }
+                return ({...ingredient, "name": newValue, isValid: validity});
             } else {
                 return (ingredient);
             }
         });
 
-        // if (id != null) {
-        //     newList = this.state.ingredients.filter((ingredient) => ingredient.id !== id)
-        // } else {
-        //     newList = this.state.ingredients.filter((ingredient) => ingredient.name !== name)
-        // }
+        this.setState({
+            ingredients: newList
+        });
+        this.props.handleIngredient(newList);
+    }
+
+    handleIngredientQuantityChange(id, name, isValid, newValue) {
+        var newList  = this.state.ingredients.map(ingredient => {
+            if (ingredient.id === id) {
+                var validity;
+                if (name === "") {
+                    validity = "required"
+                } else {
+                    validity = isValid
+                }
+                return ({...ingredient, "quantity": newValue, isValid: validity});
+            } else {
+                return (ingredient);
+            }
+        });
 
         this.setState({
             ingredients: newList
@@ -96,7 +119,9 @@ class RecipeIngredients extends Component {
             id: `Uncat${this.state.unknown_ingredients}`,
             name: "",
             category: "",
-            unit: "ml"
+            quantity: "",
+            unit: "ml",
+            isValid: "init"
         }
 
         newList.push(newIngredient);
@@ -125,7 +150,7 @@ class RecipeIngredients extends Component {
     }
 
     renderIngredients() {
-        const ingredients = this.state.ingredients.map(({id, name, category, quantity, unit}, index) => {
+        const ingredients = this.state.ingredients.map(({id, name, category, quantity, unit, isValid}, index) => {
             // var drag_id
             // if (id !== null && name !== null) {
             //     drag_id = `${id}`
@@ -141,7 +166,7 @@ class RecipeIngredients extends Component {
                             // style={{paddingLeft:"0px"}}
                         >
                             <div className="form-row">
-                                <div className="col-1 input-group-prepend" >
+                                <div className="col-1">
                                     
                                     <button type="button" className="delete-ingredient"
                                         onClick={() => {
@@ -154,17 +179,32 @@ class RecipeIngredients extends Component {
                                     
                                 </div>
 
-                                <div className="input-group col-10">
+                                <div className="col-10">
                                     <div className="form-row">
-                                        <input type="text" className="form-control col-8" value={name}
-                                            onChange= {(event) => this.handleIngredientChange(id, "name", event.target.value)}
-                                        >
-                                        </input>
+                                        <div className="col-8 ingredient-name-input">
+                                            <Input type="text" className="form-control" value={name}
+                                                onChange= {(event) => this.handleIngredientNameChange(id, name, isValid, event.target.value)}
+                                                onBlur= {(event) => {this.validateIngredient(id, event)}}
+                                                valid= {isValid == "valid"}
+                                                invalid={isValid !== "valid" && isValid !== "init" && isValid !=="no-action"}
+                                            />
+                                            {(() => {
+                                                if (isValid == "init" ) {
+
+                                                } else if (isValid == "required") {
+                                                    return (<FormFeedback>Required</FormFeedback>);
+                                                } else {
+                                                    return (<FormFeedback>Ingredient not found and will be <strong>uncategorised</strong></FormFeedback>);
+                                                } 
+                                            })()}
+                                        </div>
+                                        
+                                        
                                         
                                         <div className="col-4">
                                             <div className="form-row" >
                                                 <input type="text" className="form-control col-md-8 col-7" value={quantity}
-                                                     onChange= {(event) => this.handleIngredientChange(id, "quantity", event.target.value)}
+                                                     onChange= {(event) => this.handleIngredientQuantityChange(id, name, isValid, event.target.value)}
                                                 >
                                                    
                                                 </input>
@@ -193,57 +233,6 @@ class RecipeIngredients extends Component {
             )}
         )
 
-        // const anotherIngredient = (
-        //     <Draggable key={} draggableId={name} index={index} handle=".handle">
-        //             {(provided) => (
-        //                 <div ref={provided.innerRef} {...provided.draggableProps} className="container-fluid"
-        //                     // style={{paddingLeft:"0px"}}
-        //                 >
-        //                     <div className="input-group row ingredient-input">
-        //                         <input type="text" className="form-control col-7" value={name}>
-        //                         </input>
-                                
-        //                         <div className="col-4">
-        //                             <div className="row" >
-        //                                 <input type="text" className="form-control col-md-8 col-7">
-        //                                 </input>
-        //                                 <div className="input-group-text col-md-4 col-5 ingredient-unit" >
-        //                                     <span >{unit}</span>
-        //                                 </div>
-                                        
-        //                             </div>
-                                    
-        //                         </div>
-        //                         <div className="handle input-group-append col-1" {...provided.dragHandleProps}>
-        //                             <span className="input-group-text ingredient-handle">
-        //                                 <FontAwesomeIcon icon="grip-vertical" />
-        //                             </span>
-        //                         </div>
-        //                         {/* <img src="/assets/recipe-3.jpeg" width="20px" height="20px"/> */}
-        //                     </div>
-                            
-        //                 </div>
-        //             )}
-        //         </Draggable>
-        // )
-        var addButton = (
-            <>
-                <div className="container-fluid ingredient-input">
-                    <div className="row">
-                        <div className="col-1 offset-10" >
-                            <button type="button" className="add-ingredient-button"
-                                onClick = {() => this.addNewIngredient()}
-                            >
-                                <FontAwesomeIcon icon="plus-square" size="2x"/>
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-            </>
-        )
-        ingredients.push(addButton);
-
         return (
             <>
                 {ingredients}  
@@ -252,8 +241,32 @@ class RecipeIngredients extends Component {
         );
     }
 
-    
+    validateIngredient(id, event) {
+        const {target} = event;
+        const value = target.type === "checkbox" ? target.checked : target.value;
+        const {name} = target;
 
+        if (value !== "") {
+
+            // alert(JSON.stringify({name: value}));
+            var newList  = this.state.ingredients.map(ingredient => {
+                if (ingredient.id === id) {
+                    
+                    return ({...ingredient, "name": value, isValid: "invalid"});
+                } else {
+                    return (ingredient);
+                }
+            });
+
+            this.setState({
+                ingredients: newList
+            });
+            this.props.handleIngredient(newList);
+        } else {
+
+        }
+    }
+    
 
     render() {
 
@@ -264,7 +277,7 @@ class RecipeIngredients extends Component {
                 <div className="recipe-details-ingredient-title">
                     <h4 style={{verticalAlign:"middle", margin:"0"}}>Ingredients</h4>
                 </div>
-                <div className="recipe-details-ingredient">
+                <div className="recipe-creation-ingredient">
             
                     <DragDropContext onDragEnd={this.handleOnDragEnd}>
                         <Droppable droppableId="ingredients">
@@ -279,7 +292,21 @@ class RecipeIngredients extends Component {
                         </Droppable>
                         
                     </DragDropContext>
-                
+
+                    <div className="container-fluid ingredient-input">
+                        <div className="row">
+                            <div className="col-1 offset-10" >
+                                <button type="button" className="add-ingredient-button"
+                                    onClick = {() => this.addNewIngredient()}
+                                    
+                                >
+                                    <FontAwesomeIcon icon="plus-square" size="2x"/>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                    
                 </div>
                 
                 

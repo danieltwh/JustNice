@@ -12,25 +12,29 @@ export const MY_RECIPES =
             name: "chicken breast",
             category: "food",
             quantity: 13,
-            unit: "g"
+            unit: "g",
+            isValid: "valid"
         }, {
             id: 2,
             name: "sesame oil",
             category: "food",
             quantity: 13,
-            unit: "ml"
+            unit: "ml",
+            isValid: "valid"
         }, {
             id: 3,
             name: "soy sauce",
             category: "food",
             quantity: 13,
-            unit: "ml"
+            unit: "ml",
+            isValid: "valid"
         }, {
             id: 4,
             name: "Sake/Mirin",
             category: "food",
             quantity: 13,
-            unit: "ml"
+            unit: "ml",
+            isValid: "valid"
         }
         ],
         steps: "1. Pat the chicken breast peices dry with paper towels\n2. Slice the chicken breast into bit size pieces. Place the pieces in a large bowl.\n3. Add sesame oil and soy sauce to the bowl and mix well.\n\
@@ -53,25 +57,29 @@ export const MY_RECIPES =
                 name: "chicken breast",
                 category: "food",
                 quantity: 13,
-                unit: "g"
+                unit: "g",
+                isValid: "valid"
             }, {
                 id: 2,
                 name: "sesame oil",
                 category: "food",
                 quantity: 13,
-                unit: "ml"
+                unit: "ml",
+                isValid: "valid"
             }, {
                 id: 3,
                 name: "soy sauce",
                 category: "food",
                 quantity: 13,
-                unit: "ml"
+                unit: "ml",
+                isValid: "valid"
             }, {
                 id: 4,
                 name: "Sake/Mirin",
                 category: "food",
                 quantity: 13,
-                unit: "ml"
+                unit: "ml",
+                isValid: "valid"
             }
         ],
         steps: "1. Pat the chicken breast peices dry with paper towels\n \
@@ -96,25 +104,29 @@ export const MY_RECIPES =
                 name: "chicken breast",
                 category: "food",
                 quantity: 13,
-                unit: "g"
+                unit: "g",
+                isValid: true
             }, {
                 id: 2,
                 name: "sesame oil",
                 category: "food",
                 quantity: 13,
-                unit: "ml"
+                unit: "ml",
+                isValid: true
             }, {
                 id: 3,
                 name: "soy sauce",
                 category: "food",
                 quantity: 13,
-                unit: "ml"
+                unit: "ml",
+                isValid: true
             }, {
                 id: 4,
                 name: "Sake/Mirin",
                 category: "food",
                 quantity: 13,
-                unit: "ml"
+                unit: "ml",
+                isValid: true
             }
         ],
         steps: "1. Pat the chicken breast peices dry with paper towels\n \
@@ -139,25 +151,29 @@ export const MY_RECIPES =
                 name: "chicken breast",
                 category: "food",
                 quantity: 13,
-                unit: "g"
+                unit: "g",
+                isValid: true
             }, {
                 id: 2,
                 name: "sesame oil",
                 category: "food",
                 quantity: 13,
-                unit: "ml"
+                unit: "ml",
+                isValid: true
             }, {
                 id: 3,
                 name: "soy sauce",
                 category: "food",
                 quantity: 13,
-                unit: "ml"
+                unit: "ml",
+                isValid: true
             }, {
                 id: 4,
                 name: "Sake/Mirin",
                 category: "food",
                 quantity: 13,
-                unit: "ml"
+                unit: "ml",
+                isValid: true
             }
         ],
         steps: "1. Pat the chicken breast peices dry with paper towels\n \
@@ -182,25 +198,29 @@ export const MY_RECIPES =
                 name: "chicken breast",
                 category: "food",
                 quantity: 13,
-                unit: "g"
+                unit: "g",
+                isValid: true
             }, {
                 id: 2,
                 name: "sesame oil",
                 category: "food",
                 quantity: 13,
-                unit: "ml"
+                unit: "ml",
+                isValid: true
             }, {
                 id: 3,
                 name: "soy sauce",
                 category: "food",
                 quantity: 13,
-                unit: "ml"
+                unit: "ml",
+                isValid: true
             }, {
                 id: 4,
                 name: "Sake/Mirin",
                 category: "food",
                 quantity: 13,
-                unit: "ml"
+                unit: "ml",
+                isValid: true
             }
         ],
         steps: "1. Pat the chicken breast peices dry with paper towels\n \

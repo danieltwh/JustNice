@@ -92,35 +92,6 @@ class RecipeCreationPage extends Component {
         return recipeTiles;
     }
 
-    renderIngredients() {
-        const mapIngredientToList = (ingredient) => {
-            return (
-                <li>
-                    {ingredient}
-                </li>
-            )
-        }
-
-        const ingredients = this.props.recipe.ingredients.map(mapIngredientToList)
-
-        return (
-            <div className="recipe-details-ingredient-box">
-                
-                <div className="recipe-details-ingredient-title">
-                    <h4 style={{verticalAlign:"middle", margin:"0"}}>Ingredients</h4>
-                </div>
-                <div className="recipe-details-ingredient">
-                    <ol>
-                        {ingredients}
-                    </ol>
-                </div>
-                
-                
-            </div>
-            
-        );
-    }
-
     trackContent(element) {
         
         element.style.height = 'auto';
@@ -144,6 +115,10 @@ class RecipeCreationPage extends Component {
         )   
     }
 
+    isDisabled() {
+        return this.state.ingredients.some(ingredient => ingredient.isValid === "required")
+    }
+
     render() {
 
         console.log(JSON.stringify(this.state))
@@ -158,7 +133,7 @@ class RecipeCreationPage extends Component {
                             {this.renderTitle()}
 
                             {/* {this.renderIngredients()} */}
-                            <RecipeIngredients ingredients={this.props.recipe.ingredients} 
+                            <RecipeIngredients ingredients={this.state.ingredients} 
                                 handleIngredient= {this.handleIngredient}
                             />
                         </div>
@@ -176,8 +151,13 @@ class RecipeCreationPage extends Component {
                     </div>
                     <div className="row" style={{position: "relative", width: "100%", height: "100px"}}>
                         <div className="confirm-cancel-button">
-                            <button type="submit" className="confirm-button">Confirm</button>
-                            <button className="cancel-button" >Cancel</button>
+                            <button type="submit" className="confirm-button"
+                                disabled= {this.isDisabled()}
+                            >Confirm</button>
+                            <Link to="/myrecipes">
+                                <button type="button" className="cancel-button" >Cancel</button>
+                            </Link>
+                            
                         </div>
                         
                     </div>

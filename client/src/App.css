@@ -558,9 +558,25 @@ input[type=checkbox]:checked + label.strikethrough{
   color: #ff6b6b;
 }
 
+.recipe-creation-ingredient{
+  height: 100%;
+  background-color: #f7fff7;
+  padding: 5px 10px 5px 0px;
+  border-radius: 10px;
+}
+
 .ingredient-input {
   margin: 10px 0px;
   /* padding-left: 0; */
+}
+
+.ingredient-name-input .is-invalid {
+  border-color: #ff6600;
+}
+
+.ingredient-name-input .invalid-feedback{
+  color:#ff6600;
+  font-size: small;
 }
 
 .ingredient-unit {

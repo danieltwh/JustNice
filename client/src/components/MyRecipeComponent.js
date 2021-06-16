@@ -81,11 +81,13 @@ class MyRecipePage extends Component {
                             <CardImg className="recipe-tile-img" src={recipe.img} alt={recipe.name} />
                             <CardTitle>{recipe.name}</CardTitle>
                         </Link>
+                        
+                        
                         <div>
-                            <button type="button" className="pull-right"><FontAwesomeIcon icon="edit" size="sm"/></button>
+                            <Link to={`/edit/${parseInt(recipe.id, 10)}`} style={{textDecoration: "none", color: "inherit"}}>
+                                <button type="button" className="pull-right"><FontAwesomeIcon icon="edit" size="sm"/></button>
+                            </Link>
                         </div>
-                        
-                        
                     </Card>
                 
                 
