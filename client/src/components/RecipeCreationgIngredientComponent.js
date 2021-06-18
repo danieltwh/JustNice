@@ -6,6 +6,7 @@ import { Col, Row, Navbar, NavbarBrand, Button, Form, FormGroup, FormFeedback, F
 import {LocalForm, Control, Errors} from 'react-redux-form'
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { baseUrl } from '../shared/baseUrl';
 
 
 
@@ -70,7 +71,7 @@ class RecipeIngredients extends Component {
 
     handleIngredientNameChange(id, name, isValid, newValue) {
         var newList  = this.state.ingredients.map(ingredient => {
-            if (ingredient.id === id) {
+            if (ingredient.ingred_id === id) {
                 var validity;
                 if (isValid === "invalid" && newValue !== "") {
                     validity = "invalid";
@@ -79,7 +80,7 @@ class RecipeIngredients extends Component {
                 } else {
                     validity = "no-action"
                 }
-                return ({...ingredient, "name": newValue, isValid: validity});
+                return ({...ingredient, "ingred_name": newValue, isValid: validity});
             } else {
                 return (ingredient);
             }
@@ -93,14 +94,14 @@ class RecipeIngredients extends Component {
 
     handleIngredientQuantityChange(id, name, isValid, newValue) {
         var newList  = this.state.ingredients.map(ingredient => {
-            if (ingredient.id === id) {
+            if (ingredient.ingred_id === id) {
                 var validity;
                 if (name === "") {
                     validity = "required"
                 } else {
                     validity = isValid
                 }
-                return ({...ingredient, "quantity": newValue, isValid: validity});
+                return ({...ingredient, "ingred_quantity": newValue, isValid: validity});
             } else {
                 return (ingredient);
             }
@@ -116,11 +117,11 @@ class RecipeIngredients extends Component {
         var newList = this.state.ingredients;
 
         var newIngredient = {
-            id: `Uncat${this.state.unknown_ingredients}`,
-            name: "",
-            category: "",
-            quantity: "",
-            unit: "ml",
+            ingred_id: `Uncat${this.state.unknown_ingredients}`,
+            ingred_name: "",
+            ingred_unit: "ml",
+            ingred_cat: "",
+            ingred_quantity: "",
             isValid: "init"
         }
 
@@ -138,9 +139,9 @@ class RecipeIngredients extends Component {
     handleDeleteIngredient(id, name) {
         var newList;
         if (id !== null) {
-            newList = this.state.ingredients.filter((ingredient) => ingredient.id !== id)
+            newList = this.state.ingredients.filter((ingredient) => ingredient.ingred_id !== id)
         } else {
-            newList = this.state.ingredients.filter((ingredient) => ingredient.name !== name)
+            newList = this.state.ingredients.filter((ingredient) => ingredient.ingred_name !== name)
         }
 
         this.setState({
@@ -150,7 +151,7 @@ class RecipeIngredients extends Component {
     }
 
     renderIngredients() {
-        const ingredients = this.state.ingredients.map(({id, name, category, quantity, unit, isValid}, index) => {
+        const ingredients = this.state.ingredients.map(({ingred_id, ingred_name, ingred_unit, ingred_category, ingred_quantity, isValid}, index) => {
             // var drag_id
             // if (id !== null && name !== null) {
             //     drag_id = `${id}`
@@ -160,7 +161,7 @@ class RecipeIngredients extends Component {
             // } 
 
             return (
-                <Draggable key={JSON.stringify(id)} draggableId={JSON.stringify(id)} index={index} handle=".handle">
+                <Draggable key={JSON.stringify(ingred_id)} draggableId={JSON.stringify(ingred_id)} index={index} handle=".handle">
                     {(provided) => (
                         <div ref={provided.innerRef} {...provided.draggableProps} className="container-fluid ingredient-input"
                             // style={{paddingLeft:"0px"}}
@@ -170,7 +171,7 @@ class RecipeIngredients extends Component {
                                     
                                     <button type="button" className="delete-ingredient"
                                         onClick={() => {
-                                            this.handleDeleteIngredient(id, name);
+                                            this.handleDeleteIngredient(ingred_id, ingred_name);
                                         }}
                                     >
                                         <FontAwesomeIcon icon="minus-square" pull="left" className="delete-ingredient-icon"/>
@@ -182,9 +183,9 @@ class RecipeIngredients extends Component {
                                 <div className="col-10">
                                     <div className="form-row">
                                         <div className="col-8 ingredient-name-input">
-                                            <Input type="text" className="form-control" value={name}
-                                                onChange= {(event) => this.handleIngredientNameChange(id, name, isValid, event.target.value)}
-                                                onBlur= {(event) => {this.validateIngredient(id, event)}}
+                                            <Input type="text" className="form-control" value={ingred_name}
+                                                onChange= {(event) => this.handleIngredientNameChange(ingred_id, ingred_name, isValid, event.target.value)}
+                                                onBlur= {(event) => {this.validateIngredient(ingred_id, event)}}
                                                 valid= {isValid == "valid"}
                                                 invalid={isValid !== "valid" && isValid !== "init" && isValid !=="no-action"}
                                             />
@@ -203,13 +204,13 @@ class RecipeIngredients extends Component {
                                         
                                         <div className="col-4">
                                             <div className="form-row" >
-                                                <input type="text" className="form-control col-md-8 col-7" value={quantity}
-                                                     onChange= {(event) => this.handleIngredientQuantityChange(id, name, isValid, event.target.value)}
+                                                <input type="text" className="form-control col-md-8 col-7" value={ingred_quantity}
+                                                     onChange= {(event) => this.handleIngredientQuantityChange(ingred_id, ingred_name, isValid, event.target.value)}
                                                 >
                                                    
                                                 </input>
                                                 <div className="input-group-text col-md-4 col-5 ingredient-unit" >
-                                                    <span >{unit}</span>
+                                                    <span >{ingred_unit}</span>
                                                 </div>
                                                 
                                             </div>
@@ -248,11 +249,58 @@ class RecipeIngredients extends Component {
 
         if (value !== "") {
 
+            fetch(baseUrl + "recingred/checkingred/", {
+                method: "post",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    "ingred_name": value
+                })
+            })
+            .then(resp => {
+                return resp.json();
+                // if (resp === "Does not exist") {
+                //     console.log("error executed")
+                //     return null;
+                // } else {
+                //     return resp.json();
+                // }
+            })
+            .then(resp => {
+                // alert(JSON.stringify({name: value}));
+                
+                if (resp[Object.keys(resp)[0]] !== "D") {
+                    resp = {...resp, isValid: "valid"}
+
+                    var newList  = this.state.ingredients.map(ingredient => {
+                        if (ingredient.ingred_id === id) {
+                            
+                            return (resp);
+                        } else {
+                            return (ingredient);
+                        }
+                    });
+    
+                    this.setState({
+                        ingredients: newList
+                    });
+                    this.props.handleIngredient(newList);
+                } else {
+                    var newList  = this.state.ingredients.map(ingredient => {
+                        if (ingredient.ingred_id === id) {
+                            
+                            return ({...ingredient, isValid: "invalid"});
+                        } else {
+                            return (ingredient);
+                        }
+                    });
+                }
+            })
+
             // alert(JSON.stringify({name: value}));
             var newList  = this.state.ingredients.map(ingredient => {
-                if (ingredient.id === id) {
+                if (ingredient.ingred_id === id) {
                     
-                    return ({...ingredient, "name": value, isValid: "invalid"});
+                    return ({...ingredient, "ingred_name": value, isValid: "invalid"});
                 } else {
                     return (ingredient);
                 }

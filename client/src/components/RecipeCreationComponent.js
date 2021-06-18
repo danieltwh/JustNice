@@ -17,7 +17,9 @@ class RecipeCreationPage extends Component {
                 "author": this.props.recipe.author,
                 "img": this.props.recipe.img,
                 "rating": this.props.recipe.rating,
-                "ingredients": this.props.recipe.ingredients,
+                "ingredients": this.props.recipe.ingredients.map(ingredient => ({
+                    ...ingredient, "isValid": "valid"
+                })),
                 "steps": this.props.recipe.steps
             }
         } else {
@@ -151,11 +153,11 @@ class RecipeCreationPage extends Component {
                     </div>
                     <div className="row" style={{position: "relative", width: "100%", height: "100px"}}>
                         <div className="confirm-cancel-button">
-                            <button type="submit" className="confirm-button"
+                            <button type="submit" className="confirm-button btn btn-success"
                                 disabled= {this.isDisabled()}
                             >Confirm</button>
                             <Link to="/myrecipes">
-                                <button type="button" className="cancel-button" >Cancel</button>
+                                <button type="button" className="cancel-button btn btn-danger" >Cancel</button>
                             </Link>
                             
                         </div>

@@ -14,12 +14,12 @@ class RecipeDetailsPage extends Component {
 
     renderTitle() {
         const recipeTiles = (
-                <div key={this.props.recipe.id} className="recipe-details-title">
+                <div key={this.props.recipe.rec_id} className="recipe-details-title">
                     <div className="row">
-                        <img className="recipe-tile-img col-6" src={this.props.recipe.img} alt={this.props.recipe.name} />
+                        <img className="recipe-tile-img col-6" src={this.props.recipe.rec_img} alt={this.props.recipe.rec_name} />
                         <div className="col-6" style={{display:"flex",alignItems:"center", flexWrap:"wrap"}}>
                             <div>
-                                <h3 style={{verticalAlign:"middle", margin:"0"}}>{this.props.recipe.name}</h3>
+                                <h3 style={{verticalAlign:"middle", margin:"0"}}>{this.props.recipe.rec_name}</h3>
                             </div>
                             
                         </div>
@@ -35,12 +35,12 @@ class RecipeDetailsPage extends Component {
         const mapIngredientToList = (ingredient) => {
             return (
                 <li>
-                    {`${ingredient.name} ${ingredient.quantity}${ingredient.unit}`}
+                    {`${ingredient.ingred_name} ${ingredient.ingred_quantity}${ingredient.ingred_unit}`}
                 </li>
             )
         }
 
-        const ingredients = this.props.recipe.ingredients.map(mapIngredientToList)
+        const ingredients = this.props.recipe.rec_ingredients.map(mapIngredientToList)
 
         return (
             <div className="recipe-details-ingredient-box">
@@ -69,7 +69,7 @@ class RecipeDetailsPage extends Component {
         //     )
         // }
 
-        const steps = this.props.recipe.steps
+        const steps = this.props.recipe.rec_steps
         return (
             <div className="recipe-details-steps">
                 <p style={{"white-space": "pre-line"}}>

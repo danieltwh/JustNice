@@ -46,43 +46,42 @@ export const MY_RECIPES =
 
     // Recipe 2
     {
-        id: 2,
-        name: "Food 2",
-        author: "Tom",
-        img: "/assets/recipe-2.jpeg",
-        rating: 4,
-        ingredients: [
+        rec_id: 2,
+        rec_name: "Food 2",
+        rec_author: "Tom",
+        rec_img: "/assets/recipe-2.jpeg",
+        rec_rating: 4,
+        rec_ingredients: [
             {
-                id: 1,
-                name: "chicken breast",
-                category: "food",
-                quantity: 13,
-                unit: "g",
-                isValid: "valid"
-            }, {
-                id: 2,
-                name: "sesame oil",
-                category: "food",
-                quantity: 13,
-                unit: "ml",
-                isValid: "valid"
-            }, {
-                id: 3,
-                name: "soy sauce",
-                category: "food",
-                quantity: 13,
-                unit: "ml",
-                isValid: "valid"
-            }, {
-                id: 4,
-                name: "Sake/Mirin",
-                category: "food",
-                quantity: 13,
-                unit: "ml",
-                isValid: "valid"
+                ingred_id: 1,
+                ingred_name: "Apple",
+                ingred_unit: "whole",
+                ingred_cat: "Fruits",
+                ingred_quantity: 4
+            },
+            {
+                ingred_id: 2,
+                ingred_name: "Beef",
+                ingred_unit: "g",
+                ingred_cat: "Meat",
+                ingred_quantity: 4
+            },
+            {
+                ingred_id: 3,
+                ingred_name: "Chicken",
+                ingred_unit: "g",
+                ingred_cat: "Meat",
+                ingred_quantity: 4
+            },
+            {
+                ingred_id: 4,
+                ingred_name: "Lamb",
+                ingred_unit: "g",
+                ingred_cat: "Meat",
+                ingred_quantity: 4
             }
         ],
-        steps: "1. Pat the chicken breast peices dry with paper towels\n \
+        rec_steps: "1. Pat the chicken breast peices dry with paper towels\n \
         2. Slice the chicken breast into bit size pieces. Place the pieces in a large bowl.\n \
         3. Add sesame oil and soy sauce to the bowl and mix well.\n\
         4. Heat a large frying pan over high heat.\n\

@@ -9,19 +9,6 @@ import { USERS } from "../shared/users";
 
 /* Login */
 export const login_attempt = (username, password) => (dispatch) =>  {
-    // dispatch(login_inProgress());
-
-    // return setTimeout(() => {
-        
-    // }, 2000);
-
-    // const profile = USERS.filter((user) => (user.username===username && user.password===password));
-    // if (profile.length > 0) {
-    //     return login_success(profile[0]);
-    // } else {
-    //     return login_failed();
-    // }
-
     return fetch(baseUrl + "user/login/"
         , {
             method: "POST",
@@ -30,20 +17,7 @@ export const login_attempt = (username, password) => (dispatch) =>  {
                 "username": username,
                 "password": password
             })
-        }
-        // mode: "no-cors",
-        // credentials: "include",
-        // header: {
-        //     origin: "http://hiredone.pythonanywhere.com/"
-        // }
-        // method: "get",
-        // credentials: "same-origin",
-        // headers: {
-        //     "X-CSRFToken": getCookie("csrftoken"),
-        //     "Accept": "application/json",
-        //     "Content-Type": "application/json"
-        // }
-        )
+        })
         .then(response => {
             // console.log(response);
             // console.log(JSON.stringify(response.json()));
@@ -59,16 +33,6 @@ export const login_attempt = (username, password) => (dispatch) =>  {
             }
         })
         .catch(error => console.log(error.message));
-        // .then(users => users.filter((user) => (user.username===username)))
-        // .then(users => {
-        //     if (users.length > 0) {
-        //         // return add_users(users);
-        //         dispatch(login_success(users[0]));
-        //     } else {
-        //         dispatch(login_failed());
-        //     }
-        // })
-        // .catch(error => console.log(error.message));
 };
 
 export const login_inProgress = () => ({
@@ -126,14 +90,45 @@ export const signup_failed = (errMess) => ({
     payload: "Failed"
 });
 
-
-
 export const signout = () => {
-
-
     console.log("signout triggered")
     
     return ({
     type: ActionTypes.SIGNOUT
     });
 }
+
+export const load_myrecipes = (user_id) => (dispatch) => {
+    // dispatch(load_myrecipes_inProgress());
+
+    return fetch(baseUrl + "recingred/getallrec/", {
+        method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                "user_id": user_id, 
+            })
+        })
+        .then(resp => resp.json())
+        .then(resp => {
+            console.log(resp);
+            if (resp.length >= 1) {
+                // return add_users(users);
+                dispatch(load_myrecipes_success(resp));
+            } else {
+                dispatch(load_myrecipes_failed());
+            }
+        })
+}
+
+export const load_myrecipes_inProgress = () => ({
+    type: ActionTypes.LOAD_MY_RECIPES_IN_PROGRESS
+});
+
+export const load_myrecipes_success = (recipes) => ({
+    type: ActionTypes.LOAD_MY_RECIPES,
+    payload: recipes
+});
+
+export const load_myrecipes_failed = () => ({
+    type: ActionTypes.LOAD_MY_RECIPES_FAILED
+}) 

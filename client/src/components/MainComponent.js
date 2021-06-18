@@ -25,7 +25,7 @@ import PublicHomePage from './PublicHomePageComponent';
 import PublicAboutUsPage from "./PublicAboutUsComponent";
 import SignupPage from "./SignupPageComponent";
 
-import {login_attempt, login_success, signout} from "../redux/ActionCreators";
+import {login_attempt, login_success, signout, load_myrecipes} from "../redux/ActionCreators";
 
 
 
@@ -42,7 +42,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => ({
   login_attempt: (username, password) => dispatch(login_attempt(username, password)),
   signup_success: (user) => dispatch(login_success(user)),
-  signout: () => dispatch(signout())
+  signout: () => dispatch(signout()),
+  load_myrecipes: (user_id) => {dispatch(load_myrecipes(user_id))} 
 });
 
 
@@ -56,12 +57,17 @@ class Main extends Component {
         //     my_recipes: MY_RECIPES,
         //     token: null
         // }
+    }
 
+    componentDidMount() {
+      this.props.load_myrecipes(1);
     }
 
     render() {
       console.log(JSON.stringify(this.props))
       if (this.props.login.user) {
+        
+
         return (
           <div>
             <Header signout={this.props.signout}/>
@@ -76,12 +82,13 @@ class Main extends Component {
 
               />
               
-              <Route exact path="/myrecipes" component={() => <MyRecipePage recipes={this.props.my_recipes.my_recipes} />} />
+              <Route exact path="/myrecipes" component={() => <MyRecipePage load_myrecipes={this.props.load_myrecipes} 
+                recipes={this.props.my_recipes.my_recipes} />} />
               <Route exact path="/myrecipes/:recipeID" component={({match}) => <RecipeDetailsPage
-              recipe = {this.props.my_recipes.my_recipes.filter((recipe) => recipe.id == parseInt(match.params.recipeID, 10))[0]} />} />
+              recipe = {MY_RECIPES.filter((recipe) => recipe.rec_id == parseInt(match.params.recipeID, 10))[0]} />} />
                             
-              <Route exact path="/grocerylist" component={() => <MyGroceryListPage groceryLists={this.props.my_recipes.my_recipes}/> } />
-              <Route exact path="/grocerylist/:groceryListID" component={() => <GroceryList recipes={this.props.my_recipes.my_recipes}/> } />
+              <Route exact path="/grocerylist" component={() => <MyGroceryListPage groceryLists={MY_RECIPES}/> } />
+              <Route exact path="/grocerylist/:groceryListID" component={() => <GroceryList recipes={MY_RECIPES}/> } />
               
               <Redirect to="/explore" />
             </Switch>

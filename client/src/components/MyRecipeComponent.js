@@ -15,6 +15,10 @@ class MyRecipePage extends Component {
         this.openOptions = this.openOptions.bind(this);
         this.closeOptions = this.closeOptions.bind(this);
     }
+
+    componentDidMount() {
+        // this.props.load_myrecipes(1);
+    }
     
     toggleOptions(event) {
         if (!this.state.isOptionsOpen) {
@@ -74,17 +78,17 @@ class MyRecipePage extends Component {
         const recipesTiles = recipes.map(recipe => {
             return (
                 
-                <div key={recipe.id} className="col-6 col-sm-4 col-lg-3 col-xl-2">
+                <div key={recipe.rec_id} className="col-6 col-sm-4 col-lg-3 col-xl-2">
                 
                     <Card className="recipe-tile">
-                        <Link to={`/myrecipes/${parseInt(recipe.id, 10)}`} style={{textDecoration: "none", color: "inherit"}}>
-                            <CardImg className="recipe-tile-img" src={recipe.img} alt={recipe.name} />
-                            <CardTitle>{recipe.name}</CardTitle>
+                        <Link to={`/myrecipes/${parseInt(recipe.rec_id, 10)}`} style={{textDecoration: "none", color: "inherit"}}>
+                            <CardImg className="recipe-tile-img" src={recipe.img} alt={recipe.rec_name} />
+                            <CardTitle>{recipe.rec_name}</CardTitle>
                         </Link>
                         
                         
                         <div>
-                            <Link to={`/edit/${parseInt(recipe.id, 10)}`} style={{textDecoration: "none", color: "inherit"}}>
+                            <Link to={`/edit/${parseInt(recipe.rec_id, 10)}`} style={{textDecoration: "none", color: "inherit"}}>
                                 <button type="button" className="pull-right"><FontAwesomeIcon icon="edit" size="sm"/></button>
                             </Link>
                         </div>
