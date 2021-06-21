@@ -132,3 +132,45 @@ export const load_myrecipes_success = (recipes) => ({
 export const load_myrecipes_failed = () => ({
     type: ActionTypes.LOAD_MY_RECIPES_FAILED
 }) 
+
+
+export const get_recipe = (rec_id) => (dispatch) => {
+    dispatch(get_recipe_inProgress(true));
+
+    return fetch(baseUrl + "recingred/getfullrec/", {
+        method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                "rec_id": rec_id, 
+            })
+        })
+        .then(resp => resp.json())
+        .then(resp => {
+            // console.log(JSON.stringify(resp));
+            if (true) {
+                // return add_users(users);
+                dispatch(get_recipe_success(resp));
+            } else {
+                dispatch(get_recipe_failed("Error"));
+            }
+        })
+        .catch(err => console.log(err));
+}
+
+export const get_recipe_inProgress = () => ({
+    type: ActionTypes.GET_RECIPE_IN_PROGRESS
+});
+
+export const get_recipe_success = (recipe) => ({
+    type: ActionTypes.GET_RECIPE_SUCCESS,
+    payload: recipe
+});
+
+export const get_recipe_failed = (errMess) => ({
+    type: ActionTypes.GET_RECIPE_FAILED,
+    payload: errMess
+})
+
+export const get_recipe_reset = () => ({
+    type: ActionTypes.GET_RECIPE_RESET
+})

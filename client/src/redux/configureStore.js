@@ -8,6 +8,7 @@ import {Recipes} from "./recipes";
 import {My_recipes} from "./my_recipes";
 
 import { InitialSignForm } from './forms';
+import { Curr_recipe } from './curr_recipe';
 
 
 export const ConfigureStore = () => {
@@ -16,6 +17,7 @@ export const ConfigureStore = () => {
             login: Login,
             recipes: Recipes,
             my_recipes: My_recipes,
+            curr_recipe: Curr_recipe,
             ...createForms({
                 signupForm: InitialSignForm
             })

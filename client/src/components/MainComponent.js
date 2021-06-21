@@ -25,7 +25,7 @@ import PublicHomePage from './PublicHomePageComponent';
 import PublicAboutUsPage from "./PublicAboutUsComponent";
 import SignupPage from "./SignupPageComponent";
 
-import {login_attempt, login_success, signout, load_myrecipes} from "../redux/ActionCreators";
+import {login_attempt, login_success, signout, load_myrecipes, get_recipe} from "../redux/ActionCreators";
 
 
 
@@ -35,7 +35,8 @@ const mapStateToProps = state => {
   return {
     login: state.login,
     recipes: state.recipes,
-    my_recipes: state.my_recipes
+    my_recipes: state.my_recipes,
+    curr_recipe: state.curr_recipe
   }
 }
 
@@ -43,7 +44,8 @@ const mapDispatchToProps = (dispatch) => ({
   login_attempt: (username, password) => dispatch(login_attempt(username, password)),
   signup_success: (user) => dispatch(login_success(user)),
   signout: () => dispatch(signout()),
-  load_myrecipes: (user_id) => {dispatch(load_myrecipes(user_id))} 
+  load_myrecipes: (user_id) => {dispatch(load_myrecipes(user_id))},
+  get_recipe: (rec_id) => dispatch(get_recipe(rec_id)) 
 });
 
 
@@ -84,8 +86,14 @@ class Main extends Component {
               
               <Route exact path="/myrecipes" component={() => <MyRecipePage load_myrecipes={this.props.load_myrecipes} 
                 recipes={this.props.my_recipes.my_recipes} />} />
-              <Route exact path="/myrecipes/:recipeID" component={({match}) => <RecipeDetailsPage
-              recipe = {MY_RECIPES.filter((recipe) => recipe.rec_id == parseInt(match.params.recipeID, 10))[0]} />} />
+              
+              <Route exact path="/myrecipes/:recipeID" component={({match}) => {
+                // this.props.get_recipe(parseInt(match.params.recipeID, 10))
+                return (
+                <RecipeDetailsPage rec_id={(parseInt(match.params.recipeID, 10))} />  
+                )}
+              }/> 
+                
                             
               <Route exact path="/grocerylist" component={() => <MyGroceryListPage groceryLists={MY_RECIPES}/> } />
               <Route exact path="/grocerylist/:groceryListID" component={() => <GroceryList recipes={MY_RECIPES}/> } />
