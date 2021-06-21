@@ -5,9 +5,9 @@ import { Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 function IngredientItem(props) {
     return (
-        <div className="row ingredient-item">
-                <input type="checkbox" name={props.name} id={props.name} className="col-2 ingredient-item-checkbox" />
-                <label for={props.name} className="col-7 ingredient-item-description strikethrough">{props.name}<br/>800g</label>
+        <div key={props.id} className="row ingredient-item">
+                <input key={props.id} type="checkbox" name={props.name} id={props.name} className="col-2 ingredient-item-checkbox" />
+                <label htmlFor={props.name} className="col-7 ingredient-item-description strikethrough">{props.name}<br/>800g</label>
         </div>
 
         // <label  for={props.name} className="row ingredient-item">
@@ -20,7 +20,7 @@ function IngredientItem(props) {
 }
 
 const IngredientCategory = (props) => {
-    const ingredientItems = props.ingredients.map((ingredient) => <IngredientItem name={ingredient} />)
+    const ingredientItems = props.ingredients.map((ingredient) => <IngredientItem key={ingredient.id} id={ingredient.id} name={ingredient.name} />)
 
     return (
         <div className="col-12 col-md-4 ingredient-category">

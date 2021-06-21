@@ -4,6 +4,10 @@ import './App.css';
 import { BrowserRouter} from 'react-router-dom';
 import {Provider} from "react-redux";
 import { ConfigureStore } from "./redux/configureStore";
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faGripVertical, faMinusSquare, faPlusSquare, faEdit} from '@fortawesome/free-solid-svg-icons'
+
+library.add(faGripVertical, faMinusSquare, faPlusSquare, faEdit)
 
 const store = ConfigureStore();
 
