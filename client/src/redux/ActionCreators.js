@@ -25,7 +25,7 @@ export const login_attempt = (username, password) => (dispatch) =>  {
         })
         .then(resp => {
             console.log(resp);
-            if (resp.status == 1) {
+            if (resp.status === 1) {
                 // return add_users(users);
                 dispatch(login_success(resp.user));
             } else {
