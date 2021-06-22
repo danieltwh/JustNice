@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import {Card, CardImg, CardTitle} from 'reactstrap';
 import { Modal, ModalBody, ModalHeader, ModalFooter} from 'reactstrap';
 import { Col, Row, Navbar, NavbarBrand, Button, Form, FormGroup, FormFeedback, FormText, Label, Input } from 'reactstrap';
@@ -28,7 +28,7 @@ const mapDispatchToProps = (dispatch) => ({
 class RecipeCreationPage extends Component {
     constructor(props) {
         super(props);
-        if (this.props.rec_id !== null && this.props.curr_recipe.inProgress === "success") {
+        if (this.props.rec_id !== "new" && this.props.curr_recipe.inProgress === "success") {
             this.state= {
                 "rec_id": this.props.curr_recipe.recipe.rec_id,
                 "rec_name": this.props.curr_recipe.recipe.rec_name,
@@ -44,7 +44,7 @@ class RecipeCreationPage extends Component {
             }
         } else {
             this.state= {
-                "rec_id": "",
+                "rec_id": "new",
                 "rec_name": "",
                 "rec_instructions": "",
                 "cooking_time": "",
@@ -63,7 +63,7 @@ class RecipeCreationPage extends Component {
     }
 
     componentDidMount() {
-        if (this.props.rec_id !== null && this.props.curr_recipe.inProgress === "idle") {
+        if (this.props.rec_id !== "new" && this.props.curr_recipe.inProgress === "idle") {
             this.props.get_recipe(this.props.rec_id);
         }
 
@@ -100,6 +100,8 @@ class RecipeCreationPage extends Component {
     handleSubmit() {
         console.log(JSON.stringify(this.state))
         alert(JSON.stringify(this.state))
+
+        this.update_recipe(this.state)
     }
 
     renderTitle() {
@@ -158,7 +160,7 @@ class RecipeCreationPage extends Component {
 
         console.log(JSON.stringify(this.state))
 
-        if (this.props.curr_recipe.inProgress === "success") {
+        if (this.props.curr_recipe.inProgress === "success" || this.state.rec_id === "new") {
             return (
                 <Form className="edit-form" onSubmit={this.handleSubmit}>
     
@@ -204,6 +206,8 @@ class RecipeCreationPage extends Component {
                     
                 </Form>
             )
+        } else if(this.props.curr_recipe.inProgress === "update_success") {
+            return (<Redirect to="/myrecipe" />)
         } else {
             return (
                 <Loading />

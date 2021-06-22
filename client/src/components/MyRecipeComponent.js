@@ -2,6 +2,8 @@ import React, {Component} from  'react';
 import {Card, CardImg, CardTitle} from 'reactstrap';
 import { Link} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Fab } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
 class MyRecipePage extends Component {
     constructor(props) {
@@ -14,6 +16,7 @@ class MyRecipePage extends Component {
         this.toggleOptions = this.toggleOptions.bind(this);
         this.openOptions = this.openOptions.bind(this);
         this.closeOptions = this.closeOptions.bind(this);
+        this.addDefaultSrc = this.addDefaultSrc.bind(this);
     }
 
     componentDidMount() {
@@ -51,27 +54,43 @@ class MyRecipePage extends Component {
 
     renderOptions() {
         return (
+            // <>
+            // <button  className="grocery-list-options-button" id="grocery-list-options-button" onClick={this.toggleOptions}><img src="/assets/grocery-list-options-button.png"/></button>
+            //     {this.state.isOptionsOpen ? (
+            //         <div className="grocery-list-options" id="grocery-list-options"
+            //             ref={element => {this.optionsMenu = element;}}>
+            //             <button className="grocery-list-options-item">
+            //                 <i className="fa fa-plus grocery-list-options-icon-button" />
+            //                 <span className="grocery-list-options-icon-right">Create</span>
+            //             </button>
+            //             <button className="grocery-list-options-item">
+            //                 <i className="fa fa-edit grocery-list-options-icon-button" />
+            //                 <span className="grocery-list-options-icon-right">Edit</span>
+            //             </button>
+            //         </div>)
+            //         : 
+            //         (
+            //             null
+            //         )
+            //     }
+            // </>
+
             <>
-            <button  className="grocery-list-options-button" id="grocery-list-options-button" onClick={this.toggleOptions}><img src="/assets/grocery-list-options-button.png"/></button>
-                {this.state.isOptionsOpen ? (
-                    <div className="grocery-list-options" id="grocery-list-options"
-                        ref={element => {this.optionsMenu = element;}}>
-                        <button className="grocery-list-options-item">
-                            <i className="fa fa-plus grocery-list-options-icon-button" />
-                            <span className="grocery-list-options-icon-right">Create</span>
-                        </button>
-                        <button className="grocery-list-options-item">
-                            <i className="fa fa-edit grocery-list-options-icon-button" />
-                            <span className="grocery-list-options-icon-right">Edit</span>
-                        </button>
-                    </div>)
-                    : 
-                    (
-                        null
-                    )
-                }
-        </>
+                <div className="grocery-list-options-button" id="grocery-list-options-button">
+                    <Link to="/edit/new">
+                        <Fab color="primary" aria-label="add">
+                            <AddIcon />
+                        </Fab>
+                    </Link>
+                </div>
+            </>            
+
         )
+    }
+
+    addDefaultSrc(event) {
+        event.target.src = "/assets/recipe-1.jpeg";
+        event.target.onerror = null;
     }
 
     renderRecipes(recipes) {
@@ -82,7 +101,8 @@ class MyRecipePage extends Component {
                 
                     <Card className="recipe-tile">
                         <Link to={`/myrecipes/${parseInt(recipe.rec_id, 10)}`} style={{textDecoration: "none", color: "inherit"}}>
-                            <CardImg className="recipe-tile-img" src={recipe.img} alt={recipe.rec_name} />
+                            <CardImg className="recipe-tile-img" src={recipe.img} onError={e => this.addDefaultSrc(e)} 
+                            style={{"backgroundImage": "url('/assets/recipe-1.jpeg')", backgroundRepeat:"no-repeat"}} />
                             <CardTitle>{recipe.rec_name}</CardTitle>
                         </Link>
                         

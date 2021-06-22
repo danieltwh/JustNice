@@ -179,7 +179,28 @@ export const get_recipe_reset = () => ({
 export const update_recipe = (recipe) => (dispatch) => {
     dispatch(update_recipe_inProgress(true));
 
-    return fetch(baseUrl + "recingred/getfullrec/", {
+    var ingredients = {};
+
+    recipe.ingredient.map(curr => {
+        if (curr.isValid)  {
+            delete curr.isValid;
+            return fetch(baseUrl + "recingred/ingred/", {
+                method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        "ingred_name": curr.ingred_name,
+                        "ingred_unit": curr.ingred_unit
+                        })
+                    })
+                    .then(resp => resp.js)
+        } else {
+            return curr;
+        }
+        ingredients[`${curr.ingred_id}`] = curr.ingred_quantity;
+        return curr;
+    })
+
+    return fetch(baseUrl + "recingred/recipe/", {
         method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
@@ -192,12 +213,7 @@ export const update_recipe = (recipe) => (dispatch) => {
                 "rec_type": recipe.rec_type,
                 "isPublished": recipe.isPublished,
                 "ingredient": recipe.ingredient.map(ingredient => {
-                    if (ingredient.isValid)  {
-                        delete ingredient.isValid;
-                        return ingredient;
-                    } else {
-                        return ingredient;
-                    }
+                    return (ingredient);
                 })
             })
         })
@@ -206,9 +222,9 @@ export const update_recipe = (recipe) => (dispatch) => {
             // console.log(JSON.stringify(resp));
             if (true) {
                 // return add_users(users);
-                dispatch(get_recipe_success(resp));
+                dispatch(update_recipe_success(resp));
             } else {
-                dispatch(get_recipe_failed("Error"));
+                dispatch(update_recipe_failed("Error"));
             }
         })
         .catch(err => console.log(err));
