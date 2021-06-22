@@ -89,7 +89,7 @@ class MyRecipePage extends Component {
                         
                         <div>
                             <Link to={`/edit/${parseInt(recipe.rec_id, 10)}`} style={{textDecoration: "none", color: "inherit"}}>
-                                <button type="button" className="pull-right"><FontAwesomeIcon icon="edit" size="sm"/></button>
+                                <button type="button" className="btn btn-outline-info pull-right"><FontAwesomeIcon icon="edit" size="sm"/></button>
                             </Link>
                         </div>
                     </Card>

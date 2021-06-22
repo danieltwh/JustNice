@@ -78,9 +78,7 @@ class Main extends Component {
             
               <Route path="/explore" component={() => <ExplorePage recipes={this.props.recipes.recipes} />} />
 
-              <Route exact path="/edit/:recipeID" component={({match}) => <RecipeCreationPage recipe={this.props.my_recipes.my_recipes.filter(recipe => {
-                  return recipe.id == parseInt(match.params.recipeID, 19);
-                })[0]} />} 
+              <Route exact path="/edit/:recipeID" component={({match}) => <RecipeCreationPage rec_id={parseInt(match.params.recipeID, 10)} />} 
 
               />
               

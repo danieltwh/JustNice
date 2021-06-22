@@ -18,6 +18,15 @@ export const Curr_recipe = (state = {
 
             case ActionTypes.GET_RECIPE_RESET:
                 return {...state, inProgress: "idle", errMess: null, recipe: null};
+
+            case ActionTypes.UPDATE_RECIPE_IN_PROGRESS:
+                return {...state, inProgress: "updating", errMess: null};
+            
+            case ActionTypes.UPDATE_RECIPE_SUCCESS:
+                return {...state, inProgress: "update_success", errMess: null};
+            
+            case ActionTypes.UPDATE_RECIPE_FAILED:
+                return {...state, inProgress: "update_failed", errMess: null};
         
             default:
                 return state;
