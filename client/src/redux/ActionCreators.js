@@ -133,6 +133,10 @@ export const load_myrecipes_failed = () => ({
     type: ActionTypes.LOAD_MY_RECIPES_FAILED
 }) 
 
+export const load_myrecipes_reset = () => ({
+    type: ActionTypes.LOAD_MY_RECIPES_RESET
+})
+
 
 export const get_recipe = (rec_id) => (dispatch) => {
     dispatch(get_recipe_inProgress(true));
@@ -154,7 +158,9 @@ export const get_recipe = (rec_id) => (dispatch) => {
                 dispatch(get_recipe_failed("Error"));
             }
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            dispatch(get_recipe_failed("Error"));
+            console.log(err)});
 }
 
 export const get_recipe_inProgress = () => ({
@@ -176,58 +182,99 @@ export const get_recipe_reset = () => ({
 })
 
 
-export const update_recipe = (recipe) => (dispatch) => {
+export const update_recipe = (newRecipe) => (dispatch) => {
     dispatch(update_recipe_inProgress(true));
 
-    var ingredients = {};
+    // var ingredients = [];
+    var count = -1;
+    var ingredients = newRecipe.ingredient.map(curr => {
+        if (curr.isValid === "valid")  {
+            // ingredients.push({`${curr.ingred_id}`: curr.ingred_quantity})
+            // ingredients[`${curr.ingred_id}`] = curr.ingred_quantity;
 
-    recipe.ingredient.map(curr => {
-        if (curr.isValid)  {
-            delete curr.isValid;
-            return fetch(baseUrl + "recingred/ingred/", {
-                method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({
-                        "ingred_name": curr.ingred_name,
-                        "ingred_unit": curr.ingred_unit
-                        })
-                    })
-                    .then(resp => resp.js)
+            var nextItem = {}
+            nextItem[`${curr.ingred_id}`] = curr.ingred_quantity;
+            return nextItem;
         } else {
-            return curr;
+            // ingredients[`${count}`] = {
+            //     "ingred_name": curr.ingred_name,
+            //     "ingred_unit": curr.ingred_unit,
+            //     "ingred_quantity": curr.ingred_quantity
+            // };
+            var nextItem = {}
+            nextItem[`${count}`] = {
+                    "ingred_name": curr.ingred_name,
+                    "ingred_unit": curr.ingred_unit,
+                    "ingred_quantity": curr.ingred_quantity
+                }
+            count = count - 1;
+            return nextItem;
         }
-        ingredients[`${curr.ingred_id}`] = curr.ingred_quantity;
-        return curr;
     })
 
-    return fetch(baseUrl + "recingred/recipe/", {
-        method: "POST",
+    console.log(JSON.stringify(ingredients));
+    alert(JSON.stringify(ingredients));
+
+    if (newRecipe.rec_id === "new") {
+        return fetch(baseUrl + "recingred/recipe/", {
+            method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
-                "rec_id": recipe.rec_id,
-                "rec_name": recipe.rec_name,
-                "rec_instructions": recipe.rec_instructions,
-                "cooking_time": recipe.cooking_time,
-                "serving_pax": recipe.serving_pax,
-                "cuisine": recipe.cuisine,
-                "rec_type": recipe.rec_type,
-                "isPublished": recipe.isPublished,
-                "ingredient": recipe.ingredient.map(ingredient => {
-                    return (ingredient);
+                "rec_name": newRecipe.rec_name,
+                "rec_instructions": newRecipe.rec_instructions,
+                "cooking_time": newRecipe.cooking_time,
+                "serving_pax": newRecipe.serving_pax,
+                "cuisine": newRecipe.cuisine,
+                "rec_type": newRecipe.rec_type,
+                "isPublished": newRecipe.isPublished,
+                "user_id": 1,
+                "ingredients": ingredients
                 })
             })
-        })
-        .then(resp => resp.json())
-        .then(resp => {
-            // console.log(JSON.stringify(resp));
-            if (true) {
-                // return add_users(users);
-                dispatch(update_recipe_success(resp));
-            } else {
-                dispatch(update_recipe_failed("Error"));
-            }
-        })
-        .catch(err => console.log(err));
+            .then(resp => resp.json())
+            .then(resp => {
+                // console.log(JSON.stringify(resp));
+                if (resp.status === 1) {
+                    // return add_users(users);
+                    dispatch(update_recipe_success());
+                } else {
+                    dispatch(update_recipe_failed("Error"));
+                }
+            })
+            .catch(err => {
+                alert(err);
+                console.log(err)});
+    } else {
+        return fetch(baseUrl + "recingred/recipe/", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                "rec_id": newRecipe.rec_id,
+                "rec_name": newRecipe.rec_name,
+                "rec_instructions": newRecipe.rec_instructions,
+                "cooking_time": newRecipe.cooking_time,
+                "serving_pax": newRecipe.serving_pax,
+                "cuisine": newRecipe.cuisine,
+                "rec_type": newRecipe.rec_type,
+                "isPublished": newRecipe.isPublished,
+                "user_id": 1,
+                "ingredients": ingredients
+                })
+            })
+            .then(resp => resp.json())
+            .then(resp => {
+                // console.log(JSON.stringify(resp));
+                if (resp.status === 1) {
+                    // return add_users(users);
+                    dispatch(update_recipe_success(true));
+                } else {
+                    dispatch(update_recipe_failed("Error"));
+                }
+            })
+            .catch(err => {
+                alert(err);
+                console.log(err)});
+    }
 }
 
 export const update_recipe_inProgress = () => ({

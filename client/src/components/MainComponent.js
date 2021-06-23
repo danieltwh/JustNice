@@ -62,7 +62,7 @@ class Main extends Component {
     }
 
     componentDidMount() {
-      this.props.load_myrecipes(1);
+      // this.props.load_myrecipes(1);
     }
 
     render() {
@@ -82,8 +82,7 @@ class Main extends Component {
               />
               <Route exact path="/edit/new" component={({match}) => <RecipeCreationPage rec_id="new" />} />
               
-              <Route exact path="/myrecipes" component={() => <MyRecipePage load_myrecipes={this.props.load_myrecipes} 
-                recipes={this.props.my_recipes.my_recipes} />} />
+              <Route exact path="/myrecipes" component={MyRecipePage} />
               
               <Route exact path="/myrecipes/:recipeID" component={({match}) => {
                 // this.props.get_recipe(parseInt(match.params.recipeID, 10))

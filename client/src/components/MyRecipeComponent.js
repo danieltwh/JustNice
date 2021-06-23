@@ -5,6 +5,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
+import {withRouter} from 'react-router-dom';
+import {connect} from "react-redux";
+
+import { load_myrecipes, load_myrecipes_reset } from "../redux/ActionCreators"; 
+
+
+const mapStateToProps = state => {
+    return {
+      login: state.login,
+      my_recipes: state.my_recipes
+    }
+  }
+  
+  const mapDispatchToProps = (dispatch) => ({
+    load_myrecipes: (user_id) => {dispatch(load_myrecipes(user_id))},
+    load_myrecipes_reset: () => {dispatch(load_myrecipes_reset())}
+  });
+
 class MyRecipePage extends Component {
     constructor(props) {
         super(props);
@@ -20,7 +38,18 @@ class MyRecipePage extends Component {
     }
 
     componentDidMount() {
-        // this.props.load_myrecipes(1);
+        if (this.props.my_recipes.inProgress === "not-loaded") {
+            console.log(this.props.my_recipes.inProgress);
+            this.props.load_myrecipes(1);
+        }   
+    }
+
+    componentWillUnmount() {
+
+        if (this.props.my_recipes.inProgress === "success" && this.props.my_recipes.my_recipes.length >= 1 ) {
+            console.log(this.props.my_recipes.inProgress);
+            this.props.load_myrecipes_reset();
+        }  
     }
     
     toggleOptions(event) {
@@ -128,7 +157,7 @@ class MyRecipePage extends Component {
             <>
                 <div className="container-fluid">
                     <div className="row">
-                        {this.renderRecipes(this.props.recipes)}
+                        {this.renderRecipes(this.props.my_recipes.my_recipes)}
                     </div>
                 </div>
                 {this.renderOptions()}
@@ -137,4 +166,4 @@ class MyRecipePage extends Component {
     }
 }
 
-export default MyRecipePage;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MyRecipePage));

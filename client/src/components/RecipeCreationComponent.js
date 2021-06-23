@@ -28,7 +28,7 @@ const mapDispatchToProps = (dispatch) => ({
 class RecipeCreationPage extends Component {
     constructor(props) {
         super(props);
-        if (this.props.rec_id !== "new" && this.props.curr_recipe.inProgress === "success") {
+        if (this.props.rec_id !== "new" && this.props.curr_recipe.recipe !== null && (this.props.curr_recipe.inProgress === "success" || this.props.curr_recipe.inProgress==="updating")) {
             this.state= {
                 "rec_id": this.props.curr_recipe.recipe.rec_id,
                 "rec_name": this.props.curr_recipe.recipe.rec_name,
@@ -47,11 +47,11 @@ class RecipeCreationPage extends Component {
                 "rec_id": "new",
                 "rec_name": "",
                 "rec_instructions": "",
-                "cooking_time": "",
-                "serving_pax": "",
-                "cuisine": "",
-                "rec_type": "",
-                "isPublished": "",
+                "cooking_time": 60,
+                "serving_pax": 1,
+                "cuisine": "global",
+                "rec_type": "edible",
+                "isPublished": true,
                 "ingredient": []
             }
         }
@@ -63,15 +63,16 @@ class RecipeCreationPage extends Component {
     }
 
     componentDidMount() {
+
         if (this.props.rec_id !== "new" && this.props.curr_recipe.inProgress === "idle") {
             this.props.get_recipe(this.props.rec_id);
         }
 
-        if (this.textArea) {
-            this.trackContent(this.textArea)
+        if (this.rec_instructions) {
+            this.trackContent(this.rec_instructions)
         }
-        if (this.recipeName) {
-            this.trackContent(this.recipeName)
+        if (this.rec_name) {
+            this.trackContent(this.rec_name)
         }
     }
 
@@ -82,7 +83,7 @@ class RecipeCreationPage extends Component {
     }
 
     componentWillUnmount() {
-        if (this.props.curr_recipe.inProgress === "success") {
+        if (this.props.curr_recipe.inProgress === "success" || this.props.curr_recipe.inProgress === "update_success") {
             this.props.get_recipe_reset()
         }
     }
@@ -97,11 +98,67 @@ class RecipeCreationPage extends Component {
         });
     }
 
-    handleSubmit() {
-        console.log(JSON.stringify(this.state))
-        alert(JSON.stringify(this.state))
+    handleSubmit(event) {
+        event.preventDefault();
 
-        this.update_recipe(this.state)
+        // console.log(JSON.stringify(this.state))
+        // alert(JSON.stringify(this.state))
+
+        // var newRecipe = this.state;
+        
+        // var ingredients = {};
+        // var count = -1;
+        // newRecipe.ingredient.map(curr => {
+        //     if (curr.isValid === "valid")  {
+        //         ingredients[`${curr.ingred_id}`] = curr.ingred_quantity;
+        //         return curr;
+        //     } else {
+        //         ingredients[`${count}`] = {
+        //             "ingred_name": curr.ingred_name,
+        //             "ingred_unit": curr.ingred_unit,
+        //             "ingred_quantity": curr.ingred_quantity
+        //         };
+        //         count--;
+        //         return curr;
+        //     }
+        // })
+
+        // var bodyToSend = {
+        //     "rec_id": newRecipe.rec_id,
+        //     "rec_name": newRecipe.rec_name,
+        //     "rec_instructions": newRecipe.rec_instructions,
+        //     "cooking_time": newRecipe.cooking_time,
+        //     "serving_pax": newRecipe.serving_pax,
+        //     "cuisine": newRecipe.cuisine,
+        //     "rec_type": newRecipe.rec_type,
+        //     "isPublished": newRecipe.isPublished,
+        //     "user_id": 1,
+        //     "ingredients": ingredients
+        //     }
+        
+        // console.log(Object.keys(bodyToSend.ingredients));
+        // console.log(JSON.stringify(bodyToSend.ingredients));
+        // console.log(JSON.stringify(bodyToSend));
+        // alert(bodyToSend);
+        
+    
+        // return fetch("https://hiredone.pythonanywhere.com/" + "recingred/recipe/", {
+        //     method: "POST",
+        //     headers: {"Content-Type": "application/json"},
+        //     body: JSON.stringify(bodyToSend)
+        //     })
+        //     .then(resp => resp.json())
+        //     .then(resp => {
+        //         console.log(JSON.stringify(resp));
+        //         alert(JSON.stringify(resp));
+        //         return resp;
+        //     })
+        //     .catch(err => {
+        //         console.log(err)
+        //         alert(err);
+        //         });
+
+        this.props.update_recipe(this.state);
     }
 
     renderTitle() {
@@ -111,11 +168,11 @@ class RecipeCreationPage extends Component {
                         <img className="recipe-tile-img col-6" src={this.state.img} alt={this.state.rec_name} />
                         <div className="col-6" style={{display:"flex",alignItems:"center", flexWrap:"wrap"}}>
                             <FormGroup className="recipe-creation-name-box">
-                                <textarea name="name" placeholder="Recipe Name" className="form-control recipe-creation-name"
+                                <textarea name="rec_name" placeholder="Recipe Name" className="form-control recipe-creation-name"
                                     value={this.state.rec_name}
-                                    ref={el => this.recipeName = el}
+                                    ref={el => this.rec_name = el}
                                     onChange={e => {
-                                        this.trackContent(this.recipeName)
+                                        this.trackContent(this.rec_name)
                                         this.handleChange(e)}}
                                 />
                             </FormGroup>
@@ -130,7 +187,6 @@ class RecipeCreationPage extends Component {
     }
 
     trackContent(element) {
-        
         element.style.height = 'auto';
         element.style.height = element.scrollHeight + 'px';
     }
@@ -139,12 +195,12 @@ class RecipeCreationPage extends Component {
         return (
             <FormGroup >
                 <div className="recipe-details-steps"> 
-                    <textarea name="steps" placeholder="Steps" className="form-control"
+                    <textarea name="rec_instructions" placeholder="Steps" className="form-control"
                         // rows={rows}
-                        ref={el => {this.textArea = el}}
+                        ref={el => {this.rec_instructions = el}}
                         value={this.state.rec_instructions}
                         onChange={e => {
-                            this.trackContent(this.textArea)
+                            this.trackContent(this.rec_instructions)
                             this.handleChange(e)}}
                     ></textarea>
                 </div>
@@ -157,12 +213,16 @@ class RecipeCreationPage extends Component {
     }
 
     render() {
+        // return (
+        //     <Loading />
+        // );
 
         console.log(JSON.stringify(this.state))
+        console.log(JSON.stringify(this.props.curr_recipe.inProgress))
 
-        if (this.props.curr_recipe.inProgress === "success" || this.state.rec_id === "new") {
+        if (this.props.curr_recipe.inProgress === "success" || (this.props.curr_recipe.inProgress === "failed" && this.state.rec_id === "new")) {
             return (
-                <Form className="edit-form" onSubmit={this.handleSubmit}>
+                <Form className="edit-form" onSubmit={event => this.handleSubmit(event)}>
     
                 
                     <div className="container-fluid">
@@ -207,7 +267,7 @@ class RecipeCreationPage extends Component {
                 </Form>
             )
         } else if(this.props.curr_recipe.inProgress === "update_success") {
-            return (<Redirect to="/myrecipe" />)
+            return (<Redirect to="/myrecipes" />)
         } else {
             return (
                 <Loading />
