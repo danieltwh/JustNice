@@ -467,6 +467,7 @@ input[type=checkbox]:checked + label.strikethrough{
   width: 80px;
   height: 40px;
   border-radius: 20px;
+  margin-right: 15px;
 }
 
 .reset-button {
@@ -474,6 +475,7 @@ input[type=checkbox]:checked + label.strikethrough{
   height: 40px;
   border-radius: 20px;
 }
+
 
 /********* Recipe Details Page *********/ 
 .recipe-details-title {
