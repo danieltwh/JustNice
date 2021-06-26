@@ -36,7 +36,9 @@ const mapStateToProps = state => {
     login: state.login,
     recipes: state.recipes,
     my_recipes: state.my_recipes,
-    curr_recipe: state.curr_recipe
+    curr_recipe: state.curr_recipe,
+    grocery: state.grocery,
+    curr_grocList : state.curr_grocList
   }
 }
 
@@ -93,7 +95,7 @@ class Main extends Component {
                 
                             
               <Route exact path="/grocerylist" component={() => <MyGroceryListPage groceryLists={MY_RECIPES}/> } />
-              <Route exact path="/grocerylist/:groceryListID" component={() => <GroceryList recipes={MY_RECIPES}/> } />
+              <Route exact path="/grocerylist/:groceryListID" component={({match}) => <GroceryList recipes={MY_RECIPES} groc_id={parseInt(match.params.groceryListID, 10)} /> } />
               
               <Redirect to="/explore" />
             </Switch>

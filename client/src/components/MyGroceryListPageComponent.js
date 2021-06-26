@@ -2,6 +2,28 @@ import React, {Component} from  'react';
 import {Card, CardImg, CardTitle, CardSubtitle} from 'reactstrap';
 import { Link} from 'react-router-dom';
 
+import {withRouter} from 'react-router-dom';
+import {connect, useSelector, useDispatch} from "react-redux";
+
+import { Fab } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+
+import { load_myGrocList, load_myGrocList_reset, create_new_GrocList } from '../redux/ActionCreators';
+
+const mapStateToProps = state => {
+    return {
+      login: state.login,
+      groceryList: state.groceryList
+    }
+  }
+  
+const mapDispatchToProps = (dispatch) => ({
+    load_myGrocList: (user_id) => dispatch(load_myGrocList(user_id)),
+    load_myGrocList_reset: () => dispatch(load_myGrocList_reset()),
+    create_new_GrocList: (user_id, list_id) => dispatch(create_new_GrocList(user_id, list_id))
+});
+
+
 class MyGroceryListPage extends Component {
     constructor(props) {
         super(props);
@@ -12,6 +34,18 @@ class MyGroceryListPage extends Component {
         this.toggleOptions = this.toggleOptions.bind(this);
         this.openOptions = this.openOptions.bind(this);
         this.closeOptions = this.closeOptions.bind(this);
+    }
+
+    componentDidMount() {
+        if (this.props.groceryList.inProgress === "idle") {
+            this.props.load_myGrocList(this.props.login.user.id);
+        }
+    }
+
+    componentWillUnmount() {
+        if(this.props.groceryList.inProgress === "success") {
+            this.props.load_myGrocList_reset();
+        }
     }
 
     toggleOptions(event) {
@@ -48,11 +82,11 @@ class MyGroceryListPage extends Component {
             return (
                 
                 <div key={groceryList.id} className="col-6 col-sm-4 col-lg-3 col-xl-2">
-                <Link to={`/grocerylist/${parseInt(groceryList.id, 10)}`} style={{textDecoration: "none", color: "inherit"}}>
+                <Link to={`/grocerylist/${parseInt(groceryList.list_id, 10)}`} style={{textDecoration: "none", color: "inherit"}}>
                     <Card className="grocery-list-tile">
                         {/* <CardImg className="grocery-list-tile-img" src={groceryList.img} alt={groceryList.name} /> */}
-                        <CardTitle tag="h4" className="grocery-list-tile-name">{groceryList.name}</CardTitle>
-                        <CardSubtitle className="mb-2 text-muted">{`Created: 17/06/2021`}</CardSubtitle>
+                        <CardTitle className="grocery-list-tile-name">{groceryList.list_name}</CardTitle>
+                        <CardSubtitle className="mb-2 text-muted grocery-list-tile-subtitle">{`Created: 17/06/2021`}</CardSubtitle>
                     </Card>
                 </Link>
                 </div>
@@ -68,11 +102,20 @@ class MyGroceryListPage extends Component {
             <>
                 <div className="container-fluid">
                     <div className="row">
-                        {this.renderGroceryListTiles(this.props.groceryLists)}
+                        {this.renderGroceryListTiles(this.props.groceryList.groceryList)}
                     </div>
                 </div>
 
-                <button  className="grocery-list-options-button" id="grocery-list-options-button" onClick={this.toggleOptions}><img src="/assets/grocery-list-options-button.png"/></button>
+                <div className="grocery-list-options-button" id="grocery-list-options-button">
+                   
+                        <Fab color="primary" aria-label="add" onClick={() => this.props.create_new_GrocList(this.props.login.user.id, this.props.groceryList.groceryList.length + 1)}>
+                            <AddIcon />
+                        </Fab>
+                    
+                </div>
+          
+
+                {/* <button  className="grocery-list-options-button" id="grocery-list-options-button" onClick={this.toggleOptions}><img src="/assets/grocery-list-options-button.png"/></button>
                 {this.state.isOptionsOpen ? (
                     <div className="grocery-list-options" id="grocery-list-options"
                         ref={element => {this.optionsMenu = element;}}>
@@ -89,10 +132,10 @@ class MyGroceryListPage extends Component {
                     (
                         null
                     )
-                }
+                } */}
             </>
         )
     }
 }
 
-export default MyGroceryListPage;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MyGroceryListPage));

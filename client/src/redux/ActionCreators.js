@@ -182,7 +182,7 @@ export const get_recipe_reset = () => ({
 })
 
 
-export const update_recipe = (newRecipe) => (dispatch) => {
+export const update_recipe = (newRecipe, user_id) => (dispatch) => {
     dispatch(update_recipe_inProgress(true));
 
     // var ingredients = [];
@@ -227,7 +227,7 @@ export const update_recipe = (newRecipe) => (dispatch) => {
                 "cuisine": newRecipe.cuisine,
                 "rec_type": newRecipe.rec_type,
                 "isPublished": newRecipe.isPublished,
-                "user_id": 1,
+                "user_id": user_id,
                 "ingredients": ingredients
                 })
             })
@@ -257,7 +257,7 @@ export const update_recipe = (newRecipe) => (dispatch) => {
                 "cuisine": newRecipe.cuisine,
                 "rec_type": newRecipe.rec_type,
                 "isPublished": newRecipe.isPublished,
-                "user_id": 1,
+                "user_id": user_id,
                 "ingredients": ingredients
                 })
             })
@@ -288,3 +288,113 @@ export const update_recipe_failed = () => ({
 export const update_recipe_success = () => ({
     type: ActionTypes.UPDATE_RECIPE_SUCCESS
 });
+
+/***** Loading My Grocery List *********/
+export const load_myGrocList = (user_id) => (dispatch) => {
+    dispatch(load_myGrocList_inProgress(true));
+    return fetch(baseUrl + `groclist/getter/${user_id}`)
+        .then(resp => resp.json())
+        .then(resp => {
+            // console.log(JSON.stringify(resp));
+            if (resp.length >=0) {
+                // return add_users(users);
+                dispatch(load_myGrocList_success(resp));
+            } else {
+                dispatch(load_myGrocList_failed("Error"));
+            }
+        })
+        .catch(err => {
+            alert(err);
+            console.log(err)});
+
+}
+
+export const load_myGrocList_inProgress = () => ({
+    type: ActionTypes.LOAD_GROCERYLIST_IN_PROGRESS
+});
+
+export const load_myGrocList_success = (grocList) => ({
+    type: ActionTypes.LOAD_GROCERYLIST_SUCCESS,
+    payload: grocList
+});
+
+export const load_myGrocList_failed = (errMess) => ({
+    type: ActionTypes.LOAD_GROCERYLIST_FAILED,
+    payload: errMess
+})
+
+export const load_myGrocList_reset = () => ({
+    type: ActionTypes.LOAD_GROCERYLIST_RESET
+})
+
+/***** Creating new Grocery List *********/
+export const create_new_GrocList = (user_id, list_id) => (dispatch) => {
+    dispatch(load_myGrocList_inProgress(true));
+
+    alert(JSON.stringify({"user_id": user_id, "list_id": list_id}));
+
+    return fetch(baseUrl + `groclist/getter/`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            "user_id": user_id,
+            "list_id": list_id,
+            "list_name": "Untitled"
+            })
+        })
+        .then(resp => resp.json())
+        .then(resp => {
+            // console.log(JSON.stringify(resp));
+            if (true) {
+                // return add_users(users);
+                dispatch(load_myGrocList(user_id));
+            } else {
+                dispatch(load_myGrocList_failed("Error"));
+            }
+        })
+        .catch(err => {
+            alert(err);
+            console.log(err)});
+}
+
+/***** Loading Current Grocery List *********/
+export const load_currGrocList = (user_id, grocList_id) => (dispatch) => {
+    dispatch(load_currGrocList_inProgress(true));
+    return fetch(baseUrl + `groclist/update/${user_id}/${grocList_id}`)
+        .then(resp => resp.json())
+        .then(resp => {
+            // console.log(JSON.stringify(resp));
+            if (true) {
+                // return add_users(users);
+                dispatch(load_currGrocList_success(resp));
+            } else {
+                dispatch(load_currGrocList_failed("Error"));
+            }
+        })
+        .catch(err => {
+            alert(err);
+            console.log(err)});
+}
+
+export const load_currGrocList_inProgress = () => ({
+    type: ActionTypes.LOAD_LIST_IN_PROGRESS
+});
+
+export const load_currGrocList_success = (grocList) => ({
+    type: ActionTypes.LOAD_LIST_SUCCESS,
+    payload: grocList
+});
+
+export const load_currGrocList_failed = (errMess) => ({
+    type: ActionTypes.LOAD_LIST_FAILED,
+    payload: errMess
+})
+
+export const load_currGrocList_reset = () => ({
+    type: ActionTypes.LOAD_LIST_RESET
+})
+
+/***** Loading Current Grocery List *********/
+
+
+// export const update_currGrocList = ()

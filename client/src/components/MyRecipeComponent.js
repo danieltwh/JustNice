@@ -40,7 +40,7 @@ class MyRecipePage extends Component {
     componentDidMount() {
         if (this.props.my_recipes.inProgress === "not-loaded") {
             console.log(this.props.my_recipes.inProgress);
-            this.props.load_myrecipes(1);
+            this.props.load_myrecipes(this.props.login.user.id);
         }   
     }
 

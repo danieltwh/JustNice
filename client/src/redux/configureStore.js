@@ -10,6 +10,7 @@ import {My_recipes} from "./my_recipes";
 import { InitialSignForm } from './forms';
 import { Curr_recipe } from './curr_recipe';
 import { GroceryList } from './groceryList';
+import { Curr_GroceryList } from './curr_groceryList';
 
 
 export const ConfigureStore = () => {
@@ -19,7 +20,8 @@ export const ConfigureStore = () => {
             recipes: Recipes,
             my_recipes: My_recipes,
             curr_recipe: Curr_recipe,
-            grocery: GroceryList,
+            groceryList: GroceryList,
+            curr_grocList : Curr_GroceryList,
             ...createForms({
                 signupForm: InitialSignForm
             })

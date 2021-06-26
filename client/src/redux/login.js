@@ -2,7 +2,7 @@ import * as ActionTypes from "./ActionTypes";
 
 export const Login = (state = {
         inProgress: false,
-        user: true,
+        user: null,
         errMess: null
     }, action) => {
         switch(action.type) {

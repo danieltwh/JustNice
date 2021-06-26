@@ -9,19 +9,22 @@ import AddIcon from '@material-ui/icons/Add';
 import {withRouter} from 'react-router-dom';
 import {connect} from "react-redux";
 
-import { load_myrecipes, load_myrecipes_reset } from "../redux/ActionCreators"; 
+import { load_myrecipes, load_myrecipes_reset, load_currGrocList } from "../redux/ActionCreators"; 
+import { baseUrl } from '../shared/baseUrl';
 
 
 const mapStateToProps = state => {
     return {
       login: state.login,
-      my_recipes: state.my_recipes
+      my_recipes: state.my_recipes,
+      curr_grocList: state.curr_grocList
     }
   }
   
   const mapDispatchToProps = (dispatch) => ({
     load_myrecipes: (user_id) => {dispatch(load_myrecipes(user_id))},
-    load_myrecipes_reset: () => {dispatch(load_myrecipes_reset())}
+    load_myrecipes_reset: () => {dispatch(load_myrecipes_reset())},
+    load_currGrocList: (user_id, groc_id) => {dispatch(load_currGrocList(user_id, groc_id))}
   });
 
 class AddRecipe extends Component {
@@ -29,7 +32,8 @@ class AddRecipe extends Component {
         super(props);
 
         this.state = {
-            groceryListName:"Grocery List Name",
+            groceryListName: this.props.curr_grocList.grocery.list_name,
+            grocery_id: this.props.groc_id,
             toAdd: {}
         };
         this.addDefaultSrc = this.addDefaultSrc.bind(this);
@@ -41,7 +45,7 @@ class AddRecipe extends Component {
     componentDidMount() {
         if (this.props.my_recipes.inProgress === "not-loaded") {
             console.log(this.props.my_recipes.inProgress);
-            this.props.load_myrecipes(1);
+            this.props.load_myrecipes(this.props.login.user.id);
         }   
     }
 
@@ -136,7 +140,28 @@ class AddRecipe extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        alert(JSON.stringify(this.state));
+        // alert(JSON.stringify(this.state));
+        var toSend = {...this.state.toAdd};
+        toSend["list_name"] = this.state.groceryListName;
+
+        // alert(JSON.stringify(toSend));
+
+        return fetch(baseUrl + `groclist/update/${this.props.login.user.id}/${this.state.grocery_id}/`,{
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(
+                toSend
+            )
+        })
+        .then(resp => resp.json())
+        .then(resp => {
+            console.log(JSON.stringify(resp));
+            if(resp.status === "Successfully updated"){
+                this.props.load_currGrocList(this.props.login.user.id, this.props.groc_id);
+            } else {
+            }
+        })
+        .catch(err => console.log(err));
     }
 
     render() {

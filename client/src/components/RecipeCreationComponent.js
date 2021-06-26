@@ -14,13 +14,14 @@ import Loading from "./LoadingComponent";
 
 const mapStateToProps = state => {
     return {
-      curr_recipe: state.curr_recipe
+        login: state.login,
+        curr_recipe: state.curr_recipe
     }
   }
   
 const mapDispatchToProps = (dispatch) => ({
     get_recipe: (rec_id) => dispatch(get_recipe(rec_id)),
-    update_recipe: (recipe) => dispatch(update_recipe(recipe)),
+    update_recipe: (recipe, user_id) => dispatch(update_recipe(recipe, user_id)),
     get_recipe_reset: () => dispatch(get_recipe_reset())
 });
 
@@ -158,7 +159,7 @@ class RecipeCreationPage extends Component {
         //         alert(err);
         //         });
 
-        this.props.update_recipe(this.state);
+        this.props.update_recipe(this.state, this.props.login.user.id);
     }
 
     renderTitle() {
