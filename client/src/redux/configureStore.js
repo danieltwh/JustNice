@@ -2,6 +2,7 @@ import { createStore, combineReducers,applyMiddleware } from 'redux';
 import { createForms } from "react-redux-form";
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
+import throttle from 'lodash/throttle';
 
 import {Login} from "./login";
 import {Recipes} from "./recipes";
@@ -12,6 +13,9 @@ import { Curr_recipe } from './curr_recipe';
 import { GroceryList } from './groceryList';
 import { Curr_GroceryList } from './curr_groceryList';
 
+import { loadState,  saveState } from './localStorage';
+
+const persistedState = loadState();
 
 export const ConfigureStore = () => {
     const store = createStore(
@@ -26,8 +30,15 @@ export const ConfigureStore = () => {
                 signupForm: InitialSignForm
             })
         }),
+        persistedState,
         applyMiddleware(thunk, logger)
     );
+
+    store.subscribe(throttle(() => {
+        saveState({
+            login: store.getState().login
+        });
+    }, 1000));
     
     return store;
 };
