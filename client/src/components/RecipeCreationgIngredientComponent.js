@@ -4,6 +4,16 @@ import {Card, CardImg, CardTitle} from 'reactstrap';
 import { Modal, ModalBody, ModalHeader, ModalFooter} from 'reactstrap';
 import { Col, Row, Navbar, NavbarBrand, Button, Form, FormGroup, FormFeedback, FormText, Label, Input } from 'reactstrap';
 import {LocalForm, Control, Errors} from 'react-redux-form'
+
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import InputBase from '@material-ui/core/InputBase';
+
+
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { baseUrl } from '../shared/baseUrl';
@@ -73,12 +83,10 @@ class RecipeIngredients extends Component {
         var newList  = this.state.ingredients.map(ingredient => {
             if (ingredient.ingred_id === id) {
                 var validity;
-                if (isValid === "invalid" && newValue !== "") {
-                    validity = "invalid";
-                } else if (newValue === "") {
-                    validity = "required"
+                if (newValue === "") {
+                    validity = "required";
                 } else {
-                    validity = "no-action"
+                    validity = "init";
                 }
                 return ({...ingredient, "ingred_name": newValue, isValid: validity});
             } else {
@@ -102,6 +110,28 @@ class RecipeIngredients extends Component {
                     validity = isValid
                 }
                 return ({...ingredient, "ingred_quantity": newValue, isValid: validity});
+            } else {
+                return (ingredient);
+            }
+        });
+
+        this.setState({
+            ingredients: newList
+        });
+        this.props.handleIngredient(newList);
+    }
+
+    handleIngredientUnitChange(id, name, isValid, newValue) {
+        console.log("Ingredient unit changing..");
+        var newList  = this.state.ingredients.map(ingredient => {
+            if (ingredient.ingred_id === id) {
+                var validity;
+                if (name === "") {
+                    validity = "required"
+                } else {
+                    validity = isValid
+                }
+                return ({...ingredient, "ingred_unit": newValue, isValid: validity});
             } else {
                 return (ingredient);
             }
@@ -182,17 +212,17 @@ class RecipeIngredients extends Component {
 
                                 <div className="col-10">
                                     <div className="form-row">
-                                        <div className="col-8 ingredient-name-input">
+                                        <div className="col-7 ingredient-name-input">
                                             <Input type="text" className="form-control" value={ingred_name}
                                                 onChange= {(event) => this.handleIngredientNameChange(ingred_id, ingred_name, isValid, event.target.value)}
-                                                onBlur= {(event) => {this.validateIngredient(ingred_id, event)}}
+                                                onBlur= {(event) => {this.validateIngredient(ingred_id, ingred_quantity, event)}}
                                                 valid= {isValid == "valid"}
                                                 invalid={isValid !== "valid" && isValid !== "init" && isValid !=="no-action"}
                                             />
                                             {(() => {
-                                                if (isValid == "init" ) {
+                                                if (isValid === "init" ) {
 
-                                                } else if (isValid == "required") {
+                                                } else if (isValid === "required") {
                                                     return (<FormFeedback>Required</FormFeedback>);
                                                 } else {
                                                     return (<FormFeedback>Ingredient not found and will be <strong>uncategorised</strong></FormFeedback>);
@@ -202,15 +232,35 @@ class RecipeIngredients extends Component {
                                         
                                         
                                         
-                                        <div className="col-4">
+                                        <div className="col-5">
                                             <div className="form-row" >
-                                                <input type="text" className="form-control col-md-8 col-7" value={ingred_quantity}
+                                                <input type="text" className="form-control col-md-6 col-5" value={ingred_quantity}
                                                      onChange= {(event) => this.handleIngredientQuantityChange(ingred_id, ingred_name, isValid, event.target.value)}
                                                 >
                                                    
                                                 </input>
-                                                <div className="input-group-text col-md-4 col-5 ingredient-unit" >
-                                                    <span >{ingred_unit}</span>
+                                                
+                                                <div className="input-group-text col-md-6 col-7 ingredient-unit" >
+                                                    {(() => {
+                                                        if(isValid === "valid"){
+                                                            return <span >{ingred_unit}</span>
+                                                        } else {
+                                                            return (
+                                                                <FormControl style={{width:"100%"}}>
+                                                                {/* <InputLabel id="demo-customized-select-label">Quantity</InputLabel> */}
+                                                                    <Select value={ingred_unit}
+                                                                    labelId="demo-customized-select-label"
+                                                                    id="demo-customized-select"
+                                                                    onChange={(event) => this.handleIngredientUnitChange(ingred_id, ingred_name, isValid, event.target.value)}
+                                                                    >
+                                                                        <MenuItem value="ml">ml</MenuItem>
+                                                                        <MenuItem value="g">g</MenuItem>
+                                                                        <MenuItem value="whole">whole</MenuItem>
+                                                                    </Select>
+                                                                </FormControl>
+                                                            );
+                                                        }
+                                                    })()}
                                                 </div>
                                                 
                                             </div>
@@ -223,7 +273,7 @@ class RecipeIngredients extends Component {
 
                                 <div className="handle input-group-append col-1" {...provided.dragHandleProps}>
                                     <span className="input-group-text ingredient-handle">
-                                        <FontAwesomeIcon icon="grip-vertical" />
+                                        <FontAwesomeIcon icon="grip-vertical"/>
                                     </span>
                                 </div>
 
@@ -242,12 +292,29 @@ class RecipeIngredients extends Component {
         );
     }
 
-    validateIngredient(id, event) {
+    isEmpty(value){
+        const no_whitespace = /^\S+$/;
+        return (value === "" || !no_whitespace.test(value)); 
+    }
+
+    notJustWhiteSpace(value){
+        const notWhiteSpace = /\S/;
+        return notWhiteSpace.test(value);
+    }
+
+    validateIngredient(id, quantity, event) {
         const {target} = event;
-        const value = target.type === "checkbox" ? target.checked : target.value;
+        var value = target.type === "checkbox" ? target.checked : target.value;
         const {name} = target;
 
-        if (value !== "") {
+        // value = value.replace(/\d|\s{1,}/g, ''); // Removing any numbers and white spaces before the text
+        
+        value = value.replace(/\d+/, ""); // Removing any digits
+        value = value.replace(/^[^A-Za-z]+/, ""); // Removing any numbers and white spaces before the text
+        value = value.replace(/^\s+|\s+$/g, ""); // Removing spaces at the start and at the end
+        value = value.replace(/\s{2, }/g, " "); // Replacing 2 spaces with just 1 space
+
+        if (this.notJustWhiteSpace(value)) {
 
             fetch(baseUrl + "recingred/checkingred/", {
                 method: "post",
@@ -258,18 +325,12 @@ class RecipeIngredients extends Component {
             })
             .then(resp => {
                 return resp.json();
-                // if (resp === "Does not exist") {
-                //     console.log("error executed")
-                //     return null;
-                // } else {
-                //     return resp.json();
-                // }
             })
             .then(resp => {
                 // alert(JSON.stringify({name: value}));
                 
                 if (resp[Object.keys(resp)[0]] !== "D") {
-                    resp = {...resp, isValid: "valid"}
+                    resp = {...resp, ingred_quantity: quantity, isValid: "valid"}
 
                     var newList  = this.state.ingredients.map(ingredient => {
                         if (ingredient.ingred_id === id) {
@@ -311,7 +372,20 @@ class RecipeIngredients extends Component {
             });
             this.props.handleIngredient(newList);
         } else {
+            // alert(JSON.stringify({name: value}));
+            var newList  = this.state.ingredients.map(ingredient => {
+                if (ingredient.ingred_id === id) {
+                    
+                    return ({...ingredient, "ingred_name": value, isValid: "required"});
+                } else {
+                    return (ingredient);
+                }
+            });
 
+            this.setState({
+                ingredients: newList
+            });
+            this.props.handleIngredient(newList);
         }
     }
     

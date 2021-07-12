@@ -26,7 +26,7 @@ export const Curr_recipe = (state = {
                 return {...state, inProgress: "update_success", errMess: null};
             
             case ActionTypes.UPDATE_RECIPE_FAILED:
-                return {...state, inProgress: "update_failed", errMess: null};
+                return {...state, inProgress: "update_failed", errMess: action.payload};
         
             default:
                 return state;

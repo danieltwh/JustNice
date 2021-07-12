@@ -13,7 +13,8 @@ import MyRecipePage from './MyRecipeComponent';
 
 
 import RecipeDetailsPage from './RecipeDetailsComponent';
-import RecipeCreationPage from "./RecipeCreationComponent"
+import RecipeCreationPage from "./RecipeCreationComponent";
+import NewRecipePage from "./NewRecipeComponent";
 
 import MyGroceryListPage from "./MyGroceryListPageComponent";
 import GroceryList from './GroceryListComponent';
@@ -24,6 +25,7 @@ import PublicHeader from "./PublicHeaderComponent";
 import PublicHomePage from './PublicHomePageComponent';
 import PublicAboutUsPage from "./PublicAboutUsComponent";
 import SignupPage from "./SignupPageComponent";
+
 
 import {login_attempt, login_success, signout, load_myrecipes, get_recipe} from "../redux/ActionCreators";
 
@@ -82,6 +84,9 @@ class Main extends Component {
 
               <Route exact path="/edit/:recipeID" component={({match}) => <RecipeCreationPage rec_id={parseInt(match.params.recipeID, 10)} />} 
               />
+
+              <Route exact path="/newrecipe" component={() => <NewRecipePage />} />
+
               <Route exact path="/edit/new" component={({match}) => <RecipeCreationPage rec_id="new" />} />
               
               <Route exact path="/myrecipes" component={MyRecipePage} />

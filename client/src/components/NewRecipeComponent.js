@@ -7,9 +7,9 @@ import {LocalForm, Control, Errors} from 'react-redux-form'
 import { withRouter } from 'react-router';
 import { connect } from "react-redux";
 
-import { get_recipe, get_recipe_reset, update_recipe } from '../redux/ActionCreators';
-
 import Alert from '@material-ui/lab/Alert';
+
+import { get_recipe, get_recipe_success, get_recipe_reset, update_recipe } from '../redux/ActionCreators';
 
 import RecipeIngredients from "./RecipeCreationgIngredientComponent";
 import Loading from "./LoadingComponent";
@@ -24,39 +24,24 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => ({
     get_recipe: (rec_id) => dispatch(get_recipe(rec_id)),
     update_recipe: (recipe, user_id) => dispatch(update_recipe(recipe, user_id)),
-    get_recipe_reset: () => dispatch(get_recipe_reset())
+    get_recipe_reset: () => dispatch(get_recipe_reset()),
+    get_recipe_success: (recipe) => dispatch(get_recipe_success(recipe)),
 });
 
 
-class RecipeCreationPage extends Component {
+class NewRecipePage extends Component {
     constructor(props) {
         super(props);
-        if (this.props.rec_id !== "new" && this.props.curr_recipe.recipe !== null && (this.props.curr_recipe.inProgress === "success" || this.props.curr_recipe.inProgress==="updating")) {
-            this.state= {
-                "rec_id": this.props.curr_recipe.recipe.rec_id,
-                "rec_name": this.props.curr_recipe.recipe.rec_name,
-                "rec_instructions": this.props.curr_recipe.recipe.rec_instructions,
-                "cooking_time": this.props.curr_recipe.recipe.cooking_time,
-                "serving_pax": this.props.curr_recipe.recipe.serving_pax,
-                "cuisine": this.props.curr_recipe.recipe.cuisine,
-                "rec_type": this.props.curr_recipe.recipe.rec_type,
-                "isPublished": this.props.curr_recipe.recipe.isPublished,
-                "ingredient": this.props.curr_recipe.recipe.ingredient.map(ingredient => ({
-                    ...ingredient, "isValid": "valid"
-                })),
-            }
-        } else {
-            this.state= {
-                "rec_id": "new",
-                "rec_name": "",
-                "rec_instructions": "",
-                "cooking_time": 60,
-                "serving_pax": 1,
-                "cuisine": "global",
-                "rec_type": "edible",
-                "isPublished": true,
-                "ingredient": []
-            }
+        this.state= {
+            "rec_id": "new",
+            "rec_name": "",
+            "rec_instructions": "",
+            "cooking_time": 60,
+            "serving_pax": 1,
+            "cuisine": "global",
+            "rec_type": "edible",
+            "isPublished": true,
+            "ingredient": []
         }
         
         this.handleChange = this.handleChange.bind(this);
@@ -67,16 +52,16 @@ class RecipeCreationPage extends Component {
 
     componentDidMount() {
 
-        if (this.props.rec_id !== "new" && this.props.curr_recipe.inProgress === "idle") {
-            this.props.get_recipe(this.props.rec_id);
+        if (this.props.curr_recipe.inProgress === "idle") {
+            this.props.get_recipe_success(this.state);
         }
 
-        if (this.rec_instructions) {
-            this.trackContent(this.rec_instructions)
-        }
-        if (this.rec_name) {
-            this.trackContent(this.rec_name)
-        }
+        // if (this.rec_instructions) {
+        //     this.trackContent(this.rec_instructions)
+        // }
+        // if (this.rec_name) {
+        //     this.trackContent(this.rec_name)
+        // }
     }
 
     handleIngredient(newIngredients) {
@@ -110,7 +95,7 @@ class RecipeCreationPage extends Component {
         const recipeTiles = (
                 <div key={this.state.rec_id} className="recipe-details-title">
                     <div className="row">
-                        <img className="recipe-tile-img col-6" src={this.state.img} alt={this.state.rec_name} style={{paddingRight:"5px"}} />
+                        <img className="recipe-tile-img col-6" src={this.state.img} alt={this.state.rec_name} style={{paddingRight:"5px"}}/>
                         <div className="col-6" style={{display:"flex",alignItems:"center", flexWrap:"wrap", paddingLeft:"0px"}}>
                             <FormGroup className="recipe-creation-name-box">
                                 <textarea name="rec_name" placeholder="Recipe Name" className="form-control recipe-creation-name"
@@ -163,6 +148,11 @@ class RecipeCreationPage extends Component {
     }
 
     isDisabled() {
+        var list = this.state.ingredient.filter(ingredient => ingredient.isValid === "required" || !this.isNumeric(ingredient.ingred_quantity) ||
+        this.isEmpty(ingredient.ingred_quantity));
+
+        console.log(JSON.stringify(list));
+
         var test = this.state.ingredient.some(ingredient => ingredient.isValid === "required" || ingredient.isValid === "init" || !this.isNumeric(ingredient.ingred_quantity) ||
         this.isEmpty(ingredient.ingred_quantity));
         
@@ -239,4 +229,4 @@ class RecipeCreationPage extends Component {
     }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RecipeCreationPage));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NewRecipePage));

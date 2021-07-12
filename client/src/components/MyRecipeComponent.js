@@ -83,30 +83,9 @@ class MyRecipePage extends Component {
 
     renderOptions() {
         return (
-            // <>
-            // <button  className="grocery-list-options-button" id="grocery-list-options-button" onClick={this.toggleOptions}><img src="/assets/grocery-list-options-button.png"/></button>
-            //     {this.state.isOptionsOpen ? (
-            //         <div className="grocery-list-options" id="grocery-list-options"
-            //             ref={element => {this.optionsMenu = element;}}>
-            //             <button className="grocery-list-options-item">
-            //                 <i className="fa fa-plus grocery-list-options-icon-button" />
-            //                 <span className="grocery-list-options-icon-right">Create</span>
-            //             </button>
-            //             <button className="grocery-list-options-item">
-            //                 <i className="fa fa-edit grocery-list-options-icon-button" />
-            //                 <span className="grocery-list-options-icon-right">Edit</span>
-            //             </button>
-            //         </div>)
-            //         : 
-            //         (
-            //             null
-            //         )
-            //     }
-            // </>
-
             <>
                 <div className="grocery-list-options-button" id="grocery-list-options-button">
-                    <Link to="/edit/new">
+                    <Link to="/newrecipe">
                         <Fab color="primary" aria-label="add">
                             <AddIcon />
                         </Fab>

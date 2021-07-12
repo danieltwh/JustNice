@@ -270,7 +270,7 @@ export const update_recipe = (newRecipe, user_id) => (dispatch) => {
                     // return add_users(users);
                     dispatch(update_recipe_success(true));
                 } else {
-                    dispatch(update_recipe_failed("Error"));
+                    dispatch(update_recipe_failed("Failed to update recipe. Please try again."));
                 }
             })
             .catch(err => {
@@ -283,8 +283,9 @@ export const update_recipe_inProgress = () => ({
     type: ActionTypes.UPDATE_RECIPE_IN_PROGRESS
 });
 
-export const update_recipe_failed = () => ({
-    type: ActionTypes.UPDATE_RECIPE_FAILED
+export const update_recipe_failed = (errMess) => ({
+    type: ActionTypes.UPDATE_RECIPE_FAILED,
+    payload: errMess
 });
 
 export const update_recipe_success = () => ({

@@ -299,6 +299,13 @@ a.nav-link:hover {
   box-shadow: 0px 2px 2px rgb(0 0 0 / 40%);
 }
 
+.signup-button {
+  margin-top: 15px;
+  width: 100px;
+  height: 40px;
+  border-radius: 60px;
+}
+
 /********* Search Bar *********/ 
 .search-bar-input {
   /* width:280px; */
@@ -594,6 +601,7 @@ input[type=checkbox]:checked + label.strikethrough{
 .delete-ingredient {
   background-color: transparent;
   border: 0;
+  margin-top: 10px;
 }
 
 .delete-ingredient-icon {
@@ -623,10 +631,13 @@ input[type=checkbox]:checked + label.strikethrough{
 
 .ingredient-unit {
   justify-content: center;
+  height: 38px;
 }
 
 .ingredient-handle {
   background-color: transparent;
+  width: 36px; 
+  height: 38px;
 }
 
 .add-ingredient-button {
