@@ -648,6 +648,11 @@ input[type=checkbox]:checked + label.strikethrough{
     border-bottom: 0px;
   }
 
+  .login-form {
+    background-color: #fff;
+    width: 100%;
+  }
+
   .signup-form {
     background-color: #fff;
     width: 100%;

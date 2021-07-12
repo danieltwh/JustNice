@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import { Navbar, NavbarBrand, Button, Form, FormGroup, Label, Input, Row, Col} from 'reactstrap';
+import Alert from '@material-ui/lab/Alert';
+
+import { withRouter } from 'react-router';
+import { connect } from "react-redux";
+
 
 function LoginPageHeader(props) {
     return (
@@ -11,6 +16,11 @@ function LoginPageHeader(props) {
     )
 }
 
+const mapStateToProps = state => {
+    return {
+        login: state.login
+    }
+  }
 
 class LoginPage extends Component {
     constructor(props) {
@@ -39,6 +49,11 @@ class LoginPage extends Component {
                         <h2>Login</h2>
                             <p>Welcome back!</p>
                         <hr />
+
+                        {(() => {if(this.props.login.inProgress == false && this.props.login.errMess !== null){
+                            return <Alert severity="error">{this.props.login.errMess}</Alert>;
+                            }
+                        })()}
                         <Form className="form" onSubmit={(event) => this.handleLogin(event)}>
                         
                                 <FormGroup>
@@ -74,4 +89,4 @@ class LoginPage extends Component {
         );
     }
 }
-export default LoginPage;
+export default withRouter(connect(mapStateToProps)(LoginPage));

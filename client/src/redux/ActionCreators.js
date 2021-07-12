@@ -28,8 +28,10 @@ export const login_attempt = (username, password) => (dispatch) =>  {
             if (resp.status === 1) {
                 // return add_users(users);
                 dispatch(login_success(resp.user));
+            } else if(resp.status === 0) {
+                dispatch(login_failed("Wrong Password"));
             } else {
-                dispatch(login_failed());
+                dispatch(login_failed("Username Does Not Exist"));
             }
         })
         .catch(error => console.log(error.message));
@@ -46,7 +48,7 @@ export const login_success = (user) => ({
 
 export const login_failed = (errMess) => ({
     type: ActionTypes.LOGIN_FAILED,
-    payload: "Failed"
+    payload: errMess
 });
 
 export const add_users = (users) => ({
