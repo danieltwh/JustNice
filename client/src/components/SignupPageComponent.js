@@ -22,13 +22,15 @@ class SignupPage extends Component {
             last_name: "",
             email: "",
             username: "",
-            password: ""
+            password: "",
+            confirm_password: ""
             , validate: {
                 first_name: "",
                 last_name: "",
                 email: "",
                 username: "",
-                password: ""
+                password: "",
+                confirm_password:""
             }
             ,isLoading: false
         }
@@ -46,15 +48,41 @@ class SignupPage extends Component {
         });
     }
 
+    handleUsernameChange(event) {
+        const { target } = event;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const { name } = target;
+
+        const no_whitespace = /^\S+$/;
+
+        var result;
+        if (value.length ===0 ){
+            result = "has-danger";
+        } else if (!no_whitespace.test(value)){
+            result = "white-space"
+        } else {
+            result = "inProgress"
+        }
+
+        this.setState({
+            [name]: value,
+            validate: {...this.state.validate, [name]: result}
+        });
+    }
+
+
     validateName(event) {
         const {target} = event;
         const value = target.type === "checkbox" ? target.checked : target.value;
         const {name} = target;
-        const result = (value.length > 0)
+        const no_whitespace = /^\S+$/
+        const result = (value.length > 0 && no_whitespace.test(value));
         if (result) {
             this.setState({validate: {...this.state.validate, [name]:"has-success"}});
-        } else {
+        } else if (value.length === 0) {
             this.setState({validate: {...this.state.validate, [name]:"has-danger"}});
+        } else {
+            this.setState({validate: {...this.state.validate, [name]:"white-space"}});
         }
     }
 
@@ -62,12 +90,17 @@ class SignupPage extends Component {
         const {target} = event;
         const value = target.type === "checkbox" ? target.checked : target.value;
         const {name} = target;
+        const no_whitespace = /^\S+$/
         const email_re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-        const result = (value.length > 0 && email_re.test(value));
+        const result = (value.length > 0 && email_re.test(value) && no_whitespace.test(value));
         if (result) {
             this.setState({validate: {...this.state.validate, [name]:"has-success"}});
-        } else {
+        } else if (value.length ===0 ){
             this.setState({validate: {...this.state.validate, [name]:"has-danger"}});
+        } else if (!email_re.test(value)) {
+            this.setState({validate: {...this.state.validate, [name]:"invalid-email"}});
+        } else {
+            this.setState({validate: {...this.state.validate, [name]:"white-space"}});
         }
     }
 
@@ -75,19 +108,126 @@ class SignupPage extends Component {
         const {target} = event;
         const value = target.type === "checkbox" ? target.checked : target.value;
         const {name} = target;
-        const result = true;
-        if (result) {
-            this.setState({validate: {...this.state.validate, [name]:"has-success"}});
-        } else {
+        const no_whitespace = /^\S+$/;
+
+        const result = (no_whitespace.test(value) && value.length > 0);
+        if (value.length ===0 ){
             this.setState({validate: {...this.state.validate, [name]:"has-danger"}});
+        } else if (!no_whitespace.test(value)){
+            this.setState({validate: {...this.state.validate, [name]:"white-space"}});
+        } else {
+            this.setState({validate: {...this.state.validate, [name]:"checking"}});
+            fetch(baseUrl + "user/checkuser/", {
+                method: "post",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    "username": value
+                })
+            }).then(resp => resp.json())
+            .then(resp => {
+                if (resp.status === "Does not exist"){
+                    this.setState({validate: {...this.state.validate, [name]:"has-success"}});
+                    return resp;
+                } else {
+                    this.setState({validate: {...this.state.validate, [name]:"username-taken"}});
+                    return resp;
+                }   
+            })
+            .then(resp => console.log(resp))
+            .catch(err => console.log(err));
         }
     }
+
+    validatePassword(event){
+        const {target} = event;
+        const value = target.type === "checkbox" ? target.checked : target.value;
+        const {name} = target;
+        const no_whitespace = /^\S+$/;
+        const result = (no_whitespace.test(value) && value.length > 0);
+        // alert(JSON.stringify(no_whitespace.test(value)));
+
+
+        var confirmPassword = this.state.confirm_password;
+
+        if (value.length ===0 ){
+            this.setState({validate: {...this.state.validate, password:"has-danger"}});
+        } else if (!no_whitespace.test(value)){
+            console.log("here");
+            this.setState({validate: {...this.state.validate, password:"white-space"}});
+        } else if (confirmPassword !== value) {
+            console.log(this.state.confirm_password);
+            console.log(value);
+            console.log(this.state.confirm_password !== value); 
+            this.setState({validate: {...this.state.validate,  password: "has-success", confirm_password:"password-mismatch"}});
+        } else {
+            this.setState({validate: {...this.state.validate, password:"has-success", confirm_password: "has-success"}});
+        }
+    }
+
+    validateConfirmPassword(event){
+        const value = this.state.confirm_password;
+
+        const {target} = event;
+        const newValue = target.type === "checkbox" ? target.checked : target.value;
+        const {name} = target;
+    
+        const no_whitespace = /^\S+$/;
+        const result = (no_whitespace.test(value) && value.length > 0);
+
+        if (value.length ===0 ){
+            this.setState({validate: {...this.state.validate, confirm_password:"has-danger"}});
+        } else if (!no_whitespace.test(value)){
+            this.setState({validate: {...this.state.validate,  confirm_password:"white-space"}});
+        } else if (newValue !== value) {
+            this.setState({validate: {...this.state.validate,  confirm_password:"password-mismatch"}});
+        } else {
+            this.setState({validate: {...this.state.validate,  confirm_password:"has-success"}});
+        }
+    }
+
+    validateConfirmPasswordOnChange(event){
+        const {target} = event;
+        const value = target.type === "checkbox" ? target.checked : target.value;
+        const {name} = target;
+        const no_whitespace = /^\S+$/;
+        const result = (no_whitespace.test(value) && value.length > 0);
+
+        if (this.state.confirm_password === ""){
+            this.setState({validate: {...this.state.validate, confirm_password:"has-danger"}});
+        } else if (this.state.confirm_password !== value ) {
+            this.setState({validate: {...this.state.validate,  confirm_password:"password-mismatch"}});
+        } else {
+            this.setState({validate: {...this.state.validate,  confirm_password:"has-success"}});
+        }
+    }
+
+    validateNewConfirmPassword(event){
+        const {target} = event;
+        const value = target.type === "checkbox" ? target.checked : target.value;
+        const {name} = target;
+        const no_whitespace = /^\S+$/;
+        const result = (no_whitespace.test(value) && value.length > 0);
+
+        if (value.length ===0 ){
+            this.setState({validate: {...this.state.validate, confirm_password:"has-danger"}});
+        } else if (!no_whitespace.test(value)){
+            this.setState({validate: {...this.state.validate,  confirm_password:"white-space"}});
+        } else if (this.state.password !== value) {
+            this.setState({validate: {...this.state.validate,  confirm_password:"password-mismatch"}});
+        } else {
+            this.setState({validate: {...this.state.validate,  confirm_password:"has-success"}});
+        }
+    }
+
 
     handleSignup(event) {
         event.preventDefault();
 
         // console.log("Username: " + this.state.username + " Password: " + this.state.password);
         // alert("Username: " + this.state.username + " Password: " + this.state.password);
+
+        console.log(JSON.stringify(this.sate));
+        alert(JSON.stringify(this.state));
 
         console.log("Firstname: " + this.state.first_name + " Lastname: " + this.state.last_name + " Email: " + this.state.email +
         " Username: " + this.state.username + " Password: " + this.state.password)
@@ -121,11 +261,12 @@ class SignupPage extends Component {
 
     validate() {
         const email_re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        const has_whitespace = /\s/;
         const validation = {
-            first_name: (this.state.first_name!="" && this.state.first_name.length > 0) ? true : false,
-            last_name: (this.state.last_name!=null && this.state.last_name.length > 0 ) ? true : false,
-            email: (this.state.email!=null && this.state.email.length > 0 && email_re.test(this.state.email)) ? true : false,
-            username: true,
+            first_name: (this.state.first_name!=="" && this.state.first_name.length > 0) ? true : false,
+            last_name: (this.state.last_name!=="" && this.state.last_name.length > 0 ) ? true : false,
+            email: (this.state.email!=="" && this.state.email.length > 0 && email_re.test(this.state.email)) ? true : false,
+            username: (this.state.username !== "" && this.state.username),
             password: true
         }
         return validation;
@@ -134,64 +275,14 @@ class SignupPage extends Component {
     renderSignupForm() {
         console.log(JSON.stringify(this.state))
         
-        const validation = this.validate();
-        console.log(JSON.stringify(validation))
+        // const validation = this.validate();
+        // console.log(JSON.stringify(validation))
 
-        const canSubmit = (this.state.validate.first_name && this.state.validate.last_name &&
-            this.state.validate.email && this.state.validate.username)
+        const canSubmit = (this.state.validate.first_name === "has-success" && this.state.validate.last_name === "has-success" &&
+            this.state.validate.email === "has-success"  && this.state.validate.username === "has-success" && this.state.validate.password === "has-success" &&
+            this.state.validate.confirm_password === "has-success");
 
         return (
-            // <LocalForm>
-            //     <Row form>
-            //         <Col md={6}>
-            //             <Row className="form-group">
-            //                 <Label htmlfor="first_name">Firstname</Label>
-            //                 <Control.text model=".first_name"  type="text" name="first_name" id="first_name" 
-            //                     className="form-group" placeholder=""
-            //                     validators= {{
-            //                         required, minLength: minLength(3), maxLength: maxLength(15)
-            //                     }}
-            //                 />
-            //                 <Errors className="text-danger" model=".first_name" show="touched"
-            //                     messages= {{
-            //                         required: "Required",
-            //                         minLength: "Must be greater than 2 characters",
-            //                         maxLength: "Must be 15 characters or less"
-            //                     }}
-            //                 />
-            //             </Row>
-            //         </Col>
-            //         <Col md={6}>
-            //             <FormGroup>
-            //                 <Label for="last_name">Lastname</Label>
-            //                 <Input type="text" name="last_name" id="last_name" placeholder="" />
-            //             </FormGroup>
-            //         </Col>
-            //     </Row>
-
-           
-            //     <FormGroup>
-            //         <Label for="email">Email</Label>
-            //         <Input type="email" name="email" id="email" placeholder="abc@gmail.com" />
-            //     </FormGroup>
-
-            //     <FormGroup>
-            //         <Label for="username">Username</Label>
-            //         <Input type="username" name="username" id="username" placeholder="" />
-            //     </FormGroup>
-
-            //     <FormGroup>
-            //         <Label for="password">Password</Label>
-            //         <Input type="password" name="password" id="password" placeholder="" />
-            //     </FormGroup>
-        
-            //     <FormGroup check>
-            //         <Input type="checkbox" name="check" id="exampleCheck"/>
-            //         <Label for="exampleCheck" check>I accept the Terms of Use & Privacy Policy</Label>
-            //     </FormGroup>
-            //     <Button className="btn btn-primary">Sign Up</Button>
-            // </LocalForm>
-
 
             <Form className="form" onSubmit={this.handleSignup}>
                 <Row form>
@@ -200,7 +291,7 @@ class SignupPage extends Component {
                             <Label for="first_name">Firstname</Label>
                             <Input type="text" name="first_name" id="first_name" placeholder="" 
                                 valid={this.state.validate.first_name === "has-success"} 
-                                invalid={this.state.validate.first_name === "has-danger"}
+                                invalid={this.state.validate.first_name === "has-danger" || this.state.validate.first_name === "white-space"}
                                 onChange={(e) => {
                                     this.validateName(e);
                                     this.handleChange(e)}
@@ -210,7 +301,13 @@ class SignupPage extends Component {
                                     this.validateName(e);
                                     this.handleChange(e)}}
                             />
-                            <FormFeedback>Required</FormFeedback>
+                            {(() => {
+                                if (this.state.validate.first_name === "has-danger"){
+                                    return <FormFeedback>Required</FormFeedback>;
+                                } else {
+                                    return <FormFeedback>Spaces Not Allowed</FormFeedback>;
+                                }
+                            })()}
                         </FormGroup>
                     </Col>
                     <Col md={6}>
@@ -218,7 +315,8 @@ class SignupPage extends Component {
                             <Label for="last_name">Lastname</Label>
                             <Input type="text" name="last_name" id="last_name" placeholder="" 
                                 valid={this.state.validate.last_name === "has-success"} 
-                                invalid={this.state.validate.last_name === "has-danger"}
+                                invalid={this.state.validate.last_name === "has-danger" || 
+                                    this.state.validate.last_name === "white-space"}
                                 onChange={(e) => {
                                     this.validateName(e);
                                     this.handleChange(e)}
@@ -228,7 +326,14 @@ class SignupPage extends Component {
                                     this.validateName(e);
                                     this.handleChange(e)}}
                             />
-                            <FormFeedback>Required</FormFeedback>
+                            {(() => {
+                                if (this.state.validate.last_name === "has-danger"){
+                                    return <FormFeedback>Required</FormFeedback>;
+                                } else {
+                                    return <FormFeedback>Spaces Not Allowed</FormFeedback>;
+                                }
+                            })()}
+                            
                         </FormGroup>
                     </Col>
                 </Row>
@@ -238,7 +343,8 @@ class SignupPage extends Component {
                     <Label for="email">Email</Label>
                     <Input type="email" name="email" id="email" placeholder="abc@gmail.com" 
                         valid={this.state.validate.email === "has-success"} 
-                        invalid={this.state.validate.email === "has-danger"}
+                        invalid={this.state.validate.email === "has-danger" || this.state.validate.email === "invalid-email" || 
+                            this.state.validate.email === "white-space"}
                         onChange={(e) => {
                             this.validateEmail(e);
                             this.handleChange(e)}
@@ -248,100 +354,102 @@ class SignupPage extends Component {
                             this.validateEmail(e);
                             this.handleChange(e)}}
                     />
-                    <FormFeedback>{(this.state.email.length <= 0) ? "Required" : "Invalid Email"}</FormFeedback>
+                    {(() => {
+                        if (this.state.validate.email === "has-danger"){
+                            return <FormFeedback>Required</FormFeedback>;
+                        } else if (this.state.validate.email === "invalid-email") {
+                            return <FormFeedback>Invalid Email Format</FormFeedback>;
+                        }else {
+                            return <FormFeedback>Spaces Not Allowed</FormFeedback>;
+                        }
+                    })()}
                 </FormGroup>
 
                 <FormGroup>
                     <Label for="username">Username</Label>
                     <Input type="username" name="username" id="username" placeholder="" 
                         valid={this.state.validate.username === "has-success"} 
-                        invalid={this.state.validate.username === "has-danger"}
+                        invalid={this.state.validate.username === "has-danger" || this.state.validate.username === "white-space" || 
+                            this.state.validate.username === "username-taken" || this.state.validate.username === "checking"}
                         onChange={(e) => {
-                            this.validateUsername(e);
-                            this.handleChange(e)}
-                            }
+                            this.handleUsernameChange(e);
+                            }}
                         value={this.state.username}
                         onBlur={(e) => {
                             this.validateUsername(e);
                             this.handleChange(e)}}
                     />
+                    {(() => {
+                        if (this.state.validate.username === "has-danger"){
+                            return <FormFeedback>Required</FormFeedback>;
+                        } else if (this.state.validate.username === "username-taken") {
+                            return <FormFeedback>Username Already In Use</FormFeedback>;
+                        }else if (this.state.validate.username === "white-space") {
+                            return <FormFeedback>Spaces Not Allowed</FormFeedback>;
+                        } else {
+                            return <FormFeedback>Hold On... Checking if Username is in use</FormFeedback>;
+                        }
+                    })()}
                 </FormGroup>
 
                 <FormGroup>
                     <Label for="password">Password</Label>
                     <Input type="password" name="password" id="password" placeholder="" 
+                        valid={this.state.validate.password === "has-success"} 
+                        invalid={this.state.validate.password === "has-danger" || this.state.validate.password === "white-space"}
                         onChange={(e) => {
-                            this.handleChange(e)}
-                            }
+                            this.validatePassword(e);
+                            this.handleChange(e);
+                            // this.validateConfirmPassword(e);
+                            // this.handlePasswordChange(e);
+                            // this.validateConfirmPasswordOnChange(e);
+                            }}
                         onBlur={(e) => {
+                            // this.validatePassword(e);
                             this.handleChange(e)}}
                     />
+                    {(() => {
+                        if (this.state.validate.password === "has-danger"){
+                            return <FormFeedback>Required</FormFeedback>;
+                        }else{
+                            return <FormFeedback>Spaces Not Allowed</FormFeedback>;
+                        }
+                    })()}
                 </FormGroup>
 
                 <FormGroup>
                     <Label for="confirm_password">Confirm Password</Label>
-                    <Input type="password" name="confirm_password" id="confirm_password" placeholder="" />
+                    <Input type="password" name="confirm_password" id="confirm_password" placeholder="" 
+                        valid={this.state.validate.confirm_password === "has-success"} 
+                        invalid={this.state.validate.confirm_password === "has-danger" || this.state.validate.confirm_password === "white-space" || 
+                            this.state.validate.confirm_password === "password-mismatch"}
+                        onChange={(e) => {
+                            this.handleChange(e)
+                            this.validateNewConfirmPassword(e);
+                            }}
+                        value={this.state.confirm_password}
+                        onBlur={(e) => {
+                            this.handleChange(e);
+                            this.validateNewConfirmPassword(e);
+                            }}
+                    />
+                    {(() => {
+                        if (this.state.validate.confirm_password === "has-danger"){
+                            return <FormFeedback>Required</FormFeedback>;
+                        }else if (this.state.validate.confirm_password === "white-space") {
+                            return <FormFeedback>Spaces Not Allowed</FormFeedback>;
+                        } else if (this.state.validate.confirm_password === "password-mismatch"){
+                            return <FormFeedback>Password Do Not Match</FormFeedback>;
+                        }
+                    })()}
                 </FormGroup>
         
                 <FormGroup check>
                     <Input type="checkbox" name="check" id="exampleCheck"/>
                     <Label for="exampleCheck" check>I accept the Terms of Use & Privacy Policy</Label>
                 </FormGroup>
-                <button type="submit" className="btn btn-primary" disabled={!canSubmit}>Sign Up</button>
+                <button type="submit" className="signup-button btn btn-primary pull-right" disabled={!canSubmit}>Sign Up</button>
             </Form>
-
-
-
-
-            // <div className="container-fluid signup-form">
-            //     <div className="row">
-            //         <Form className="col-10 offset-1 col-lg-6 offset-lg-3" onSubmit={(event) => this.handleSignup(event)}>
-            //             <FormGroup className="row">
-            //                 <Label className="col-3" htmlFor="firstname">Firstname</Label>
-            //                 <Input className="col-8 offset-1" type='text' id='firstname' name='firstname'
-            //                     onChange={(event) => this.setState({firstname: event.target.value})}
-            //                 />
-            //             </FormGroup>
-
-            //             <FormGroup className="row">
-            //                 <Label className="col-3" htmlFor="lastname">Lastname</Label>
-            //                 <Input className="col-7 offset-2" type='text' id='lastname' name= "lastname"
-            //                     onChange={(event) => this.setState({lastname: event.target.value})}
-            //                 />
-            //             </FormGroup>
-
-            //             <FormGroup className="row">
-            //                 <Label className="col-3" htmlFor="email">Email</Label>
-            //                 <Input className="col-7 offset-2" type='email' id='email' name= "email"
-            //                     onChange={(event) => this.setState({email: event.target.value})}
-            //                 />
-            //             </FormGroup>
-
-            //             <FormGroup className="row">
-            //                 <Label className="col-3" htmlFor="username">Username</Label>
-            //                 <Input className="col-7 offset-2" type='text' id='username' name='username'
-            //                     onChange={(event) => this.setState({username: event.target.value})}
-            //                 />
-            //             </FormGroup>
-
-            //             <FormGroup className="row">
-            //                 <Label className="col-3" htmlFor="password">Password</Label>
-            //                 <Input className="col-7 offset-2" type='password' id='password' name='password'
-            //                     onChange={(event) => this.setState({password: event.target.value})}
-            //                 />
-            //             </FormGroup>
-            //             <FormGroup className="row">
-            //                 <div className="col-12 text-right">
-            //                     <Button type="Submit" value="submit" className="bg-primary">Submit</Button>
-            //                 </div>
-                            
-                
-                            
-            //             </FormGroup>
-                        
-            //         </Form>
-            //     </div>
-            // </div>
         )
     }
 

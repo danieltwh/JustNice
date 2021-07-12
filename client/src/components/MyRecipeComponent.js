@@ -2,6 +2,26 @@ import React, {Component} from  'react';
 import {Card, CardImg, CardTitle} from 'reactstrap';
 import { Link} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Fab } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+
+import {withRouter} from 'react-router-dom';
+import {connect} from "react-redux";
+
+import { load_myrecipes, load_myrecipes_reset } from "../redux/ActionCreators"; 
+
+
+const mapStateToProps = state => {
+    return {
+      login: state.login,
+      my_recipes: state.my_recipes
+    }
+  }
+  
+  const mapDispatchToProps = (dispatch) => ({
+    load_myrecipes: (user_id) => {dispatch(load_myrecipes(user_id))},
+    load_myrecipes_reset: () => {dispatch(load_myrecipes_reset())}
+  });
 
 class MyRecipePage extends Component {
     constructor(props) {
@@ -14,10 +34,22 @@ class MyRecipePage extends Component {
         this.toggleOptions = this.toggleOptions.bind(this);
         this.openOptions = this.openOptions.bind(this);
         this.closeOptions = this.closeOptions.bind(this);
+        this.addDefaultSrc = this.addDefaultSrc.bind(this);
     }
 
     componentDidMount() {
-        // this.props.load_myrecipes(1);
+        if (this.props.my_recipes.inProgress === "not-loaded") {
+            console.log(this.props.my_recipes.inProgress);
+            this.props.load_myrecipes(this.props.login.user.id);
+        }   
+    }
+
+    componentWillUnmount() {
+
+        if (this.props.my_recipes.inProgress === "success" && this.props.my_recipes.my_recipes.length >= 1 ) {
+            console.log(this.props.my_recipes.inProgress);
+            this.props.load_myrecipes_reset();
+        }  
     }
     
     toggleOptions(event) {
@@ -52,26 +84,21 @@ class MyRecipePage extends Component {
     renderOptions() {
         return (
             <>
-            <button  className="grocery-list-options-button" id="grocery-list-options-button" onClick={this.toggleOptions}><img src="/assets/grocery-list-options-button.png"/></button>
-                {this.state.isOptionsOpen ? (
-                    <div className="grocery-list-options" id="grocery-list-options"
-                        ref={element => {this.optionsMenu = element;}}>
-                        <button className="grocery-list-options-item">
-                            <i className="fa fa-plus grocery-list-options-icon-button" />
-                            <span className="grocery-list-options-icon-right">Create</span>
-                        </button>
-                        <button className="grocery-list-options-item">
-                            <i className="fa fa-edit grocery-list-options-icon-button" />
-                            <span className="grocery-list-options-icon-right">Edit</span>
-                        </button>
-                    </div>)
-                    : 
-                    (
-                        null
-                    )
-                }
-        </>
+                <div className="grocery-list-options-button" id="grocery-list-options-button">
+                    <Link to="/newrecipe">
+                        <Fab color="primary" aria-label="add">
+                            <AddIcon />
+                        </Fab>
+                    </Link>
+                </div>
+            </>            
+
         )
+    }
+
+    addDefaultSrc(event) {
+        event.target.src = "/assets/recipe-1.jpeg";
+        event.target.onerror = null;
     }
 
     renderRecipes(recipes) {
@@ -82,14 +109,15 @@ class MyRecipePage extends Component {
                 
                     <Card className="recipe-tile">
                         <Link to={`/myrecipes/${parseInt(recipe.rec_id, 10)}`} style={{textDecoration: "none", color: "inherit"}}>
-                            <CardImg className="recipe-tile-img" src={recipe.img} alt={recipe.rec_name} />
+                            <CardImg className="recipe-tile-img" src={recipe.img} onError={e => this.addDefaultSrc(e)} 
+                            style={{"backgroundImage": "url('/assets/recipe-1.jpeg')", backgroundRepeat:"no-repeat"}} />
                             <CardTitle>{recipe.rec_name}</CardTitle>
                         </Link>
                         
                         
                         <div>
                             <Link to={`/edit/${parseInt(recipe.rec_id, 10)}`} style={{textDecoration: "none", color: "inherit"}}>
-                                <button type="button" className="pull-right"><FontAwesomeIcon icon="edit" size="sm"/></button>
+                                <button type="button" className="btn btn-outline-info pull-right"><FontAwesomeIcon icon="edit" size="sm"/></button>
                             </Link>
                         </div>
                     </Card>
@@ -108,7 +136,7 @@ class MyRecipePage extends Component {
             <>
                 <div className="container-fluid">
                     <div className="row">
-                        {this.renderRecipes(this.props.recipes)}
+                        {this.renderRecipes(this.props.my_recipes.my_recipes)}
                     </div>
                 </div>
                 {this.renderOptions()}
@@ -117,4 +145,4 @@ class MyRecipePage extends Component {
     }
 }
 
-export default MyRecipePage;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MyRecipePage));

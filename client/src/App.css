@@ -1,3 +1,8 @@
+/* .default_img {
+  background-image: url("/public/assets/recipe-3.jpeg");
+  background-repeat: no-repeat;
+} */
+
 .row-header{
   margin:0px auto;
   padding:0px auto;
@@ -23,6 +28,7 @@
 
 .recipe-tile-img {
   width: 100%;
+  /* min-width: 100px; */
   /* height: 20vh; */
   aspect-ratio: 1/1;
   object-fit: cover;
@@ -249,13 +255,27 @@ a.nav-link:hover {
 }
 
 /********* Public Sign Up Form *********/ 
-.signup-form {
-  margin-top: 30px;
-}
+
 
 /********* Public Login Form *********/ 
+.login-bg{
+  background-color: #4ecdc4;
+  min-height: 100vh;
+  padding: 0 20px 50px 20px;
+  overflow: auto;
+}
+
 .login-form {
-  margin-top: 30px
+  background-color: #fff;
+  padding: 50px 20px;
+  width: 60%;
+  min-height: 50vh;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: auto;
+  border-radius: 20px;
+  box-shadow: 0px 2px 2px rgb(0 0 0 / 40%);
 }
 
 /********* Public Signup Form  *********/ 
@@ -271,11 +291,19 @@ a.nav-link:hover {
   padding: 50px 20px;
   width: 60%;
   min-height: 80vh;
+  margin-top: 30px;
   margin-left: auto;
   margin-right: auto;
   overflow: auto;
   border-radius: 20px;
   box-shadow: 0px 2px 2px rgb(0 0 0 / 40%);
+}
+
+.signup-button {
+  margin-top: 15px;
+  width: 100px;
+  height: 40px;
+  border-radius: 60px;
 }
 
 /********* Search Bar *********/ 
@@ -317,27 +345,37 @@ a.nav-link:hover {
 .grocery-list-tile-name {
   text-align: center;
   margin: 5%;
-  position: relative;  
+  position: relative; 
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.grocery-list-tile-subtitle {
+  font-size: 13px;
+  text-align: center;
 }
 
 /********* Grocery List Options Button *********/ 
 .grocery-list-options-button {
   position: fixed;
-  bottom: 10px;
-  right: 2%;
+  bottom: 18px;
+  right: 18px;
   width: 50px;
   height: 50px;
-  border-radius: 25px;
+  background-color: transparent;
+  border-color: transparent;
+
+  /* border-radius: 25px;
   align-items: center;
   justify-content: center;
   background-color: #f3f3f3;
-  border: 2px solid #555555;
+  border: 2px solid #555555; */
 }
 
-.grocery-list-options-button img {
+/* .grocery-list-options-button img {
   width: 100%;
   object-fit: cover;
-}
+} */
 
 
 .grocery-list-options {
@@ -402,9 +440,18 @@ a.nav-link:hover {
 
 
 /********* Grocery List *********/ 
+.groceryList-title{
+  background-color: #4ecdc4;
+  color: #fff;
+  text-align: center;
+  margin: 0 -15px;
+  padding-top: 5px;
+}
+
 .grocery-list-table {
   border-collapse: collapse;
-  margin-top: 3px;
+  
+  background-color: #4ecdc4;
 }
 
 .ingredient-category {
@@ -458,6 +505,7 @@ input[type=checkbox]:checked + label.strikethrough{
   width: 80px;
   height: 40px;
   border-radius: 20px;
+  margin-right: 15px;
 }
 
 .reset-button {
@@ -465,6 +513,7 @@ input[type=checkbox]:checked + label.strikethrough{
   height: 40px;
   border-radius: 20px;
 }
+
 
 /********* Recipe Details Page *********/ 
 .recipe-details-title {
@@ -552,6 +601,7 @@ input[type=checkbox]:checked + label.strikethrough{
 .delete-ingredient {
   background-color: transparent;
   border: 0;
+  margin-top: 10px;
 }
 
 .delete-ingredient-icon {
@@ -581,10 +631,13 @@ input[type=checkbox]:checked + label.strikethrough{
 
 .ingredient-unit {
   justify-content: center;
+  height: 38px;
 }
 
 .ingredient-handle {
   background-color: transparent;
+  width: 36px; 
+  height: 38px;
 }
 
 .add-ingredient-button {
@@ -606,6 +659,11 @@ input[type=checkbox]:checked + label.strikethrough{
     border-bottom: 0px;
   }
 
+  .login-form {
+    background-color: #fff;
+    width: 100%;
+  }
+
   .signup-form {
     background-color: #fff;
     width: 100%;
@@ -613,6 +671,14 @@ input[type=checkbox]:checked + label.strikethrough{
 
   .recipe-creation-name{
     max-height: 20vh;
+  }
+
+  .grocery-list-tile-name {
+    font-size: calc(12px + 1.1vw);
+  }
+  
+  .grocery-list-tile-subtitle {
+    font-size: calc(5px + 1.02vw);
   }
 
 }

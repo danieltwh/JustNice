@@ -4,7 +4,7 @@ import {RECIPES} from "../shared/recipes";
 export const Recipes = (state = {
         inProgress: false,
         errMess: null,
-        recipes: RECIPES
+        recipes: null
     }, action) => {
         switch(action.type) {
             case ActionTypes.LOAD_RECIPES:

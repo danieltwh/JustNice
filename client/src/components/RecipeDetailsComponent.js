@@ -9,6 +9,8 @@ import {connect, useSelector, useDispatch} from "react-redux";
 
 import {get_recipe, get_recipe_reset} from "../redux/ActionCreators";
 
+import Loading from "./LoadingComponent";
+
 const mapStateToProps = state => {
     return {
       curr_recipe: state.curr_recipe
@@ -115,9 +117,7 @@ class RecipeDetailsPage extends Component {
     render() {
         if (this.props.curr_recipe.inProgress!=="success") {
             return (
-                <div>
-                    Hold On...
-                </div>
+                <Loading />
             );
         } else {
 
@@ -127,7 +127,7 @@ class RecipeDetailsPage extends Component {
                     <div className="row">
                         <div className="col-12 col-md-6 recipe-details-left-box">
                             {/* {this.renderTitle()} */}
-                            <RenderTitle rec_id={this.props.rec_id} rec_name="Food" rec_img="/assets/recipe-3.jpeg" />
+                            <RenderTitle rec_id={this.props.rec_id} rec_name={this.props.curr_recipe.recipe.rec_name} rec_img="/assets/recipe-3.jpeg" />
 
                             {/* {this.renderIngredients()} */}
                             <RenderIngredients rec_ingredients={this.props.curr_recipe.recipe.ingredient} />
