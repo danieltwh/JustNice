@@ -401,3 +401,46 @@ export const load_currGrocList_reset = () => ({
 
 
 // export const update_currGrocList = ()
+
+
+/***** Loading Recipe Image *********/
+export const load_recipe_image = (recipeId) => (dispatch) => {
+    dispatch(load_recipe_image_inProgress(true));
+
+    // alert("Getting recipe image")
+
+    return fetch(baseUrl + "getphoto/", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            "filename": `rec${recipeId}`,
+            })
+        })
+        .then(resp => resp.json())
+        .then(resp => {
+            console.log(JSON.stringify(resp));
+            dispatch(load_recipe_image_success(resp));
+        })
+        .catch(err => {
+            dispatch(load_recipe_image_failed(err));
+            alert(err);
+            console.log(err)});
+}
+
+export const load_recipe_image_inProgress = () => ({
+    type: ActionTypes.LOAD_RECIPE_IMG_PROGRESS
+});
+
+export const load_recipe_image_success = (details) => ({
+    type: ActionTypes.LOAD_RECIPE_IMG_SUCCESS,
+    payload: details
+});
+
+export const load_recipe_image_failed = (errMess) => ({
+    type: ActionTypes.LOAD_RECIPE_IMG_FAILED,
+    payload: errMess
+})
+
+export const load_recipe_image_reset = () => ({
+    type: ActionTypes.LOAD_RECIPE_IMG_RESET
+})

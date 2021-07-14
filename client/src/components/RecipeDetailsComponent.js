@@ -10,6 +10,7 @@ import {connect, useSelector, useDispatch} from "react-redux";
 import {get_recipe, get_recipe_reset} from "../redux/ActionCreators";
 
 import Loading from "./LoadingComponent";
+import { baseUrl } from '../shared/baseUrl';
 
 const mapStateToProps = state => {
     return {
@@ -60,8 +61,8 @@ const RenderTitle = ({rec_id, rec_name, rec_img}) => {
     const recipeTiles = (
             <div key={rec_id} className="recipe-details-title">
                 <div className="row">
-                    <img className="recipe-tile-img col-6" src={rec_img} alt={rec_name} />
-                    <div className="col-6" style={{display:"flex",alignItems:"center", flexWrap:"wrap"}}>
+                    <img className="recipe-tile-img col-6" src={rec_img} alt={rec_name} style={{paddingRight:"5px"}}/>
+                    <div className="col-6" style={{display:"flex",alignItems:"center", flexWrap:"wrap", paddingLeft:"0px"}}>
                         <div>
                             <h3 style={{verticalAlign:"middle", margin:"0"}}>{rec_name}</h3>
                         </div>
@@ -127,7 +128,7 @@ class RecipeDetailsPage extends Component {
                     <div className="row">
                         <div className="col-12 col-md-6 recipe-details-left-box">
                             {/* {this.renderTitle()} */}
-                            <RenderTitle rec_id={this.props.rec_id} rec_name={this.props.curr_recipe.recipe.rec_name} rec_img="/assets/recipe-3.jpeg" />
+                            <RenderTitle rec_id={this.props.rec_id} rec_name={this.props.curr_recipe.recipe.rec_name} rec_img={baseUrl + this.props.curr_recipe.recipe.url} />
 
                             {/* {this.renderIngredients()} */}
                             <RenderIngredients rec_ingredients={this.props.curr_recipe.recipe.ingredient} />

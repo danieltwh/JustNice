@@ -12,6 +12,7 @@ import { InitialSignForm } from './forms';
 import { Curr_recipe } from './curr_recipe';
 import { GroceryList } from './groceryList';
 import { Curr_GroceryList } from './curr_groceryList';
+import {Images} from './images';
 
 import { loadState,  saveState } from './localStorage';
 
@@ -26,6 +27,7 @@ export const ConfigureStore = () => {
             curr_recipe: Curr_recipe,
             groceryList: GroceryList,
             curr_grocList : Curr_GroceryList,
+            images: Images,
             ...createForms({
                 signupForm: InitialSignForm
             })

@@ -580,6 +580,21 @@ input[type=checkbox]:checked + label.strikethrough{
   max-height: 25vh;
 }
 
+.upload-button {
+  width: 70px;
+  height: 40px;
+  border-radius: 20px;
+  float: right;
+
+  font-size: 15px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 5px 10px 0px 0px;
+  padding: 0px;
+}
+
 .confirm-cancel-button {
   position: absolute;
   right: 2%;

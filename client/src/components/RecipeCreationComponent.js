@@ -7,24 +7,28 @@ import {LocalForm, Control, Errors} from 'react-redux-form'
 import { withRouter } from 'react-router';
 import { connect } from "react-redux";
 
-import { get_recipe, get_recipe_reset, update_recipe } from '../redux/ActionCreators';
+import { get_recipe, get_recipe_reset, update_recipe, load_recipe_image } from '../redux/ActionCreators';
 
 import Alert from '@material-ui/lab/Alert';
+import Image from "material-ui-image";
 
 import RecipeIngredients from "./RecipeCreationgIngredientComponent";
 import Loading from "./LoadingComponent";
+import { baseUrl } from '../shared/baseUrl';
 
 const mapStateToProps = state => {
     return {
         login: state.login,
-        curr_recipe: state.curr_recipe
+        curr_recipe: state.curr_recipe,
+        images: state.images,
     }
   }
   
 const mapDispatchToProps = (dispatch) => ({
     get_recipe: (rec_id) => dispatch(get_recipe(rec_id)),
     update_recipe: (recipe, user_id) => dispatch(update_recipe(recipe, user_id)),
-    get_recipe_reset: () => dispatch(get_recipe_reset())
+    get_recipe_reset: () => dispatch(get_recipe_reset()),
+    load_recipe_image: (recipeId) => dispatch(load_recipe_image(recipeId)),
 });
 
 
@@ -45,6 +49,7 @@ class RecipeCreationPage extends Component {
                 "ingredient": this.props.curr_recipe.recipe.ingredient.map(ingredient => ({
                     ...ingredient, "isValid": "valid"
                 })),
+                "image": null,
             }
         } else {
             this.state= {
@@ -64,12 +69,19 @@ class RecipeCreationPage extends Component {
         this.trackContent = this.trackContent.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleIngredient = this.handleIngredient.bind(this);
+        this.changeImage = this.changeImage.bind(this);
+        this.uploadImage = this.uploadImage.bind(this);
     }
 
     componentDidMount() {
 
         if (this.props.rec_id !== "new" && this.props.curr_recipe.inProgress === "idle") {
             this.props.get_recipe(this.props.rec_id);
+        }
+
+        if (this.props.images.recipe.inProgress === "idle"){
+            // alert("Getting recipe image")
+            this.props.load_recipe_image(this.props.rec_id);
         }
 
         if (this.rec_instructions) {
@@ -104,14 +116,47 @@ class RecipeCreationPage extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        this.props.update_recipe(this.state, this.props.login.user.id);
+        var final = Object.assign({}, this.state);
+        delete final.image;
+        this.props.update_recipe(final, this.props.login.user.id);
+    }
+
+    changeImage(event){
+        event.preventDefault();
+        this.setState({image: event.target.files[0]});
+    }
+
+    uploadImage(event){
+        event.preventDefault();
+        alert("Uploading Image");
+
+        const formData = new FormData();
+
+        formData.append()
+
     }
 
     renderTitle() {
         const recipeTiles = (
                 <div key={this.state.rec_id} className="recipe-details-title">
                     <div className="row">
-                        <img className="recipe-tile-img col-6" src={this.state.img} alt={this.state.rec_name} style={{paddingRight:"5px"}} />
+                        {(() => {
+                            if(this.props.images.recipe.inProgress === "success"){
+                                return (
+                                    <div className="col-6" style={{paddingRight:"5px"}} >
+                                        <Image src={baseUrl + this.props.images.recipe.url} />  
+                                    </div>                      
+                        
+                                )
+                            } else {
+                                return (
+                                    <div className="recipe-tile-img col-6" style={{paddingRight:"5px"}} >
+                                        <Image onClick={() => console.log('onClick')} src="" aspectRatio={(1/1)}/>  
+                                    </div>)
+                            }
+                        })()}
+
+                       
                         <div className="col-6" style={{display:"flex",alignItems:"center", flexWrap:"wrap", paddingLeft:"0px"}}>
                             <FormGroup className="recipe-creation-name-box">
                                 <textarea name="rec_name" placeholder="Recipe Name" className="form-control recipe-creation-name"
@@ -122,6 +167,13 @@ class RecipeCreationPage extends Component {
                                         this.handleChange(e)}}
                                 />
                             </FormGroup>
+                            <FormGroup>
+                                <Input type="file" className="" onChange={this.changeImage}/>
+                                <button type=" " className="upload-button btn btn-success"
+                                    onClick={(event) => this.uploadImage(event)}
+                                >Update</button>
+                            </FormGroup>
+                            
                             
                         </div>
                     </div>
@@ -179,7 +231,8 @@ class RecipeCreationPage extends Component {
         // );
 
         console.log(JSON.stringify(this.state))
-        console.log(JSON.stringify(this.props.curr_recipe.inProgress))
+        console.log(JSON.stringify(this.props.images.recipe.url))
+        console.log(JSON.stringify(this.state.image))
 
         if (this.props.curr_recipe.inProgress === "loading") {
             return (

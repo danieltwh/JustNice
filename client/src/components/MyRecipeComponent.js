@@ -10,6 +10,8 @@ import {connect} from "react-redux";
 
 import { load_myrecipes, load_myrecipes_reset } from "../redux/ActionCreators"; 
 
+import { baseUrl } from "../shared/baseUrl";
+
 
 const mapStateToProps = state => {
     return {
@@ -109,7 +111,7 @@ class MyRecipePage extends Component {
                 
                     <Card className="recipe-tile">
                         <Link to={`/myrecipes/${parseInt(recipe.rec_id, 10)}`} style={{textDecoration: "none", color: "inherit"}}>
-                            <CardImg className="recipe-tile-img" src={recipe.img} onError={e => this.addDefaultSrc(e)} 
+                            <CardImg className="recipe-tile-img" src={baseUrl + recipe.url} onError={e => this.addDefaultSrc(e)} 
                             style={{"backgroundImage": "url('/assets/recipe-1.jpeg')", backgroundRepeat:"no-repeat"}} />
                             <CardTitle>{recipe.rec_name}</CardTitle>
                         </Link>
