@@ -444,3 +444,47 @@ export const load_recipe_image_failed = (errMess) => ({
 export const load_recipe_image_reset = () => ({
     type: ActionTypes.LOAD_RECIPE_IMG_RESET
 })
+
+export const update_recipe_image = (recipeId, newImage) => (dispatch) => {
+    dispatch(update_recipe_image_inProgress(true));
+
+    alert(newImage);
+    var formData = new FormData();
+
+    formData.append("pic", newImage);
+    formData.append("filename", `rec${recipeId}`);
+
+    return fetch(baseUrl + "updatephoto/", {
+        method: "POST",
+        body: formData
+        })
+        .then(resp => resp.json())
+        .then(resp => {
+            console.log(JSON.stringify(resp));
+            if(resp.status === "new"){
+                dispatch(load_recipe_image_success(resp));
+                return resp;
+            } else {
+                dispatch(update_recipe_image_failed("Failed to update image. Please try again."));
+                return resp;
+            } 
+        })
+        .catch(err => {
+            dispatch(update_recipe_image_failed("Failed to update image. Please try again."));
+            alert(err);
+            console.log(err)});
+}
+
+export const update_recipe_image_inProgress = () => ({
+    type: ActionTypes.UPDATE_RECIPE_IMG_PROGRESS
+});
+
+export const update_recipe_image_success = (details) => ({
+    type: ActionTypes.UPDATE_RECIPE_IMG_SUCCESS,
+    payload: details
+});
+
+export const update_recipe_image_failed = (errMess) => ({
+    type: ActionTypes.UPDATE_RECIPE_IMG_FAILED,
+    payload: errMess
+})

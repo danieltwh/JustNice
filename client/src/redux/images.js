@@ -36,6 +36,18 @@ export const Images = (state = {
 
             case ActionTypes.LOAD_RECIPE_IMG_RESET:
                 return {...state, recipe: {inProgress: "idle", errMess: null}};
+
+            case ActionTypes.UPDATE_RECIPE_IMG_SUCCESS:
+                return {...state, recipe: {inProgress: "update-success", ...action.payload}};
+            
+            case ActionTypes.UPDATE_RECIPE_IMG_PROGRESS:
+                return {...state, recipe: {inProgress: "update-loading", errMess: null, recipe: null}};
+            
+            case ActionTypes.UPDATE_RECIPE_IMG_FAILED:
+                return {...state, recipe: {inProgress: "update-failed", errMess: action.payload}};
+
+            case ActionTypes.UPDATE_RECIPE_IMG_RESET:
+                return {...state, recipe: {inProgress: "update-idle", errMess: null}};
             default:
                 return state;
         }
