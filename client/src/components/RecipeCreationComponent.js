@@ -31,7 +31,8 @@ const mapDispatchToProps = (dispatch) => ({
 class RecipeCreationPage extends Component {
     constructor(props) {
         super(props);
-        if (this.props.rec_id !== "new" && this.props.curr_recipe.recipe !== null && (this.props.curr_recipe.inProgress === "success" || this.props.curr_recipe.inProgress==="updating")) {
+        if (this.props.rec_id !== "new" && this.props.curr_recipe.recipe !== null && (this.props.curr_recipe.inProgress === "success" || this.props.curr_recipe.inProgress==="updating" ||
+        this.props.curr_recipe.inProgress==="update_failed")) {
             this.state= {
                 "rec_id": this.props.curr_recipe.recipe.rec_id,
                 "rec_name": this.props.curr_recipe.recipe.rec_name,
