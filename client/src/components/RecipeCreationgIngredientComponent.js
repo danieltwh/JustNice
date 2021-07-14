@@ -329,6 +329,8 @@ class RecipeIngredients extends Component {
             .then(resp => {
                 // alert(JSON.stringify({name: value}));
                 
+                // alert(JSON.stringify(resp));
+
                 if (resp[Object.keys(resp)[0]] !== "D") {
                     resp = {...resp, ingred_quantity: quantity, isValid: "valid"}
 
@@ -354,23 +356,24 @@ class RecipeIngredients extends Component {
                             return (ingredient);
                         }
                     });
+                    this.setState({
+                        ingredients: newList
+                    });
+                    this.props.handleIngredient(newList);
                 }
             })
 
             // alert(JSON.stringify({name: value}));
-            var newList  = this.state.ingredients.map(ingredient => {
-                if (ingredient.ingred_id === id) {
+            // var newList  = this.state.ingredients.map(ingredient => {
+            //     if (ingredient.ingred_id === id) {
                     
-                    return ({...ingredient, "ingred_name": value, isValid: "invalid"});
-                } else {
-                    return (ingredient);
-                }
-            });
+            //         return ({...ingredient, "ingred_name": value, isValid: "invalid"});
+            //     } else {
+            //         return (ingredient);
+            //     }
+            // });
 
-            this.setState({
-                ingredients: newList
-            });
-            this.props.handleIngredient(newList);
+            
         } else {
             // alert(JSON.stringify({name: value}));
             var newList  = this.state.ingredients.map(ingredient => {
