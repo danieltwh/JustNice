@@ -7,7 +7,7 @@ import {LocalForm, Control, Errors} from 'react-redux-form'
 import { withRouter } from 'react-router';
 import { connect } from "react-redux";
 
-import { get_recipe, get_recipe_reset, update_recipe, load_recipe_image } from '../redux/ActionCreators';
+import { get_recipe, get_recipe_reset, update_recipe, load_recipe_image, update_recipe_image } from '../redux/ActionCreators';
 
 import Alert from '@material-ui/lab/Alert';
 import Image from "material-ui-image";
@@ -29,6 +29,7 @@ const mapDispatchToProps = (dispatch) => ({
     update_recipe: (recipe, user_id) => dispatch(update_recipe(recipe, user_id)),
     get_recipe_reset: () => dispatch(get_recipe_reset()),
     load_recipe_image: (recipeId) => dispatch(load_recipe_image(recipeId)),
+    update_recipe_image: (recipeId, image) => dispatch(update_recipe_image(recipeId, image)),
 });
 
 
@@ -128,11 +129,18 @@ class RecipeCreationPage extends Component {
 
     uploadImage(event){
         event.preventDefault();
-        alert("Uploading Image");
+        // alert("Uploading Image");
 
-        const formData = new FormData();
+        var newImage = this.state.image;
 
-        formData.append()
+        this.setState({"image": null});
+
+        this.props.update_recipe_image(this.props.rec_id, this.state.image).then((resp) => {
+            if(resp.status === "new"){
+                document.getElementById("recipe-image-upload").value="";
+                this.forceUpdate();
+            }
+        });
 
     }
 
@@ -141,7 +149,7 @@ class RecipeCreationPage extends Component {
                 <div key={this.state.rec_id} className="recipe-details-title">
                     <div className="row">
                         {(() => {
-                            if(this.props.images.recipe.inProgress === "success"){
+                            if(this.props.images.recipe.inProgress === "success" ){
                                 return (
                                     <div className="col-6" style={{paddingRight:"5px"}} >
                                         <Image src={baseUrl + this.props.images.recipe.url} />  
@@ -150,7 +158,7 @@ class RecipeCreationPage extends Component {
                                 )
                             } else {
                                 return (
-                                    <div className="recipe-tile-img col-6" style={{paddingRight:"5px"}} >
+                                    <div className="col-6" style={{paddingRight:"5px"}} >
                                         <Image onClick={() => console.log('onClick')} src="" aspectRatio={(1/1)}/>  
                                     </div>)
                             }
@@ -168,7 +176,7 @@ class RecipeCreationPage extends Component {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Input type="file" className="" onChange={this.changeImage}/>
+                                <Input id="recipe-image-upload" type="file" className="" onChange={this.changeImage} />
                                 <button type=" " className="upload-button btn btn-success"
                                     onClick={(event) => this.uploadImage(event)}
                                 >Update</button>
