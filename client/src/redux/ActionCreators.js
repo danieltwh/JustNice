@@ -502,12 +502,12 @@ export const load_explore_recipes = () => (dispatch) => {
                 // return add_users(users);
                 dispatch(load_explore_recipes_success(resp));
             } else {
-                dispatch(load_explore_recipes_failed("Error"));
+                dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
             }
         })
         .catch(err => {
             alert(err);
-            dispatch(load_explore_recipes_failed("Error"));
+            dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
             console.log(err)});
 
 }
@@ -529,6 +529,34 @@ export const load_explore_recipes_failed = (errMess) => ({
 export const load_explore_recipes_reset = () => ({
     type: ActionTypes.LOAD_RECIPES_RESET
 })
+
+/***** Searching Recipes *********/
+export const search_recipes = (search) => (dispatch) => {
+    // alert(search);
+    dispatch(load_explore_recipes_inProgress(true));
+
+    return fetch(baseUrl + `recingred/search/`, {
+        method: "POST",
+        body: JSON.stringify({
+            "category": "recingred",
+            "keywords": search,
+            })
+        })
+        .then(resp => resp.json())
+        .then(resp => {
+            // console.log(JSON.stringify(resp));
+            if (resp.length >=0) {
+                // return add_users(users);
+                dispatch(load_explore_recipes_success(resp));
+            } else {
+                dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
+            }
+        })
+        .catch(err => {
+            alert(err);
+            dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
+            console.log(err)});
+}
 
 
 

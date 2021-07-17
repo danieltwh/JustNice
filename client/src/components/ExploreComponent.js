@@ -187,7 +187,6 @@ export default function ExplorePage() {
 
     return (
         <div className="container-fluid">
-            <SearchBar location="explore" />
             {(() => {
                 if (recipes.inProgress === "failed"){
                     return (

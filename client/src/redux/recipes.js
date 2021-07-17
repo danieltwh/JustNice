@@ -8,7 +8,7 @@ export const Recipes = (state = {
     }, action) => {
         switch(action.type) {
             case ActionTypes.LOAD_RECIPES:
-                return {...state, inProgress: "inProgress", recipes: action.payload};
+                return {...state, inProgress: "inProgress", recipes: []};
             
             case ActionTypes.LOAD_RECIPES_IN_PROGRESS:
                 return {...state, inProgress: "inProgress", errMess: null, recipes: []};

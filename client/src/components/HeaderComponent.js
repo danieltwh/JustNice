@@ -14,6 +14,7 @@ import {DropdownButton, Dropdown} from 'react-bootstrap';
 
 import { Link, NavLink } from 'react-router-dom';
 
+import SearchBar from "./SearchBarComponent.js";
 import {baseUrl} from "../shared/baseUrl";
 
 // function DropDownMenu(props) {
@@ -107,7 +108,7 @@ class Header extends Component {
         return (
             <div>
               <Navbar dark expand="md">
-                <NavbarToggler onClick={this.toggleNav} onBlur={this.blurToggleNav}/>
+                <NavbarToggler onClick={this.toggleNav}/>
                 
                 <NavLink to="/explore">
                   <NavbarBrand className="navbar-brand-mobile">
@@ -163,23 +164,8 @@ class Header extends Component {
                     <a className="dropdown-item">Something else here</a>
                   </div>
                 </div> */}
-                
-                <Dropdown className="profile-icon">
-                  <Dropdown.Toggle className="btn-circle btn-md" variant="light" id="dropdown-basic" style={{backgroundColor: "Transparent", 
-                  backgroundImage: "url(/assets/profilepic/profilepic-1.png)", backgroundPosition: 'center',
-                  backgroundSize: "cover",
-                  backgroundRepeat: "no-repeat",
-                  borderColor: "rgba(0, 0, 0, 0.15)"}} >
-                    {/* <img className="" src="/assets/profilepic/profilepic-1.png"></img> */}
-                  </Dropdown.Toggle>
 
-                  <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1"><i className="fa fa-user-circle fa-lg icon-button"/>Account</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2"><i className="fa fa-cog fa-lg icon-button" />Settings</Dropdown.Item>
-                    <DropdownItem divider />
-                    <Dropdown.Item onClick={this.props.signout}><i className="fa fa-sign-out fa-lg icon-button" />Sign Out</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
+
                 
                 
                 
@@ -212,7 +198,7 @@ class Header extends Component {
 
                 <Collapse isOpen={this.state.isNavOpen} navbar>
                   <Nav className="mr-auto" navbar>
-                    <NavItem>
+                    <NavItem className="nav-item">
                       <NavLink className="nav-link" to="/explore">Explore</NavLink>
                     </NavItem>
 
@@ -223,6 +209,11 @@ class Header extends Component {
                     <NavItem>
                       <NavLink className="nav-link" to="/grocerylist" >Grocery List</NavLink>
                     </NavItem>
+
+                    <div className="search-bar">
+                      <SearchBar />
+                    </div>
+                    
 
                     {/* <form className="search-bar">
                       <div className="form-horizontal">
@@ -270,7 +261,22 @@ class Header extends Component {
                      
                 </Collapse>
 
-                
+                <Dropdown className="profile-icon">
+                  <Dropdown.Toggle className="btn-circle btn-md" variant="light" id="dropdown-basic" style={{backgroundColor: "Transparent", 
+                  backgroundImage: "url(/assets/profilepic/profilepic-1.png)", backgroundPosition: 'center',
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
+                  borderColor: "rgba(0, 0, 0, 0.15)"}} >
+                    {/* <img className="" src="/assets/profilepic/profilepic-1.png"></img> */}
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1"><i className="fa fa-user-circle fa-lg icon-button"/>Account</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2"><i className="fa fa-cog fa-lg icon-button" />Settings</Dropdown.Item>
+                    <DropdownItem divider />
+                    <Dropdown.Item onClick={this.props.signout}><i className="fa fa-sign-out fa-lg icon-button" />Sign Out</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
                 
 
 

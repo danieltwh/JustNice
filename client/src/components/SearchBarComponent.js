@@ -1,6 +1,10 @@
 import React, { Component, useState, useEffect } from 'react';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { useLocation } from 'react-router-dom';
+
+import { search_recipes } from '../redux/ActionCreators';
+
 import { makeStyles, withStyles, styled } from "@material-ui/core/styles";
 
 import Typography from '@material-ui/core/Typography';
@@ -41,9 +45,8 @@ const useStyles = makeStyles({
         transform: 'translateY(-50%)',
     },
     root: {
-        backgroundColor: "#F2F1F9",
         width: "100%",
-        padding: "10px 10px",
+        padding: "0px 0px 0px 0px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -133,7 +136,7 @@ const Item = styled(Paper)(({ theme }) => ({
   }));
 
 
-export default function SearchBar(location) {
+export default function SearchBar() {
     const login = useSelector(state => state.login);
 
     const [search, setSearch] = useState("");
@@ -142,10 +145,13 @@ export default function SearchBar(location) {
     const [servingPax, setServingPax] = useState("");
     const [cuisine, setCuisine] = useState("");
     const [recType, setRecType] = useState("");
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
 
+    const location = useLocation();
+    
     const classes = useStyles();
 
+    const dispatch = useDispatch();
 
 
     const handleClickOpen = () => {
@@ -156,8 +162,15 @@ export default function SearchBar(location) {
         setOpen(false);
     };
 
+    const handleSingleSearch = (event) => {
+        event.preventDefault();
+        alert(JSON.stringify([open, search, cookingTime, servingPax, cuisine, recType]));
+        dispatch(search_recipes(search));
+    };
+
     const handleSubmit = () => {
         alert(JSON.stringify([open, search, cookingTime, servingPax, cuisine, recType]));
+        // dispatch(search_recipes(search));
     };
 
 
@@ -165,12 +178,13 @@ export default function SearchBar(location) {
     console.log(JSON.stringify([open, search, cookingTime, servingPax, cuisine, recType]));
     // console.log(search);
 
+    console.log(location.pathname === "/explore")
 
     return (
         <div className={classes.root}>
-            <Grid container>
+            {/* <Grid container>
                 <form >
-                    <Grid item>
+                    <Grid item> */}
                         {/* <InputBase
                         className={classes.input}
                         placeholder="Search Recipes"
@@ -179,19 +193,21 @@ export default function SearchBar(location) {
                     <IconButton type="submit" className={classes.iconButton} aria-label="search">
                         <SearchIcon />
                     </IconButton> */}
-                        <TextField label="Search" value={search} onChange={(e) => {setSearch(e.target.value); setAdvanceSearch(e.target.value)}}
-                            placeholder="Recipe / Ingredients" variant="outlined" color="secondary" size="small"
+                        <TextField id="single-search-input" label={<Typography id="search-bar-label" variant="button" display="block" component="p" gutterBottom>Search</Typography>} 
+                        value={search} onChange={(e) => {setSearch(e.target.value); setAdvanceSearch(e.target.value)}}
+                            placeholder="Recipe / Ingredients" variant="outlined" color="primary" size="small"
                             InputLabelProps={{ shrink: true, }} />
                         <button type="submit"
                             className="btn btn-light search-bar-btn"
-                            onClick={event => { this.submitSearch(event) }}>
+                            onClick={event => { handleSingleSearch(event) }}>
                             <i className="fa fa-search"></i>
                         </button>
 
-                        <Button onClick={(e) => handleClickOpen()}>Advance Search</Button>
+                        <Button color="primary" onClick={(e) => handleClickOpen()}>Advance Search</Button>
 
                         <Dialog onClose={(e) => handleClose()} aria-labelledby="customized-dialog-title" open={open}>
-                            <DialogTitle id="customized-dialog-title" onClose={e => handleClose()}>
+                            <DialogTitle id="customized-dialog-title" onClose={e => handleClose()} color="primary" 
+                            style={{margin:"0px"}}>
                                 Advance Search
                             </DialogTitle>
                             <DialogContent dividers>
@@ -200,7 +216,7 @@ export default function SearchBar(location) {
                         
                                     <Grid container item xs={12} className={classes.gridRow}>
                                     <TextField fullWidth label="Search" value={advanceSearch} onChange={(e) => setAdvanceSearch(e.target.value)}
-                                        placeholder="Recipe / Ingredients" variant="outlined" color="secondary" size="small"
+                                        placeholder="Recipe / Ingredients" variant="outlined" color="primary" size="small"
                                         InputLabelProps={{ shrink: true, }} />
                                     </Grid>
                                
@@ -304,12 +320,9 @@ export default function SearchBar(location) {
                         {/* <IconButton type="submit" className={classes.iconButton} aria-label="search">
                         <SearchIcon />
                     </IconButton> */}
-                    </Grid>
+                    {/* </Grid>
                 </form>
-
-
-
-            </Grid>
+            </Grid> */}
         </div>
     )
 
