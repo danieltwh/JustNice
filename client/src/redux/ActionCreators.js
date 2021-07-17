@@ -488,3 +488,47 @@ export const update_recipe_image_failed = (errMess) => ({
     type: ActionTypes.UPDATE_RECIPE_IMG_FAILED,
     payload: errMess
 })
+
+
+
+/***** Loading Explore Page *********/
+export const load_explore_recipes = () => (dispatch) => {
+    dispatch(load_explore_recipes_inProgress(true));
+    return fetch(baseUrl + `recingred/search/`)
+        .then(resp => resp.json())
+        .then(resp => {
+            // console.log(JSON.stringify(resp));
+            if (resp.length >=0) {
+                // return add_users(users);
+                dispatch(load_explore_recipes_success(resp));
+            } else {
+                dispatch(load_explore_recipes_failed("Error"));
+            }
+        })
+        .catch(err => {
+            alert(err);
+            dispatch(load_explore_recipes_failed("Error"));
+            console.log(err)});
+
+}
+
+export const load_explore_recipes_inProgress = () => ({
+    type: ActionTypes.LOAD_RECIPES_IN_PROGRESS
+});
+
+export const load_explore_recipes_success = (grocList) => ({
+    type: ActionTypes.LOAD_RECIPES_SUCCESS,
+    payload: grocList
+});
+
+export const load_explore_recipes_failed = (errMess) => ({
+    type: ActionTypes.LOAD_RECIPES_FAILED,
+    payload: errMess
+})
+
+export const load_explore_recipes_reset = () => ({
+    type: ActionTypes.LOAD_RECIPES_RESET
+})
+
+
+

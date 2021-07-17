@@ -224,7 +224,7 @@ class Header extends Component {
                       <NavLink className="nav-link" to="/grocerylist" >Grocery List</NavLink>
                     </NavItem>
 
-                    <form className="search-bar">
+                    {/* <form className="search-bar">
                       <div className="form-horizontal">
                       <div className="input-group">
                         <input type="text" name="..." 
@@ -245,7 +245,7 @@ class Header extends Component {
                       </div>
                         
                       </div>
-                    </form>
+                    </form> */}
 
                     
 
