@@ -25,6 +25,9 @@
   background-color: #e9ecef;
   text-decoration: none;
 }
+.recipe-tile-title {
+  font-size: 20px;
+  }
 
 .recipe-tile-img {
   width: 100%;
@@ -38,6 +41,16 @@
   width: 171px;
   height: 171px
 } */
+
+.share-button{
+  color: 'white';
+  background-color: 'blue';
+  top: '50%';
+  height: 30;
+  float: 'right';
+  position: 'relative';
+  transform: 'translateY(-50%)';
+}
 
 .footer{
   background-color: #D1C4E9;
@@ -320,6 +333,7 @@ a.nav-link:hover {
   /* width:10px; */
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  height: 40px;
 }
 
 /********* My Grocery List Page *********/ 
