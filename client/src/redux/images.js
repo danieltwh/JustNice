@@ -7,6 +7,7 @@ export const Images = (state = {
         errMess: null
     },
     recipe: {
+        url: "", 
         inProgress: "idle",
         errMess: null,
     },
@@ -29,7 +30,7 @@ export const Images = (state = {
                 return {...state, recipe: {inProgress: "success", ...action.payload}};
             
             case ActionTypes.LOAD_RECIPE_IMG_PROGRESS:
-                return {...state, recipe: {inProgress: "loading", errMess: null, recipe: null}};
+                return {...state, recipe: {inProgress: "loading", errMess: null, url: ""}};
             
             case ActionTypes.LOAD_RECIPE_IMG_FAILED:
                 return {...state, recipe: {inProgress: "failed", errMess: action.payload}};
@@ -41,7 +42,7 @@ export const Images = (state = {
                 return {...state, recipe: {inProgress: "update-success", ...action.payload}};
             
             case ActionTypes.UPDATE_RECIPE_IMG_PROGRESS:
-                return {...state, recipe: {inProgress: "update-loading", errMess: null, recipe: null}};
+                return {...state, recipe: {inProgress: "update-loading", errMess: null}};
             
             case ActionTypes.UPDATE_RECIPE_IMG_FAILED:
                 return {...state, recipe: {inProgress: "update-failed", errMess: action.payload}};
