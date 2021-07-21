@@ -17,7 +17,7 @@ export const My_recipes = (state = {
                 return {...state, inProgress: "failed", errMess: action.payload};
 
             case ActionTypes.LOAD_MY_RECIPES_RESET:
-                return {...state, inProgress: "not-loaded"};
+                return {...state, inProgress: "not-loaded", my_recipes: []};
             default:
                 return state;
         }

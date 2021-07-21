@@ -103,6 +103,19 @@ class MyRecipePage extends Component {
         event.target.onerror = null;
     }
 
+    getCurrentDate(separator = '') {
+
+        var newDate = new Date()
+        var date = newDate.getDate();
+        var month = newDate.getMonth() + 1;
+        var year = newDate.getFullYear();
+        var h = newDate.getHours();
+        var m = newDate.getMinutes();
+        var s = newDate.getSeconds();
+
+        return `${year}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${date}${separator}${h}${separator}${m}${separator}${s}`
+    }
+
     renderRecipes(recipes) {
         const recipesTiles = recipes.map(recipe => {
             return (
@@ -111,8 +124,9 @@ class MyRecipePage extends Component {
                 
                     <Card className="recipe-tile">
                         <Link to={`/myrecipes/${parseInt(recipe.rec_id, 10)}`} style={{textDecoration: "none", color: "inherit"}}>
-                            <CardImg className="recipe-tile-img" src={baseUrl + recipe.url} onError={e => this.addDefaultSrc(e)} 
-                            style={{"backgroundImage": "url('/assets/recipe-1.jpeg')", backgroundRepeat:"no-repeat"}} />
+                            <CardImg className="recipe-tile-img" src={`${baseUrl}${recipe.url}?${this.getCurrentDate()}`} 
+                            onError={e => this.addDefaultSrc(e)} 
+                             />
                             <CardTitle>{recipe.rec_name}</CardTitle>
                         </Link>
                         

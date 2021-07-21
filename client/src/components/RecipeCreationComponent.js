@@ -1,16 +1,27 @@
-import React, {Component} from 'react';
-import {Link, Redirect} from "react-router-dom";
-import {Card, CardImg, CardTitle} from 'reactstrap';
-import { Modal, ModalBody, ModalHeader, ModalFooter} from 'reactstrap';
-import { Col, Row, Navbar, NavbarBrand, Button, Form, FormGroup, FormFeedback, FormText, Label, Input } from 'reactstrap';
-import {LocalForm, Control, Errors} from 'react-redux-form'
+import React, { Component } from 'react';
+import { Link, Redirect } from "react-router-dom";
+import { Card, CardImg, CardTitle } from 'reactstrap';
+import { Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
+import {
+    Col, Row, Navbar, NavbarBrand, Button, Form, FormGroup, FormFeedback, FormText, Label,
+    InputGroup, InputGroupAddon, InputGroupText, Input
+} from 'reactstrap';
+import { LocalForm, Control, Errors } from 'react-redux-form'
 import { withRouter } from 'react-router';
 import { connect } from "react-redux";
 
-import { get_recipe, get_recipe_reset, update_recipe, load_recipe_image, update_recipe_image } from '../redux/ActionCreators';
+import {
+    get_recipe, get_recipe_reset, update_recipe, load_recipe_image,
+    update_recipe_image, load_recipe_image_reset
+} from '../redux/ActionCreators';
 
 import Alert from '@material-ui/lab/Alert';
 import Image from "material-ui-image";
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import { FormHelperText } from '@material-ui/core';
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import RecipeIngredients from "./RecipeCreationgIngredientComponent";
 import Loading from "./LoadingComponent";
@@ -22,23 +33,24 @@ const mapStateToProps = state => {
         curr_recipe: state.curr_recipe,
         images: state.images,
     }
-  }
-  
+}
+
 const mapDispatchToProps = (dispatch) => ({
     get_recipe: (rec_id) => dispatch(get_recipe(rec_id)),
     update_recipe: (recipe, user_id) => dispatch(update_recipe(recipe, user_id)),
     get_recipe_reset: () => dispatch(get_recipe_reset()),
     load_recipe_image: (recipeId) => dispatch(load_recipe_image(recipeId)),
     update_recipe_image: (recipeId, image) => dispatch(update_recipe_image(recipeId, image)),
+    load_recipe_image_reset: () => dispatch(load_recipe_image_reset()),
 });
 
 
 class RecipeCreationPage extends Component {
     constructor(props) {
         super(props);
-        if (this.props.rec_id !== "new" && this.props.curr_recipe.recipe !== null && (this.props.curr_recipe.inProgress === "success" || this.props.curr_recipe.inProgress==="updating" ||
-        this.props.curr_recipe.inProgress==="update_failed")) {
-            this.state= {
+        if (this.props.rec_id !== "new" && this.props.curr_recipe.recipe !== null && (this.props.curr_recipe.inProgress === "success" || this.props.curr_recipe.inProgress === "updating" ||
+            this.props.curr_recipe.inProgress === "update_failed")) {
+            this.state = {
                 "rec_id": this.props.curr_recipe.recipe.rec_id,
                 "rec_name": this.props.curr_recipe.recipe.rec_name,
                 "rec_instructions": this.props.curr_recipe.recipe.rec_instructions,
@@ -53,7 +65,7 @@ class RecipeCreationPage extends Component {
                 "image": null,
             }
         } else {
-            this.state= {
+            this.state = {
                 "rec_id": "new",
                 "rec_name": "",
                 "rec_instructions": "",
@@ -61,11 +73,11 @@ class RecipeCreationPage extends Component {
                 "serving_pax": 1,
                 "cuisine": "global",
                 "rec_type": "edible",
-                "isPublished": true,
+                "isPublished": false,
                 "ingredient": []
             }
         }
-        
+
         this.handleChange = this.handleChange.bind(this);
         this.trackContent = this.trackContent.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -80,7 +92,7 @@ class RecipeCreationPage extends Component {
             this.props.get_recipe(this.props.rec_id);
         }
 
-        if (this.props.images.recipe.inProgress === "idle"){
+        if (this.props.images.recipe.inProgress === "idle") {
             // alert("Getting recipe image")
             this.props.load_recipe_image(this.props.rec_id);
         }
@@ -102,7 +114,9 @@ class RecipeCreationPage extends Component {
     componentWillUnmount() {
         if (this.props.curr_recipe.inProgress === "success" || this.props.curr_recipe.inProgress === "update_success") {
             this.props.get_recipe_reset()
+            this.props.load_recipe_image_reset()
         }
+
     }
 
     handleChange(event) {
@@ -122,75 +136,175 @@ class RecipeCreationPage extends Component {
         this.props.update_recipe(final, this.props.login.user.id);
     }
 
-    changeImage(event){
+    changeImage(event) {
         event.preventDefault();
-        this.setState({image: event.target.files[0]});
+        this.setState({ image: event.target.files[0] });
     }
 
-    uploadImage(event){
+    uploadImage(event) {
         event.preventDefault();
         // alert("Uploading Image");
 
         var newImage = this.state.image;
 
-        this.setState({"image": null});
+        this.setState({ "image": null });
+
+        this.props.load_recipe_image_reset();
 
         this.props.update_recipe_image(this.props.rec_id, this.state.image).then((resp) => {
-            if(resp.status === "new"){
-                document.getElementById("recipe-image-upload").value="";
+            if (resp.status === "new") {
+                document.getElementById("recipe-image-upload").value = "";
                 this.forceUpdate();
             }
         });
 
     }
 
+    getCurrentDate(separator = '') {
+
+        var newDate = new Date()
+        var date = newDate.getDate();
+        var month = newDate.getMonth() + 1;
+        var year = newDate.getFullYear();
+        var h = newDate.getHours();
+        var m = newDate.getMinutes();
+        var s = newDate.getSeconds();
+
+        return `${year}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${date}${separator}${h}${separator}${m}${separator}${s}`
+    }
+
     renderTitle() {
         const recipeTiles = (
-                <div key={this.state.rec_id} className="recipe-details-title">
-                    <div className="row">
-                        {(() => {
-                            if(this.props.images.recipe.inProgress === "success" ){
-                                return (
-                                    <div className="col-6" style={{paddingRight:"5px"}} >
-                                        <Image src={baseUrl + this.props.images.recipe.url} />  
-                                    </div>                      
-                        
-                                )
-                            } else {
-                                return (
-                                    <div className="col-6" style={{paddingRight:"5px"}} >
-                                        <Image onClick={() => console.log('onClick')} src="" aspectRatio={(1/1)}/>  
-                                    </div>)
-                            }
-                        })()}
+            <div key={this.state.rec_id} className="recipe-details-title">
+                <div className="row">
 
-                       
-                        <div className="col-6" style={{display:"flex",alignItems:"center", flexWrap:"wrap", paddingLeft:"0px"}}>
-                            <FormGroup className="recipe-creation-name-box">
-                                <textarea name="rec_name" placeholder="Recipe Name" className="form-control recipe-creation-name"
-                                    value={this.state.rec_name}
-                                    ref={el => this.rec_name = el}
-                                    onChange={e => {
-                                        this.trackContent(this.rec_name)
-                                        this.handleChange(e)}}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Input id="recipe-image-upload" type="file" className="" onChange={this.changeImage} />
-                                <button type=" " className="upload-button btn btn-success"
-                                    onClick={(event) => this.uploadImage(event)}
-                                >Update</button>
-                            </FormGroup>
-                            
-                            
-                        </div>
+                    <div className="col-6" style={{ paddingRight: "5px" }} >
+                        <Image onClick={() => console.log('onClick')} src={(this.props.images.recipe.inProgress === "success") ? `${baseUrl}${this.props.images.recipe.url}?${this.getCurrentDate()}` : ""}
+                            aspectRatio={(1 / 1)} />
                     </div>
-                    
+
+
+
+                    <div className="col-6" style={{ display: "flex", alignItems: "center", flexWrap: "wrap", paddingLeft: "0px" }}>
+                        <FormGroup className="recipe-creation-name-box">
+                            <textarea name="rec_name" placeholder="Recipe Name" className="form-control recipe-creation-name"
+                                value={this.state.rec_name}
+                                ref={el => this.rec_name = el}
+                                onChange={e => {
+                                    this.trackContent(this.rec_name)
+                                    this.handleChange(e)
+                                }}
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <Input id="recipe-image-upload" type="file" className="" onChange={this.changeImage} />
+                            <button type=" " className="upload-button btn btn-primary"
+                                onClick={(event) => this.uploadImage(event)}
+                            ><FontAwesomeIcon icon="upload" />&nbsp; Upload</button>
+                        </FormGroup>
+
+
+                    </div>
                 </div>
+
+            </div>
         )
-        
+
         return recipeTiles;
     }
+
+
+    renderInformation() {
+        return (
+            <div className="container" className="recipe-details-info">
+
+                <div className="row">
+                    <div className="col-6">
+                        <FormGroup>
+                            <Label style={{ fontSize: "16px" }} for="cooking_time"><strong>Cooking Time</strong></Label>
+                            <InputGroup>
+                                <InputGroupAddon addonType="prepend">
+                                    <InputGroupText><FontAwesomeIcon icon="clock" /></InputGroupText>
+                                </InputGroupAddon>
+                                <Input placeholder="mins" min={0} max={100} type="number"
+                                    name="cooking_time" value={this.state.cooking_time}
+                                    onChange={e => this.handleChange(e)}
+                                />
+                            </InputGroup>
+                        </FormGroup>
+
+                    </div>
+
+                    <div className="col-6">
+                        <FormGroup>
+                            <Label style={{ fontSize: "16px" }} for="serving_pax"><strong>Serving Pax</strong></Label>
+                            <InputGroup>
+                                <InputGroupAddon addonType="prepend">
+                                    <InputGroupText><FontAwesomeIcon icon="user" /></InputGroupText>
+                                </InputGroupAddon>
+                                <Input placeholder="Pax" min={0} max={100} type="number"
+                                    name="serving_pax" value={this.state.serving_pax}
+                                    onChange={e => this.handleChange(e)}
+                                />
+                            </InputGroup>
+                        </FormGroup>
+                    </div>
+                </div>
+
+                <div className="row">
+                    <div className="col-6">
+                        <FormGroup>
+                            <Label style={{ fontSize: "16px" }} for="cuisine"><strong>Cuisine</strong></Label>
+                            <Input type="select" name="cuisine" value={this.state.cuisine}
+                                onChange={e => this.handleChange(e)}>
+
+                                <option value="chinese">Chinese</option>
+                                <option value="western">Western</option>
+                                <option value="japanese">Japanese</option>
+                            </Input>
+                        </FormGroup>
+                    </div>
+
+                    <div className="col-6">
+                        <FormGroup>
+                            <Label style={{ fontSize: "16px" }} for="cuisine"><strong>Recipe Type</strong></Label>
+                            <Input type="select" name="rec_type" value={this.state.rec_type}
+                                onChange={e => this.handleChange(e)}>
+
+                                <option value="breakfast">Breakfast</option>
+                                <option value="lunch">Lunch</option>
+                                <option value="dinner">Dinner</option>
+                                <option value="brunch">Brunch</option>
+                                <option value="snack">Snack</option>
+                            </Input>
+                        </FormGroup>
+                    </div>
+                </div>
+
+                <div className="row">
+                    <div className="col-12">
+                        <div style={{ fontSize: "16px" }} for="isPublished"><strong>Privacy Setting</strong></div>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={this.state.isPublished}
+                                    onChange={e => this.handleChange(e)}
+                                    name="isPublished"
+                                    color="primary"
+                                />
+                            }
+                            label={this.state.isPublished ?
+                                <><FontAwesomeIcon icon="lock-open" />&nbsp; Public</> :
+                                <><FontAwesomeIcon icon="lock" />&nbsp; Private</>}
+                        />
+                        <FormHelperText style={{ fontSize: "11px" }} id="component-helper-text">Note: Public recipes means that other users can view them.</FormHelperText>
+                    </div>
+                </div>
+
+            </div>
+        )
+    }
+
 
     trackContent(element) {
         element.style.height = 'auto';
@@ -200,33 +314,34 @@ class RecipeCreationPage extends Component {
     renderSteps() {
         return (
             <FormGroup >
-                <div className="recipe-details-steps"> 
+                <div className="recipe-details-steps">
                     <textarea name="rec_instructions" placeholder="Steps" className="form-control"
                         // rows={rows}
-                        ref={el => {this.rec_instructions = el}}
+                        ref={el => { this.rec_instructions = el }}
                         value={this.state.rec_instructions}
                         onChange={e => {
                             this.trackContent(this.rec_instructions)
-                            this.handleChange(e)}}
+                            this.handleChange(e)
+                        }}
                     ></textarea>
                 </div>
             </FormGroup>
-        )   
+        )
     }
 
     isNumeric(value) {
         return /^\d+$/.test(value);
     }
 
-    isEmpty(value){
+    isEmpty(value) {
         const no_whitespace = /^\S+$/;
-        return (value === "" || !no_whitespace.test(value)); 
+        return (value === "" || !no_whitespace.test(value));
     }
 
     isDisabled() {
         var test = this.state.ingredient.some(ingredient => ingredient.isValid === "required" || ingredient.isValid === "init" || !this.isNumeric(ingredient.ingred_quantity) ||
-        this.isEmpty(ingredient.ingred_quantity));
-        
+            this.isEmpty(ingredient.ingred_quantity));
+
         test = test || this.state.rec_name === "";
         test = test || this.state.rec_instructions === "";
         console.log(test);
@@ -246,58 +361,79 @@ class RecipeCreationPage extends Component {
             return (
                 <Loading />
             )
-            
-        } else if(this.props.curr_recipe.inProgress === "update_success") {
+
+        } else if (this.props.curr_recipe.inProgress === "update_success") {
             return (<Redirect to="/myrecipes" />)
         } else {
             return (
                 <Form className="edit-form" onSubmit={event => this.handleSubmit(event)}>
-                {(() => {
-                    if(this.props.curr_recipe.inProgress === "update_failed"){
-                        return <Alert severity="error">{this.props.curr_recipe.errMess}</Alert>;
-                    }
-                })()}
+                    {(() => {
+                        if (this.props.curr_recipe.inProgress === "update_failed") {
+                            return <Alert severity="error">{this.props.curr_recipe.errMess}</Alert>;
+                        } else if (this.props.curr_recipe.inProgress === "update_failed") {
+                            return <Alert severity="success">Recipe updated successfully!</Alert>;
+                        }
+                    })()}
 
                     <div className="container-fluid">
-    
+
                         <div className="row">
                             <div className="col-12 col-md-6 recipe-details-left-box">
+                                <div className="recipe-details-info-title">
+                                    <h4 style={{ verticalAlign: "middle", margin: "0" }}>Title</h4>
+                                </div>
                                 {this.renderTitle()}
-    
-                                {/* {this.renderIngredients()} */}
-                                <RecipeIngredients ingredients={this.state.ingredient} 
-                                    handleIngredient= {this.handleIngredient}
+                            </div>
+
+                            <div className="col-12 col-md-6 recipe-details-info-box">
+                                <div>
+                                    <div className="recipe-details-info-title">
+                                        <h4 style={{ verticalAlign: "middle", margin: "0" }}>Information</h4>
+                                    </div>
+                                    {this.renderInformation()}
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div className="row">
+                            <div className="col-12 col-md-6 recipe-details-left-box">
+                                <RecipeIngredients ingredients={this.state.ingredient}
+                                    handleIngredient={this.handleIngredient}
                                 />
                             </div>
-    
+
                             <div className="col-12 col-md-6 recipe-details-steps-box">
                                 <div>
                                     <div className="recipe-details-steps-title">
-                                        <h4 style={{verticalAlign:"middle", margin:"0"}}>Recipe</h4>
+                                        <h4 style={{ verticalAlign: "middle", margin: "0" }}>Recipe</h4>
                                     </div>
                                     {this.renderSteps()}
-                              
+
                                 </div>
                             </div>
-                            
                         </div>
-                        <div className="row" style={{position: "relative", width: "100%", height: "100px"}}>
+
+                        <div className="row" style={{ position: "relative", width: "100%", height: "100px" }}>
                             <div className="confirm-cancel-button">
-                                <button type="submit" className="confirm-button btn btn-success"
-                                    disabled= {this.isDisabled()}
-                                >Confirm</button>
+
                                 <Link to="/myrecipes">
-                                    <button type="button" className="cancel-button btn btn-danger" >Cancel</button>
+                                    <button type="button" className="cancel-button btn btn-danger"><FontAwesomeIcon icon="times" />&nbsp; Cancel</button>
                                 </Link>
-                                
+
+                                <button type="submit" className="confirm-button btn btn-success"
+                                    disabled={this.isDisabled()}
+                                ><FontAwesomeIcon icon="check" />&nbsp; Confirm</button>
+
                             </div>
-                            
+
                         </div>
                     </div>
                 </Form>
             )
         }
-        
+
     }
 }
 
