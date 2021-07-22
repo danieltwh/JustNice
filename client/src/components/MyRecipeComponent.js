@@ -8,7 +8,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { withRouter } from 'react-router-dom';
 import { connect } from "react-redux";
 
-import { load_myrecipes, load_myrecipes_reset } from "../redux/ActionCreators";
+import { load_myrecipes, load_myrecipes_reset, load_recipe_image_reset, get_recipe_reset, load_explore_recipes_reset } from "../redux/ActionCreators";
 
 import { baseUrl } from "../shared/baseUrl";
 import Loading from "./LoadingComponent";
@@ -37,13 +37,21 @@ import Image from "material-ui-image";
 const mapStateToProps = state => {
     return {
         login: state.login,
-        my_recipes: state.my_recipes
+        my_recipes: state.my_recipes,
+        curr_recipe: state.curr_recipe,
+        recipes: state.recipes,
+
+
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
     load_myrecipes: (user_id) => { dispatch(load_myrecipes(user_id)) },
-    load_myrecipes_reset: () => { dispatch(load_myrecipes_reset()) }
+    load_myrecipes_reset: () => { dispatch(load_myrecipes_reset()) },
+    get_recipe_reset: () => dispatch(get_recipe_reset()),
+    load_recipe_image_reset: () => dispatch(load_recipe_image_reset()),
+    load_explore_recipes_reset: () => dispatch(load_explore_recipes_reset()),
+
 });
 
 const RecipeTile = (recipe) => {
@@ -163,6 +171,17 @@ class MyRecipePage extends Component {
             console.log(this.props.my_recipes.inProgress);
             this.props.load_myrecipes(this.props.login.user.id);
         }
+
+        if (this.props.curr_recipe.inProgress !== "idle") {
+            this.props.get_recipe_reset();
+            this.props.load_recipe_image_reset();
+        }
+
+        if (this.props.recipes.inProgress !== "idle") {
+            this.props.load_explore_recipes_reset();
+        }
+
+
     }
 
     componentWillUnmount() {

@@ -71,8 +71,8 @@ class RecipeCreationPage extends Component {
                 "rec_instructions": "",
                 "cooking_time": 60,
                 "serving_pax": 1,
-                "cuisine": "global",
-                "rec_type": "edible",
+                "cuisine": "chinese",
+                "rec_type": "breakfast",
                 "isPublished": false,
                 "ingredient": []
             }
@@ -89,7 +89,12 @@ class RecipeCreationPage extends Component {
     componentDidMount() {
 
         if (this.props.rec_id !== "new" && this.props.curr_recipe.inProgress === "idle") {
+            // alert(JSON.stringify([this.props.rec_id, this.props.curr_recipe.inProgress]))
             this.props.get_recipe(this.props.rec_id);
+        }
+
+        if(this.props.curr_recipe.inProgress === "success"){
+            this.setState({refresh: true});
         }
 
         if (this.props.images.recipe.inProgress === "idle") {
@@ -112,10 +117,12 @@ class RecipeCreationPage extends Component {
     }
 
     componentWillUnmount() {
-        if (this.props.curr_recipe.inProgress === "success" || this.props.curr_recipe.inProgress === "update_success") {
+        if (this.props.curr_recipe.inProgress === "update_success") {
             this.props.get_recipe_reset()
             this.props.load_recipe_image_reset()
-        }
+        } 
+
+ 
 
     }
 
@@ -151,12 +158,7 @@ class RecipeCreationPage extends Component {
 
         this.props.load_recipe_image_reset();
 
-        this.props.update_recipe_image(this.props.rec_id, this.state.image).then((resp) => {
-            if (resp.status === "new") {
-                document.getElementById("recipe-image-upload").value = "";
-                this.forceUpdate();
-            }
-        });
+        this.props.update_recipe_image(this.props.rec_id, newImage)
 
     }
 
@@ -196,18 +198,28 @@ class RecipeCreationPage extends Component {
                                 }}
                             />
                         </FormGroup>
-                        <FormGroup>
-                            <Input id="recipe-image-upload" type="file" className="" onChange={this.changeImage} />
-                            <button type=" " className="upload-button btn btn-primary"
-                                onClick={(event) => this.uploadImage(event)}
-                            ><FontAwesomeIcon icon="upload" />&nbsp; Upload</button>
-                        </FormGroup>
 
+                        {(() => {
+                            if (this.state.rec_id === "new") {
+                                
+                            } else {
+                                return (
+                                    <FormGroup>
+                                        <Input id="recipe-image-upload" type="file" className="" onChange={this.changeImage} />
+                                        <button type=" " className="upload-button btn btn-primary"
+                                            onClick={(event) => this.uploadImage(event)}>
+                                            <FontAwesomeIcon icon="upload" />&nbsp; Upload
+                                        </button>
+                                    </FormGroup>
+                                )
+                            }
+                        })()}
+                            
 
-                    </div>
                 </div>
-
             </div>
+
+            </div >
         )
 
         return recipeTiles;

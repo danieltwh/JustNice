@@ -25,7 +25,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from "@material-ui/core/styles";
 // import { MuiThemeProvider, createMuiTheme} from "material-ui/styles";
 
-import { load_explore_recipes } from '../redux/ActionCreators';
+import { load_explore_recipes, load_explore_recipes_reset, get_recipe_reset,  load_recipe_image_reset} from '../redux/ActionCreators';
 
 import Alert from '@material-ui/lab/Alert';
 import Image from "material-ui-image";
@@ -104,6 +104,7 @@ const useStyles = makeStyles({
 export default function ExplorePage() {
     const login = useSelector(state => state.login);
     const recipes = useSelector(state => state.recipes);
+    const curr_recipe = useSelector(state => state.curr_recipe)
     const classes = useStyles();
 
     const dispatch = useDispatch();
@@ -112,6 +113,17 @@ export default function ExplorePage() {
         if(recipes.inProgress === "idle"){
             dispatch(load_explore_recipes());
         }
+
+        if(curr_recipe.inProgress !== "idle"){
+            dispatch(get_recipe_reset())
+            dispatch(load_recipe_image_reset())
+        }
+
+        // return () => {
+        //     if(recipes.inProgress === "success"){
+        //         dispatch(load_explore_recipes_reset());
+        //     }
+        // }
     })
 
     function renderRecipes(recipes) {

@@ -1,5 +1,5 @@
 import * as ActionTypes from "./ActionTypes";
-import {fetch} from "cross-fetch";
+import { fetch } from "cross-fetch";
 
 import { baseUrl } from "../shared/baseUrl";
 
@@ -8,11 +8,11 @@ import { USERS } from "../shared/users";
 
 
 /* Login */
-export const login_attempt = (username, password) => (dispatch) =>  {
+export const login_attempt = (username, password) => (dispatch) => {
     return fetch(baseUrl + "user/login/"
         , {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 "username": username,
                 "password": password
@@ -29,13 +29,16 @@ export const login_attempt = (username, password) => (dispatch) =>  {
                 // return add_users(users);
                 dispatch(login_success(resp.user));
                 dispatch(load_profile_image(resp.user.id));
-            } else if(resp.status === 0) {
+            } else if (resp.status === 0) {
                 dispatch(login_failed("Wrong Password"));
             } else {
                 dispatch(login_failed("Username Does Not Exist"));
             }
         })
-        .catch(error => console.log(error.message));
+        .catch(error => {
+            dispatch(login_failed("Failed to login. Please try again"));
+            console.log(error.message)
+        });
 };
 
 export const login_inProgress = () => ({
@@ -57,22 +60,22 @@ export const add_users = (users) => ({
     payload: users
 });
 
-export const signup_attempt = (first_name, last_name, email, username, password) => (dispatch) =>  {
+export const signup_attempt = (first_name, last_name, email, username, password) => (dispatch) => {
     // dispatch(login_inProgress())
 
     return fetch(baseUrl + "user/"
         , {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                "first_name":first_name, 
+                "first_name": first_name,
                 "last_name": last_name,
                 "email": email,
                 "username": username,
                 "password": password
             })
         }
-        )
+    )
         .then(response => {
             return response.json()
         })
@@ -93,15 +96,15 @@ export const signup_failed = (errMess) => ({
     payload: "Failed"
 });
 
-export const login_edit_attempt = (userId, first_name, last_name, email, username, password) => (dispatch) =>  {
-    
+export const login_edit_attempt = (userId, first_name, last_name, email, username, password) => (dispatch) => {
+
     dispatch(login_edit_inProgress(true));
 
     alert(password);
 
     var newInfo = {
         "id": userId,
-        "first_name":first_name, 
+        "first_name": first_name,
         "last_name": last_name,
         "email": email,
         "username": username,
@@ -114,7 +117,7 @@ export const login_edit_attempt = (userId, first_name, last_name, email, usernam
     return fetch(baseUrl + "user/"
         , {
             method: "PUT",
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(newInfo)
         })
         .then(response => response.json())
@@ -122,7 +125,7 @@ export const login_edit_attempt = (userId, first_name, last_name, email, usernam
             // console.log(JSON.stringify(response));
             // alert(JSON.stringify(response));
             // alert(response)
-            if(response === "Updated Successfully") {
+            if (response === "Updated Successfully") {
                 dispatch(login_edit_success(newInfo));
 
             } else {
@@ -153,9 +156,9 @@ export const login_edit_reset = (errMess) => ({
 
 export const signout = () => {
     console.log("signout triggered")
-    
+
     return ({
-    type: ActionTypes.SIGNOUT
+        type: ActionTypes.SIGNOUT
     });
 }
 
@@ -164,11 +167,11 @@ export const load_myrecipes = (user_id) => (dispatch) => {
 
     return fetch(baseUrl + "recingred/getallrec/", {
         method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                "user_id": user_id, 
-            })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            "user_id": user_id,
         })
+    })
         .then(resp => resp.json())
         .then(resp => {
             console.log(resp);
@@ -192,7 +195,7 @@ export const load_myrecipes_success = (recipes) => ({
 
 export const load_myrecipes_failed = () => ({
     type: ActionTypes.LOAD_MY_RECIPES_FAILED
-}) 
+})
 
 export const load_myrecipes_reset = () => ({
     type: ActionTypes.LOAD_MY_RECIPES_RESET
@@ -204,11 +207,11 @@ export const get_recipe = (rec_id) => (dispatch) => {
 
     return fetch(baseUrl + "recingred/getfullrec/", {
         method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                "rec_id": rec_id, 
-            })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            "rec_id": rec_id,
         })
+    })
         .then(resp => resp.json())
         .then(resp => {
             // console.log(JSON.stringify(resp));
@@ -221,7 +224,8 @@ export const get_recipe = (rec_id) => (dispatch) => {
         })
         .catch(err => {
             dispatch(get_recipe_failed("Error"));
-            console.log(err)});
+            console.log(err)
+        });
 }
 
 export const get_recipe_inProgress = () => ({
@@ -249,7 +253,7 @@ export const update_recipe = (newRecipe, user_id) => (dispatch) => {
     // var ingredients = [];
     var count = -1;
     var ingredients = newRecipe.ingredient.map(curr => {
-        if (curr.isValid === "valid")  {
+        if (curr.isValid === "valid") {
             // ingredients.push({`${curr.ingred_id}`: curr.ingred_quantity})
             // ingredients[`${curr.ingred_id}`] = curr.ingred_quantity;
 
@@ -264,34 +268,38 @@ export const update_recipe = (newRecipe, user_id) => (dispatch) => {
             // };
             var nextItem = {}
             nextItem[`${count}`] = {
-                    "ingred_name": curr.ingred_name,
-                    "ingred_unit": curr.ingred_unit,
-                    "ingred_quantity": curr.ingred_quantity
-                }
+                "ingred_name": curr.ingred_name,
+                "ingred_unit": curr.ingred_unit,
+                "ingred_quantity": curr.ingred_quantity
+            }
             count = count - 1;
             return nextItem;
         }
     })
 
-    console.log(JSON.stringify(ingredients));
-    alert(JSON.stringify(ingredients));
+    // console.log(JSON.stringify(ingredients));
+    // alert(JSON.stringify(ingredients));
+
+    var toSend = {
+        "rec_name": newRecipe.rec_name,
+        "rec_instructions": newRecipe.rec_instructions,
+        "cooking_time": newRecipe.cooking_time,
+        "serving_pax": newRecipe.serving_pax,
+        "cuisine": newRecipe.cuisine,
+        "rec_type": newRecipe.rec_type,
+        "isPublished": newRecipe.isPublished,
+        "user_id": user_id,
+        "ingredients": ingredients
+    }
+
+    alert(JSON.stringify(newRecipe));
 
     if (newRecipe.rec_id === "new") {
         return fetch(baseUrl + "recingred/recipe/", {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                "rec_name": newRecipe.rec_name,
-                "rec_instructions": newRecipe.rec_instructions,
-                "cooking_time": newRecipe.cooking_time,
-                "serving_pax": newRecipe.serving_pax,
-                "cuisine": newRecipe.cuisine,
-                "rec_type": newRecipe.rec_type,
-                "isPublished": newRecipe.isPublished,
-                "user_id": user_id,
-                "ingredients": ingredients
-                })
-            })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(toSend)
+        })
             .then(resp => resp.json())
             .then(resp => {
                 // console.log(JSON.stringify(resp));
@@ -303,12 +311,14 @@ export const update_recipe = (newRecipe, user_id) => (dispatch) => {
                 }
             })
             .catch(err => {
-                alert(err);
-                console.log(err)});
+                // alert(err);
+                dispatch(update_recipe_failed("Error"))
+                console.log(err)
+            });
     } else {
         return fetch(baseUrl + "recingred/recipe/", {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 "rec_id": newRecipe.rec_id,
                 "rec_name": newRecipe.rec_name,
@@ -320,21 +330,32 @@ export const update_recipe = (newRecipe, user_id) => (dispatch) => {
                 "isPublished": newRecipe.isPublished,
                 "user_id": user_id,
                 "ingredients": ingredients
-                })
             })
+        })
             .then(resp => resp.json())
             .then(resp => {
                 // console.log(JSON.stringify(resp));
-                if (resp.status === 1) {
+                if (resp.status !== 1) {
                     // return add_users(users);
                     dispatch(update_recipe_success(true));
+                    return true;
+
                 } else {
                     dispatch(update_recipe_failed("Failed to update recipe. Please try again."));
+                    return false;
                 }
             })
+            // .then(resp => {
+            //     if(resp){
+            //         dispatch(get_recipe_reset());
+            //         dispatch(load_recipe_image_reset());
+            //     }
+            // })
             .catch(err => {
-                alert(err);
-                console.log(err)});
+                // alert(err);
+                dispatch(update_recipe_failed("Failed to update recipe. Please try again."));
+                console.log(err)
+            });
     }
 }
 
@@ -359,7 +380,7 @@ export const load_myGrocList = (user_id) => (dispatch) => {
         .then(resp => resp.json())
         .then(resp => {
             // console.log(JSON.stringify(resp));
-            if (resp.length >=0) {
+            if (resp.length >= 0) {
                 // return add_users(users);
                 dispatch(load_myGrocList_success(resp));
             } else {
@@ -368,7 +389,8 @@ export const load_myGrocList = (user_id) => (dispatch) => {
         })
         .catch(err => {
             alert(err);
-            console.log(err)});
+            console.log(err)
+        });
 
 }
 
@@ -394,17 +416,17 @@ export const load_myGrocList_reset = () => ({
 export const create_new_GrocList = (user_id, list_id) => (dispatch) => {
     dispatch(load_myGrocList_inProgress(true));
 
-    alert(JSON.stringify({"user_id": user_id, "list_id": list_id}));
+    alert(JSON.stringify({ "user_id": user_id, "list_id": list_id }));
 
     return fetch(baseUrl + `groclist/getter/`, {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             "user_id": user_id,
             "list_id": list_id,
             "list_name": "Untitled"
-            })
         })
+    })
         .then(resp => resp.json())
         .then(resp => {
             // console.log(JSON.stringify(resp));
@@ -417,7 +439,8 @@ export const create_new_GrocList = (user_id, list_id) => (dispatch) => {
         })
         .catch(err => {
             alert(err);
-            console.log(err)});
+            console.log(err)
+        });
 }
 
 /***** Loading Current Grocery List *********/
@@ -436,7 +459,8 @@ export const load_currGrocList = (user_id, grocList_id) => (dispatch) => {
         })
         .catch(err => {
             alert(err);
-            console.log(err)});
+            console.log(err)
+        });
 }
 
 export const load_currGrocList_inProgress = () => ({
@@ -470,11 +494,11 @@ export const load_profile_image = (userId) => (dispatch) => {
 
     return fetch(baseUrl + "getphoto/", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             "filename": `user${userId}`,
-            })
         })
+    })
         .then(resp => resp.json())
         .then(resp => {
             console.log(JSON.stringify(resp));
@@ -483,7 +507,8 @@ export const load_profile_image = (userId) => (dispatch) => {
         .catch(err => {
             dispatch(load_profile_image_failed(err));
             alert(err);
-            console.log(err)});
+            console.log(err)
+        });
 }
 
 export const load_profile_image_inProgress = () => ({
@@ -516,22 +541,23 @@ export const update_profile_image = (userId, newImage) => (dispatch) => {
     return fetch(baseUrl + "updatephoto/", {
         method: "POST",
         body: formData
-        })
+    })
         .then(resp => resp.json())
         .then(resp => {
             console.log(JSON.stringify(resp));
-            if(resp.status === "new"){
+            if (resp.status === "new") {
                 dispatch(load_profile_image_success(resp));
                 return resp;
             } else {
                 dispatch(update_profile_image_failed("Failed to update image. Please try again."));
                 return resp;
-            } 
+            }
         })
         .catch(err => {
             dispatch(update_profile_image_failed("Failed to update image. Please try again."));
             alert(err);
-            console.log(err)});
+            console.log(err)
+        });
 }
 
 export const update_profile_image_inProgress = () => ({
@@ -557,11 +583,11 @@ export const load_recipe_image = (recipeId) => (dispatch) => {
 
     return fetch(baseUrl + "getphoto/", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             "filename": `rec${recipeId}`,
-            })
         })
+    })
         .then(resp => resp.json())
         .then(resp => {
             console.log(JSON.stringify(resp));
@@ -570,7 +596,8 @@ export const load_recipe_image = (recipeId) => (dispatch) => {
         .catch(err => {
             dispatch(load_recipe_image_failed(err));
             alert(err);
-            console.log(err)});
+            console.log(err)
+        });
 }
 
 export const load_recipe_image_inProgress = () => ({
@@ -603,22 +630,23 @@ export const update_recipe_image = (recipeId, newImage) => (dispatch) => {
     return fetch(baseUrl + "updatephoto/", {
         method: "POST",
         body: formData
-        })
+    })
         .then(resp => resp.json())
         .then(resp => {
             console.log(JSON.stringify(resp));
-            if(resp.status === "new"){
+            if (resp.status === "new") {
                 dispatch(load_recipe_image_success(resp));
                 return resp;
             } else {
                 dispatch(update_recipe_image_failed("Failed to update image. Please try again."));
                 return resp;
-            } 
+            }
         })
         .catch(err => {
             dispatch(update_recipe_image_failed("Failed to update image. Please try again."));
             alert(err);
-            console.log(err)});
+            console.log(err)
+        });
 }
 
 export const update_recipe_image_inProgress = () => ({
@@ -654,7 +682,8 @@ export const load_explore_recipes = () => (dispatch) => {
         .catch(err => {
             alert(err);
             dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
-            console.log(err)});
+            console.log(err)
+        });
 
 }
 
@@ -686,12 +715,12 @@ export const search_recipes = (search) => (dispatch) => {
         body: JSON.stringify({
             "category": "recingred",
             "keywords": search,
-            })
         })
+    })
         .then(resp => resp.json())
         .then(resp => {
             // console.log(JSON.stringify(resp));
-            if (resp.length >=0) {
+            if (resp.length >= 0) {
                 // return add_users(users);
                 dispatch(load_explore_recipes_success(resp));
             } else {
@@ -701,7 +730,8 @@ export const search_recipes = (search) => (dispatch) => {
         .catch(err => {
             alert(err);
             dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
-            console.log(err)});
+            console.log(err)
+        });
 }
 
 
