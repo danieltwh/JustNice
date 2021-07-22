@@ -193,9 +193,12 @@ export default function SearchBar() {
                     <IconButton type="submit" className={classes.iconButton} aria-label="search">
                         <SearchIcon />
                     </IconButton> */}
-                        <TextField id="single-search-input" label={<Typography id="search-bar-label" variant="button" display="block" component="p" gutterBottom>Search</Typography>} 
+
+                    {/* label={<Typography id="search-bar-label" variant="button" display="block" component="p" gutterBottom>Search</Typography>}  */}
+                    
+                        <TextField id="single-search-input" 
                         value={search} onChange={(e) => {setSearch(e.target.value); setAdvanceSearch(e.target.value)}}
-                            placeholder="Recipe / Ingredients" variant="outlined" color="primary" size="small"
+                            placeholder="Search" variant="outlined" color="primary" size="small"
                             InputLabelProps={{ shrink: true, }} />
                         <button type="submit"
                             className="btn btn-light search-bar-btn"

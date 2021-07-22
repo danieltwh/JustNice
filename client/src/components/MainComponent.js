@@ -7,6 +7,7 @@ import {MY_RECIPES} from "../shared/my_recipes";
 
 // In App Pages
 import LoginPage from "./LoginPageComponent";
+import AccountPage from './AccountPageComponent';
 import Header from "./HeaderComponent";
 import ExplorePage from "./ExploreComponent";
 import MyRecipePage from './MyRecipeComponent';
@@ -79,6 +80,8 @@ class Main extends Component {
             <Header signout={this.props.signout}/>
             <Switch>
               {/* <Route path="/login" component={() => <LoginPage login_attempt={this.props.login_attempt} />} /> */}
+
+              <Route path="/account" component={AccountPage} />
             
               <Route path="/explore" component={() => <ExplorePage recipes={this.props.recipes.recipes} />} />
 

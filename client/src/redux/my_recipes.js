@@ -11,7 +11,7 @@ export const My_recipes = (state = {
                 return {...state, inProgress: "success", my_recipes: action.payload};
             
             case ActionTypes.LOAD_MY_RECIPES_IN_PROGRESS:
-                return {...state, inProgress: "loading", errMess: null, my_recipes: []};
+                return {...state, inProgress: "inProgress", errMess: null, my_recipes: []};
             
             case ActionTypes.LOAD_MY_RECIPES_FAILED:
                 return {...state, inProgress: "failed", errMess: action.payload};

@@ -271,7 +271,7 @@ class Header extends Component {
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1"><i className="fa fa-user-circle fa-lg icon-button"/>Account</Dropdown.Item>
+                    <Dropdown.Item href="/account"><i className="fa fa-user-circle fa-lg icon-button"/>Account</Dropdown.Item>
                     <Dropdown.Item href="#/action-2"><i className="fa fa-cog fa-lg icon-button" />Settings</Dropdown.Item>
                     <DropdownItem divider />
                     <Dropdown.Item onClick={this.props.signout}><i className="fa fa-sign-out fa-lg icon-button" />Sign Out</Dropdown.Item>
