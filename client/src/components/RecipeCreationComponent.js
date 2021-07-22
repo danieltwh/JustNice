@@ -63,6 +63,7 @@ class RecipeCreationPage extends Component {
                     ...ingredient, "isValid": "valid"
                 })),
                 "image": null,
+                "change": false,
             }
         } else {
             this.state = {
@@ -91,10 +92,6 @@ class RecipeCreationPage extends Component {
         if (this.props.rec_id !== "new" && this.props.curr_recipe.inProgress === "idle") {
             // alert(JSON.stringify([this.props.rec_id, this.props.curr_recipe.inProgress]))
             this.props.get_recipe(this.props.rec_id);
-        }
-
-        if(this.props.curr_recipe.inProgress === "success"){
-            this.setState({refresh: true});
         }
 
         if (this.props.images.recipe.inProgress === "idle") {
@@ -154,12 +151,11 @@ class RecipeCreationPage extends Component {
 
         var newImage = this.state.image;
 
-        this.setState({ "image": null });
+        // this.setState({ "image": null, change: !this.state.change });
 
         this.props.load_recipe_image_reset();
 
-        this.props.update_recipe_image(this.props.rec_id, newImage)
-
+        this.props.update_recipe_image(this.props.rec_id, newImage).then(() => this.setState({ "image": null, change: !this.state.change }));
     }
 
     getCurrentDate(separator = '') {
@@ -181,7 +177,7 @@ class RecipeCreationPage extends Component {
                 <div className="row">
 
                     <div className="col-6" style={{ paddingRight: "5px" }} >
-                        <Image onClick={() => console.log('onClick')} src={(this.props.images.recipe.inProgress === "success") ? `${baseUrl}${this.props.images.recipe.url}?${this.getCurrentDate()}` : ""}
+                        <Image onClick={() => console.log('onClick')} src={(this.props.images.recipe.inProgress === "success") ? `${baseUrl}${this.props.images.recipe.url}?${this.state.change}` : ""}
                             aspectRatio={(1 / 1)} />
                     </div>
 
@@ -205,7 +201,9 @@ class RecipeCreationPage extends Component {
                             } else {
                                 return (
                                     <FormGroup>
-                                        <Input id="recipe-image-upload" type="file" className="" onChange={this.changeImage} />
+                                        <Input id="recipe-image-upload" type="file" className="" onChange={this.changeImage} 
+                                            onClick={e => (e.target.value = null)}
+                                        />
                                         <button type=" " className="upload-button btn btn-primary"
                                             onClick={(event) => this.uploadImage(event)}>
                                             <FontAwesomeIcon icon="upload" />&nbsp; Upload

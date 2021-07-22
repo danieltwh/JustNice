@@ -71,13 +71,14 @@ const RecipeTile = (recipe) => {
         <div key={recipe.rec_id} className="col-6 col-sm-4 col-lg-3 col-xl-2">
 
             <Card className="recipe-tile">
-                <CardContent>
-                    <Typography style={{ fontSize: "20px", padding: "0" }}>
-                        {recipe.recipe.rec_name}
-                    </Typography>
-                </CardContent>
-
                 <Link to={`/myrecipes/${parseInt(recipe.recipe.rec_id, 10)}`} style={{ textDecoration: "none", color: "inherit" }}>
+                    <CardContent>
+                        <Typography style={{ fontSize: "20px", padding: "0" }}>
+                            {recipe.recipe.rec_name}
+                        </Typography>
+                    </CardContent>
+
+
 
                     <Image className="recipe-tile-img" src={baseUrl + recipe.recipe.url} alt={recipe.recipe.rec_name} />
                     <CardContent style={{ padding: "2px 10px 5px 10px", alignItems: "center", }}>

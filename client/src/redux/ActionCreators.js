@@ -9,6 +9,8 @@ import { USERS } from "../shared/users";
 
 /* Login */
 export const login_attempt = (username, password) => (dispatch) => {
+    dispatch(login_inProgress());
+    
     return fetch(baseUrl + "user/login/"
         , {
             method: "POST",
@@ -335,7 +337,7 @@ export const update_recipe = (newRecipe, user_id) => (dispatch) => {
             .then(resp => resp.json())
             .then(resp => {
                 // console.log(JSON.stringify(resp));
-                if (resp.status !== 1) {
+                if (resp.status === 1) {
                     // return add_users(users);
                     dispatch(update_recipe_success(true));
                     return true;
