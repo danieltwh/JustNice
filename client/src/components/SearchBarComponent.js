@@ -165,7 +165,9 @@ export default function SearchBar() {
     const handleSingleSearch = (event) => {
         event.preventDefault();
         alert(JSON.stringify([open, search, cookingTime, servingPax, cuisine, recType]));
+        
         dispatch(search_recipes(search));
+        setSearch("");
     };
 
     const handleSubmit = () => {

@@ -1,10 +1,11 @@
-import React, {Component, useState, useEffect } from  'react';
+import React, { Component, useState, useEffect } from 'react';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
 // import { withRouter } from 'react-router';
 // import { connect } from "react-redux";
 import { baseUrl } from '../shared/baseUrl';
+import { Link } from 'react-router-dom';
 import Loading from "./LoadingComponent";
 import SearchBar from "./SearchBarComponent";
 
@@ -25,7 +26,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from "@material-ui/core/styles";
 // import { MuiThemeProvider, createMuiTheme} from "material-ui/styles";
 
-import { load_explore_recipes } from '../redux/ActionCreators';
+import { load_explore_recipes, load_explore_recipes_reset, get_recipe_reset, load_recipe_image_reset } from '../redux/ActionCreators';
 
 import Alert from '@material-ui/lab/Alert';
 import Image from "material-ui-image";
@@ -36,56 +37,56 @@ import Image from "material-ui-image";
 //         recipes: state.recipes,
 //     }
 //   }
-  
+
 // const mapDispatchToProps = (dispatch) => ({
 //     load_explore_recipes: () => dispatch(load_explore_recipes()),
 // });
 
 const useStyles = makeStyles({
     titleItemRight: {
-      color: 'white',
-      backgroundColor: 'blue',
-      top: '50%',
-      height: 30,
-      float: 'right',
-      position: 'relative',
-      transform: 'translateY(-50%)',
+        color: 'white',
+        backgroundColor: 'blue',
+        top: '50%',
+        height: 30,
+        float: 'right',
+        position: 'relative',
+        transform: 'translateY(-50%)',
     },
     root: {
         minWidth: 275,
-      },
-      bullet: {
+    },
+    bullet: {
         display: 'inline-block',
         margin: '0 2px',
         transform: 'scale(0.8)',
-      },
-      title: {
+    },
+    title: {
         fontSize: 20,
         padding: 0,
-      },
-      pos: {
+    },
+    pos: {
         marginBottom: 12,
-      },
+    },
 
-      recipeDetails:{
-          padding: "2px 10px 5px 10px",
-          alignItems: "center",
-          
-      },
+    recipeDetails: {
+        padding: "2px 10px 5px 10px",
+        alignItems: "center",
 
-      paper: {
-          textAlign: "center",
+    },
 
-      },
-      paxDetails:{
-          textAlign: "center",
-      },
+    paper: {
+        textAlign: "center",
 
-      cardBottom:{
-          padding: 0,
-          alignSelf: "bottom",
-      }
-    });
+    },
+    paxDetails: {
+        textAlign: "center",
+    },
+
+    cardBottom: {
+        padding: 0,
+        alignSelf: "bottom",
+    }
+});
 
 // const breakpointValues = createMuiTheme({
 //     breakpoints: {
@@ -104,62 +105,78 @@ const useStyles = makeStyles({
 export default function ExplorePage() {
     const login = useSelector(state => state.login);
     const recipes = useSelector(state => state.recipes);
+    const curr_recipe = useSelector(state => state.curr_recipe)
     const classes = useStyles();
 
     const dispatch = useDispatch();
-    
-    useEffect(() =>  {
-        if(recipes.inProgress === "idle"){
+
+    useEffect(() => {
+        if (recipes.inProgress === "idle") {
             dispatch(load_explore_recipes());
         }
+
+        if (curr_recipe.inProgress !== "idle") {
+            dispatch(get_recipe_reset())
+            dispatch(load_recipe_image_reset())
+        }
+
+        // return () => {
+        //     if(recipes.inProgress === "success"){
+        //         dispatch(load_explore_recipes_reset());
+        //     }
+        // }
     })
 
     function renderRecipes(recipes) {
         const recipesTiles = recipes.map(recipe => {
             return (
                 <div key={recipe.rec_id} className="col-6 col-sm-4 col-lg-3 col-xl-2 ">
-                {/* <Grid item xs={6} sm={4} lg={3} xl={2}> */}
-                {/* <div className="recipe-tile"> */}
-                 
-                    <Card  className="recipe-tile" style={{height: "95%",}}>
+                    {/* <Grid item xs={6} sm={4} lg={3} xl={2}> */}
+                    {/* <div className="recipe-tile"> */}
+
+                    <Card className="recipe-tile" style={{ height: "95%", }}>
+                    <Link to={`/explore/${parseInt(recipe.rec_id, 10)}`} style={{ textDecoration: "none", color: "inherit" }}>
                         <CardContent>
                             <Typography className={classes.title}>
                                 {recipe.rec_name}
                             </Typography>
                         </CardContent>
-                        <Image className="recipe-tile-img" src={baseUrl + recipe.url} alt={recipe.rec_name} />
-                        <CardContent className={classes.recipeDetails}>
-                            <Grid container rowSpacing={2} columnSpacing={4} direction="row" justifyContent="center" alignItems="flex-start">
-                                    <Grid  item xs={6} sm={6}>
+
+                        
+                            <Image className="recipe-tile-img" src={baseUrl + recipe.url} alt={recipe.rec_name} />
+                            <CardContent className={classes.recipeDetails}>
+                                <Grid container rowSpacing={2} columnSpacing={4} direction="row" justifyContent="center" alignItems="flex-start">
+                                    <Grid item xs={6} sm={6}>
                                         {/* <Paper > */}
-                                            <Typography variant="body2" color="textSecondary" component="p">
-                                                Time: {recipe.cooking_time}min
-                                            </Typography>
+                                        <Typography variant="body2" color="textSecondary" component="p">
+                                            Time: {recipe.cooking_time}min
+                                        </Typography>
                                         {/* </Paper> */}
                                     </Grid>
                                     <Grid className={classes.paxDetails} item xs={6} sm={6} >
                                         {/* <Paper > */}
-                                            <Typography  variant="body2" color="textSecondary" component="p">
-                                                Pax: {recipe.serving_pax}
-                                            </Typography>
+                                        <Typography variant="body2" color="textSecondary" component="p">
+                                            Pax: {recipe.serving_pax}
+                                        </Typography>
                                         {/* </Paper> */}
                                     </Grid>
 
                                     <Grid item xs={12} sm={12} md={12}>
                                         {/* <Paper > */}
-                                            <Typography  variant="body2" color="textSecondary" component="p">
-                                                Cuisine: {recipe.cuisine}
-                                            </Typography>
+                                        <Typography variant="body2" color="textSecondary" component="p">
+                                            Cuisine: {recipe.cuisine}
+                                        </Typography>
                                         {/* </Paper> */}
-                                    
+
                                     </Grid>
-                            </Grid>
-                            {/* <Typography variant="body2" color="textSecondary" component="p">
+                                </Grid>
+                                {/* <Typography variant="body2" color="textSecondary" component="p">
                             Cooking Time: {recipe.cooking_time}min &nbsp;&nbsp;&nbsp; Pax: {recipe.serving_pax} <br/>
                             Cuisine: {recipe.cuisine}
                             </Typography> */}
-                        </CardContent>
-                        
+                            </CardContent>
+                        </Link>
+
                         <CardActions className={classes.cardBottom}>
                             <Grid container direction="row" justify="flex-end" alignItems="flex-end">
                                 <Grid item>
@@ -167,7 +184,7 @@ export default function ExplorePage() {
                                 </Grid>
                             </Grid>
                         </CardActions>
-                        
+
 
                         {/* <CardActions>
                             <Button  className="share-button" size="small" color="primary" >
@@ -175,20 +192,20 @@ export default function ExplorePage() {
                             </Button>
                         </CardActions> */}
                     </Card>
-                       
-                {/* </div> */}
-                {/* </Grid> */}
+
+                    {/* </div> */}
+                    {/* </Grid> */}
                 </div>
             )
         });
-        
+
         return recipesTiles;
     }
 
     return (
         <div className="container-fluid">
             {(() => {
-                if (recipes.inProgress === "failed"){
+                if (recipes.inProgress === "failed") {
                     return (
                         <Alert severity="error">{recipes.errMess}</Alert>
                     )
@@ -197,9 +214,9 @@ export default function ExplorePage() {
                         <>
                             <Alert severity="info">Hold on...Serving up the recipes soon!</Alert>
                             <Loading />
-                        
+
                         </>
-                        
+
                     )
                 }
             })()}
@@ -208,12 +225,12 @@ export default function ExplorePage() {
             </div>
         </div>
         // <Grid container direction="row" rowSpacing={10} columnSpacing={{sm: 10, md: 10}} >
-            
+
         //     {renderRecipes(recipes.recipes)}
-            
+
         // </Grid>
     )
-    
+
 }
 
 
@@ -227,7 +244,7 @@ export default function ExplorePage() {
 
 //     }
 
-    
+
 
 //     componentDidMount() {
 //         if(this.props.recipes.inProgress === "idle"){
@@ -255,7 +272,7 @@ export default function ExplorePage() {
 //                                 {/* </Grid> */}
 //                             </Grid>
 //                         </CardActions>
-                        
+
 
 //                         {/* <CardActions>
 //                             <Button  className="share-button" size="small" color="primary" >
@@ -266,7 +283,7 @@ export default function ExplorePage() {
 //                 </div>
 //             )
 //         });
-        
+
 //         return recipesTiles;
 //     }
 

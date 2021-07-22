@@ -20,7 +20,7 @@ export const Recipes = (state = {
                 return {...state, inProgress: "success", recipes: action.payload};
 
             case ActionTypes.LOAD_RECIPES_RESET:
-                return {...state, inProgress: "idle", errMess: null, recipes: [] };
+                return {...state, inProgress: "idle", errMess: null, recipes: state.recipes };
         
             default:
                 return state;

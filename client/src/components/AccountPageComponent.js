@@ -47,7 +47,8 @@ class AccountPage extends Component {
             username: this.props.login.user.username,
             password: "",
             confirm_password: "",
-            image: ""
+            image: "",
+            change: false
             , validate: {
                 first_name: "has-success",
                 last_name: "has-success",
@@ -496,11 +497,11 @@ class AccountPage extends Component {
 
         var newImage = this.state.image;
 
-        this.setState({ "image": null });
+        
 
         this.props.load_profile_image_reset();
 
-        this.props.update_profile_image(this.props.login.user.id, newImage);
+        this.props.update_profile_image(this.props.login.user.id, newImage).then(() => this.setState({ "image": null, "change": !this.state.change }));
 
     }
 
@@ -510,13 +511,15 @@ class AccountPage extends Component {
             <div className="row">
 
                 <div className="col-6" style={{ paddingRight: "5px" }} >
-                    <Image onClick={() => console.log('onClick')} src={(this.props.images.profile.inProgress === "success") ? `${baseUrl}${this.props.images.profile.url}?${this.getCurrentDate()}` : ""}
+                    <Image onClick={() => console.log('onClick')} src={(this.props.images.profile.inProgress === "success") ? `${baseUrl}${this.props.images.profile.url}?${this.state.change}` : ""}
                         aspectRatio={(1 / 1)} />
                 </div>
 
                 <div className="col-6" style={{ display: "flex", alignItems: "center", flexWrap: "wrap", paddingLeft: "0px" }}>
                         <FormGroup>
-                            <Input id="recipe-image-upload" type="file" className="" onChange={event => this.changeImage(event)} />
+                            <Input id="recipe-image-upload" type="file" className="" onChange={event => this.changeImage(event)} 
+                                onClick={e => (e.target.value = null)}
+                            />
                             <button type=" " className="upload-button btn btn-primary"
                                 onClick={(event) => this.uploadImage(event)}
                             ><FontAwesomeIcon icon="upload" />&nbsp; Upload</button>

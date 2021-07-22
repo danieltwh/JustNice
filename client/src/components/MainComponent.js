@@ -81,16 +81,18 @@ class Main extends Component {
             <Switch>
               {/* <Route path="/login" component={() => <LoginPage login_attempt={this.props.login_attempt} />} /> */}
 
-              <Route path="/account" component={AccountPage} />
+              <Route exact path="/account" component={AccountPage} />
             
-              <Route path="/explore" component={() => <ExplorePage recipes={this.props.recipes.recipes} />} />
+              <Route exact path="/explore" component={() => <ExplorePage recipes={this.props.recipes.recipes} />} />
+
+              <Route exact path="/explore/:recipeID" component={({match}) => <RecipeDetailsPage rec_id={(parseInt(match.params.recipeID, 10))} />  } />
 
               <Route exact path="/edit/:recipeID" component={({match}) => <RecipeCreationPage rec_id={parseInt(match.params.recipeID, 10)} />} 
               />
 
-              <Route exact path="/newrecipe" component={() => <NewRecipePage />} />
+              {/* <Route exact path="/newrecipe" component={() => <NewRecipePage />} /> */}
 
-              <Route exact path="/edit/new" component={({match}) => <RecipeCreationPage rec_id="new" />} />
+              <Route exact path="/newrecipe" component={({match}) => <RecipeCreationPage rec_id="new" />} />
               
               <Route exact path="/myrecipes" component={MyRecipePage} />
               

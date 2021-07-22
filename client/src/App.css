@@ -110,6 +110,7 @@ a.nav-link:hover {
 
 .nav-item{
   align-self: center;
+  text-align: center;
 }
 
 /********* Circle Button *********/ 
@@ -173,6 +174,15 @@ a.nav-link:hover {
 
 .profile-pic {
 
+}
+
+.profile-border{
+    min-width: 30px;
+    min-height: 30px;
+    /* padding: 7px 10px; */
+    border-radius: 25px;
+    font-size: 10px;
+    text-align: center;
 }
 
 .profile-tab {
