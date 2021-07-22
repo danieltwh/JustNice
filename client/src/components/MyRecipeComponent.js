@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import { load_myrecipes, load_myrecipes_reset } from "../redux/ActionCreators";
 
 import { baseUrl } from "../shared/baseUrl";
-
+import Loading from "./LoadingComponent";
 
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -245,6 +245,30 @@ class MyRecipePage extends Component {
         return (
             <>
                 <div className="container-fluid">
+                    {(() => {
+                        if (this.props.my_recipes.inProgress === "failed") {
+                            return (
+                                <Alert severity="error">{this.props.my_recipes.errMess}</Alert>
+                            )
+
+                        } else if (this.props.my_recipes.inProgress === "inProgress") {
+                            return (
+                                <>
+                                    <Alert severity="info">Hold on...Serving up the recipes soon!</Alert>
+                                    <Loading />
+                                </>
+                            )
+                        } else if (this.props.my_recipes.my_recipes.length === 0) {
+                            return (
+                                <Alert severity="info">
+                                    Ohhh no... You don't seem to have any recipes. Create one here!
+                                    <Button variant="contained" color="primary" style={{ marginLeft: "15px" }}>Create Recipe</Button>
+                                </Alert>
+                            )
+                        }
+                    })()}
+
+
                     <div className="row">
                         {this.renderRecipes(this.props.my_recipes.my_recipes)}
                     </div>

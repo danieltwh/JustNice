@@ -226,14 +226,14 @@ class SignupPage extends Component {
         // console.log("Username: " + this.state.username + " Password: " + this.state.password);
         // alert("Username: " + this.state.username + " Password: " + this.state.password);
 
-        console.log(JSON.stringify(this.sate));
-        alert(JSON.stringify(this.state));
+        // console.log(JSON.stringify(this.sate));
+        // alert(JSON.stringify(this.state));
 
-        console.log("Firstname: " + this.state.first_name + " Lastname: " + this.state.last_name + " Email: " + this.state.email +
-        " Username: " + this.state.username + " Password: " + this.state.password)
+        // console.log("Firstname: " + this.state.first_name + " Lastname: " + this.state.last_name + " Email: " + this.state.email +
+        // " Username: " + this.state.username + " Password: " + this.state.password)
 
-        alert("Firstname: " + this.state.first_name + " Lastname: " + this.state.last_name + " Email: " + this.state.email +
-        " Username: " + this.state.username + " Password: " + this.state.password)
+        // alert("Firstname: " + this.state.first_name + " Lastname: " + this.state.last_name + " Email: " + this.state.email +
+        // " Username: " + this.state.username + " Password: " + this.state.password)
         return fetch(baseUrl + "user/", {
             method: "POST",
             headers: {

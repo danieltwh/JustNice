@@ -28,6 +28,7 @@ export const login_attempt = (username, password) => (dispatch) =>  {
             if (resp.status === 1) {
                 // return add_users(users);
                 dispatch(login_success(resp.user));
+                dispatch(load_profile_image(resp.user.id));
             } else if(resp.status === 0) {
                 dispatch(login_failed("Wrong Password"));
             } else {
@@ -92,6 +93,64 @@ export const signup_failed = (errMess) => ({
     payload: "Failed"
 });
 
+export const login_edit_attempt = (userId, first_name, last_name, email, username, password) => (dispatch) =>  {
+    
+    dispatch(login_edit_inProgress(true));
+
+    alert(password);
+
+    var newInfo = {
+        "id": userId,
+        "first_name":first_name, 
+        "last_name": last_name,
+        "email": email,
+        "username": username,
+        "password": password
+    }
+
+
+    alert(JSON.stringify(newInfo));
+
+    return fetch(baseUrl + "user/"
+        , {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(newInfo)
+        })
+        .then(response => response.json())
+        .then(response => {
+            // console.log(JSON.stringify(response));
+            // alert(JSON.stringify(response));
+            // alert(response)
+            if(response === "Updated Successfully") {
+                dispatch(login_edit_success(newInfo));
+
+            } else {
+                dispatch(login_edit_failed(response.message));
+            }
+        })
+        .catch(error => console.log(error.message));
+};
+
+export const login_edit_inProgress = () => ({
+    type: ActionTypes.LOGIN_EDIT_IN_PROGRESS,
+});
+
+export const login_edit_success = (user) => ({
+    type: ActionTypes.LOGIN_EDIT_SUCCESS,
+    payload: user
+});
+
+export const login_edit_failed = (errMess) => ({
+    type: ActionTypes.LOGIN_EDIT_FAILED,
+    payload: "Failed"
+});
+
+export const login_edit_reset = (errMess) => ({
+    type: ActionTypes.LOGIN_EDIT_RESET
+});
+
+
 export const signout = () => {
     console.log("signout triggered")
     
@@ -101,7 +160,7 @@ export const signout = () => {
 }
 
 export const load_myrecipes = (user_id) => (dispatch) => {
-    // dispatch(load_myrecipes_inProgress());
+    dispatch(load_myrecipes_inProgress(true));
 
     return fetch(baseUrl + "recingred/getallrec/", {
         method: "POST",
@@ -113,11 +172,11 @@ export const load_myrecipes = (user_id) => (dispatch) => {
         .then(resp => resp.json())
         .then(resp => {
             console.log(resp);
-            if (resp.length >= 1) {
+            if (resp.length >= 0) {
                 // return add_users(users);
                 dispatch(load_myrecipes_success(resp));
             } else {
-                dispatch(load_myrecipes_failed());
+                dispatch(load_myrecipes_failed("Failed to load your recipes. Please try again."));
             }
         })
 }
@@ -292,6 +351,7 @@ export const update_recipe_success = () => ({
     type: ActionTypes.UPDATE_RECIPE_SUCCESS
 });
 
+
 /***** Loading My Grocery List *********/
 export const load_myGrocList = (user_id) => (dispatch) => {
     dispatch(load_myGrocList_inProgress(true));
@@ -402,6 +462,92 @@ export const load_currGrocList_reset = () => ({
 
 // export const update_currGrocList = ()
 
+/***** Profile Image *********/
+export const load_profile_image = (userId) => (dispatch) => {
+    dispatch(load_profile_image_inProgress(true));
+
+    // alert("Getting profile image")
+
+    return fetch(baseUrl + "getphoto/", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            "filename": `user${userId}`,
+            })
+        })
+        .then(resp => resp.json())
+        .then(resp => {
+            console.log(JSON.stringify(resp));
+            dispatch(load_profile_image_success(resp));
+        })
+        .catch(err => {
+            dispatch(load_profile_image_failed(err));
+            alert(err);
+            console.log(err)});
+}
+
+export const load_profile_image_inProgress = () => ({
+    type: ActionTypes.LOAD_PROFILE_IMG_PROGRESS
+});
+
+export const load_profile_image_success = (details) => ({
+    type: ActionTypes.LOAD_PROFILE_IMG_SUCCESS,
+    payload: details
+});
+
+export const load_profile_image_failed = (errMess) => ({
+    type: ActionTypes.LOAD_PROFILE_IMG_FAILED,
+    payload: errMess
+})
+
+export const load_profile_image_reset = () => ({
+    type: ActionTypes.LOAD_PROFILE_IMG_RESET
+})
+
+export const update_profile_image = (userId, newImage) => (dispatch) => {
+    dispatch(update_profile_image_inProgress(true));
+
+    alert(newImage);
+    var formData = new FormData();
+
+    formData.append("pic", newImage);
+    formData.append("filename", `user${userId}`);
+
+    return fetch(baseUrl + "updatephoto/", {
+        method: "POST",
+        body: formData
+        })
+        .then(resp => resp.json())
+        .then(resp => {
+            console.log(JSON.stringify(resp));
+            if(resp.status === "new"){
+                dispatch(load_profile_image_success(resp));
+                return resp;
+            } else {
+                dispatch(update_profile_image_failed("Failed to update image. Please try again."));
+                return resp;
+            } 
+        })
+        .catch(err => {
+            dispatch(update_profile_image_failed("Failed to update image. Please try again."));
+            alert(err);
+            console.log(err)});
+}
+
+export const update_profile_image_inProgress = () => ({
+    type: ActionTypes.UPDATE_PROFILE_IMG_PROGRESS
+});
+
+export const update_profile_image_success = (details) => ({
+    type: ActionTypes.UPDATE_PROFILE_IMG_SUCCESS,
+    payload: details
+});
+
+export const update_profile_image_failed = (errMess) => ({
+    type: ActionTypes.UPDATE_PROFILE_IMG_FAILED,
+    payload: errMess
+})
+
 
 /***** Loading Recipe Image *********/
 export const load_recipe_image = (recipeId) => (dispatch) => {
@@ -498,7 +644,7 @@ export const load_explore_recipes = () => (dispatch) => {
         .then(resp => resp.json())
         .then(resp => {
             // console.log(JSON.stringify(resp));
-            if (resp.length >=0) {
+            if (resp.length > 0) {
                 // return add_users(users);
                 dispatch(load_explore_recipes_success(resp));
             } else {

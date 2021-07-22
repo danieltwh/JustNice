@@ -115,7 +115,7 @@ class LoginPage extends Component {
                             <p>Welcome back!</p>
                         <hr />
 
-                        {(() => {if(this.props.login.inProgress == false && this.props.login.errMess !== null){
+                        {(() => {if(this.props.login.inProgress == "login_failed" && this.props.login.errMess !== null){
                             return <Alert severity="error">{this.props.login.errMess}</Alert>;
                             }
                         })()}
