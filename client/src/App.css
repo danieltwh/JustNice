@@ -352,17 +352,25 @@ a.nav-link:hover {
   /* width:280px; */
   /* max-width:100px; */
   /* display:inline-block */
+ 
 }
 
 #single-search-input{
   background-color: #FFFFFF;
   border-radius: 4px;
   width: 145px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 
 #search-bar-label{
   transform: translateY(-9px);
   font-size: 19px;
+}
+
+#advance-search-button:hover {
+    text-decoration: underline;
+  
 }
 
 
@@ -375,6 +383,7 @@ a.nav-link:hover {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   height: 40px;
+  background-color: #d7d2d2;
 }
 
 .search-bar .MuiOutlinedInput-adornedEnd {
