@@ -44,6 +44,18 @@ const mapDispatchToProps = (dispatch) => ({
     load_recipe_image_reset: () => dispatch(load_recipe_image_reset()),
 });
 
+function getCurrentDate(separator = '') {
+
+    var newDate = new Date()
+    var date = newDate.getDate();
+    var month = newDate.getMonth() + 1;
+    var year = newDate.getFullYear();
+    var h = newDate.getHours();
+    var m = newDate.getMinutes();
+    var s = newDate.getSeconds();
+
+    return `${year}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${date}${separator}${h}${separator}${m}${separator}${s}`
+}
 
 class RecipeCreationPage extends Component {
     constructor(props) {
@@ -63,7 +75,7 @@ class RecipeCreationPage extends Component {
                     ...ingredient, "isValid": "valid"
                 })),
                 "image": null,
-                "change": false,
+                "change": getCurrentDate(),
             }
         } else {
             this.state = {
@@ -117,9 +129,9 @@ class RecipeCreationPage extends Component {
         if (this.props.curr_recipe.inProgress === "update_success") {
             this.props.get_recipe_reset()
             this.props.load_recipe_image_reset()
-        } 
+        }
 
- 
+
 
     }
 
@@ -149,13 +161,15 @@ class RecipeCreationPage extends Component {
         event.preventDefault();
         // alert("Uploading Image");
 
-        var newImage = this.state.image;
+        if (this.state.image !== null) {
+            var newImage = this.state.image;
 
-        // this.setState({ "image": null, change: !this.state.change });
+            // this.setState({ "image": null, change: !this.state.change });
 
-        this.props.load_recipe_image_reset();
+            this.props.load_recipe_image_reset();
 
-        this.props.update_recipe_image(this.props.rec_id, newImage).then(() => this.setState({ "image": null, change: !this.state.change }));
+            this.props.update_recipe_image(this.props.rec_id, newImage).then(() => this.setState({ "image": null, change: this.getCurrentDate() }));
+        }
     }
 
     getCurrentDate(separator = '') {
@@ -184,6 +198,7 @@ class RecipeCreationPage extends Component {
 
 
                     <div className="col-6" style={{ display: "flex", alignItems: "center", flexWrap: "wrap", paddingLeft: "0px" }}>
+                    
                         <FormGroup className="recipe-creation-name-box">
                             <textarea name="rec_name" placeholder="Recipe Name" className="form-control recipe-creation-name"
                                 value={this.state.rec_name}
@@ -197,25 +212,27 @@ class RecipeCreationPage extends Component {
 
                         {(() => {
                             if (this.state.rec_id === "new") {
-                                
+
                             } else {
                                 return (
+                                    <form id="uploadImage" onSubmit={event => alert("image being submitted")} action="#" method="put">
                                     <FormGroup>
-                                        <Input id="recipe-image-upload" type="file" className="" onChange={this.changeImage} 
+                                        <Input id="recipe-image-upload" type="file" className="" onChange={e => this.changeImage(e)} form="uploadImage"
                                             onClick={e => (e.target.value = null)}
                                         />
-                                        <button type=" " className="upload-button btn btn-primary"
+                                        <button type="button" className="upload-button btn btn-primary"
                                             onClick={(event) => this.uploadImage(event)}>
                                             <FontAwesomeIcon icon="upload" />&nbsp; Upload
                                         </button>
                                     </FormGroup>
+                                    </form>
                                 )
                             }
                         })()}
-                            
 
+
+                    </div>
                 </div>
-            </div>
 
             </div >
         )
@@ -271,6 +288,11 @@ class RecipeCreationPage extends Component {
                                 <option value="chinese">Chinese</option>
                                 <option value="western">Western</option>
                                 <option value="japanese">Japanese</option>
+                                <option value="korean">Korean</option>
+                                <option value="indian">Indian</option>
+                                <option value="thai">Thai</option>
+                                <option value="mexican">Mexican</option>
+                                <option value="others">Others</option>
                             </Input>
                         </FormGroup>
                     </div>
@@ -284,6 +306,7 @@ class RecipeCreationPage extends Component {
                                 <option value="breakfast">Breakfast</option>
                                 <option value="lunch">Lunch</option>
                                 <option value="dinner">Dinner</option>
+                                <option value="dessert">Dessert</option>
                                 <option value="brunch">Brunch</option>
                                 <option value="snack">Snack</option>
                             </Input>
@@ -351,6 +374,11 @@ class RecipeCreationPage extends Component {
     isDisabled() {
         var test = this.state.ingredient.some(ingredient => ingredient.isValid === "required" || ingredient.isValid === "init" || !this.isNumeric(ingredient.ingred_quantity) ||
             this.isEmpty(ingredient.ingred_quantity));
+
+        // We will not allow recipes without ingredients
+        if(this.state.ingredient.length === 0) {
+            test = true;
+        }
 
         test = test || this.state.rec_name === "";
         test = test || this.state.rec_instructions === "";

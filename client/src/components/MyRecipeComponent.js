@@ -54,8 +54,22 @@ const mapDispatchToProps = (dispatch) => ({
 
 });
 
+function getCurrentDate(separator = '') {
+
+    var newDate = new Date()
+    var date = newDate.getDate();
+    var month = newDate.getMonth() + 1;
+    var year = newDate.getFullYear();
+    var h = newDate.getHours();
+    var m = newDate.getMinutes();
+    var s = newDate.getSeconds();
+
+    return `${year}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${date}${separator}${h}${separator}${m}${separator}${s}`
+}
+
 const RecipeTile = (recipe) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [change, setChange] = React.useState(getCurrentDate());
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -70,7 +84,7 @@ const RecipeTile = (recipe) => {
     return (
         <div key={recipe.rec_id} className="col-6 col-sm-4 col-lg-3 col-xl-2">
 
-            <Card className="recipe-tile">
+            <Card className="recipe-tile" style={{ height: "95%", }}>
                 <Link to={`/myrecipes/${parseInt(recipe.recipe.rec_id, 10)}`} style={{ textDecoration: "none", color: "inherit" }}>
                     <CardContent>
                         <Typography style={{ fontSize: "20px", padding: "0" }}>
@@ -80,7 +94,7 @@ const RecipeTile = (recipe) => {
 
 
 
-                    <Image className="recipe-tile-img" src={baseUrl + recipe.recipe.url} alt={recipe.recipe.rec_name} />
+                    <Image className="recipe-tile-img" src={`${baseUrl}${recipe.recipe.url}?${change}`} alt={recipe.recipe.rec_name} />
                     <CardContent style={{ padding: "2px 10px 5px 10px", alignItems: "center", }}>
                         <Grid container rowSpacing={2} columnSpacing={4} direction="row" justifyContent="center" alignItems="flex-start">
                             <Grid item xs={6} sm={6}>
@@ -169,28 +183,28 @@ class MyRecipePage extends Component {
 
     componentDidMount() {
         if (this.props.my_recipes.inProgress === "not-loaded") {
-            console.log(this.props.my_recipes.inProgress);
+            // console.log(this.props.my_recipes.inProgress);
             this.props.load_myrecipes(this.props.login.user.id);
         }
 
-        if (this.props.curr_recipe.inProgress !== "idle") {
-            this.props.get_recipe_reset();
-            this.props.load_recipe_image_reset();
-        }
+        // if (this.props.curr_recipe.inProgress !== "idle") {
+        //     this.props.get_recipe_reset();
+        //     this.props.load_recipe_image_reset();
+        // }
 
-        if (this.props.recipes.inProgress !== "idle") {
-            this.props.load_explore_recipes_reset();
-        }
+        // if (this.props.recipes.inProgress !== "idle") {
+        //     this.props.load_explore_recipes_reset();
+        // }
 
 
     }
 
     componentWillUnmount() {
 
-        if (this.props.my_recipes.inProgress === "success" && this.props.my_recipes.my_recipes.length >= 1) {
-            console.log(this.props.my_recipes.inProgress);
-            this.props.load_myrecipes_reset();
-        }
+        // if (this.props.my_recipes.inProgress === "success" && this.props.my_recipes.my_recipes.length >= 1) {
+        //     console.log(this.props.my_recipes.inProgress);
+        //     this.props.load_myrecipes_reset();
+        // }
     }
 
     toggleOptions(event) {

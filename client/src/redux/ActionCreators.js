@@ -5,6 +5,19 @@ import { baseUrl } from "../shared/baseUrl";
 
 import { USERS } from "../shared/users";
 
+function getCurrentDate(separator = '') {
+
+    var newDate = new Date()
+    var date = newDate.getDate();
+    var month = newDate.getMonth() + 1;
+    var year = newDate.getFullYear();
+    var h = newDate.getHours();
+    var m = newDate.getMinutes();
+    var s = newDate.getSeconds();
+
+    return `${date}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${year} - ${h}:${m}${separator}:${s}`
+    // return `${year}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${date}${separator}${h}${separator}${m}${separator}${s}`
+  }
 
 
 /* Login */
@@ -294,7 +307,8 @@ export const update_recipe = (newRecipe, user_id) => (dispatch) => {
         "ingredients": ingredients
     }
 
-    alert(JSON.stringify(newRecipe));
+    // alert(JSON.stringify(newRecipe));
+    alert(JSON.stringify(toSend));
 
     if (newRecipe.rec_id === "new") {
         return fetch(baseUrl + "recingred/recipe/", {
@@ -416,9 +430,9 @@ export const load_myGrocList_reset = () => ({
 
 /***** Creating new Grocery List *********/
 export const create_new_GrocList = (user_id, list_id) => (dispatch) => {
-    dispatch(load_myGrocList_inProgress(true));
+    // dispatch(load_myGrocList_inProgress(true));
 
-    alert(JSON.stringify({ "user_id": user_id, "list_id": list_id }));
+    // alert(JSON.stringify({ "user_id": user_id, "list_id": list_id }));
 
     return fetch(baseUrl + `groclist/getter/`, {
         method: "POST",
@@ -426,21 +440,24 @@ export const create_new_GrocList = (user_id, list_id) => (dispatch) => {
         body: JSON.stringify({
             "user_id": user_id,
             "list_id": list_id,
-            "list_name": "Untitled"
+            "list_name": `New List`
         })
     })
         .then(resp => resp.json())
         .then(resp => {
-            // console.log(JSON.stringify(resp));
-            if (true) {
+            console.log(JSON.stringify(resp));
+            if (resp.status === "New list created") {
                 // return add_users(users);
-                dispatch(load_myGrocList(user_id));
+                // dispatch(load_myGrocList(user_id));
+                return {status: true, user_id: user_id, list_id: list_id}
             } else {
-                dispatch(load_myGrocList_failed("Error"));
+                dispatch(load_myGrocList_failed("Failed to create new list. Please try again."));
+                return {status: false, user_id: user_id}
             }
         })
         .catch(err => {
-            alert(err);
+            // alert(err);
+            dispatch(load_myGrocList_failed("Failed to create new list. Please try again."));
             console.log(err)
         });
 }
@@ -452,7 +469,7 @@ export const load_currGrocList = (user_id, grocList_id) => (dispatch) => {
         .then(resp => resp.json())
         .then(resp => {
             // console.log(JSON.stringify(resp));
-            if (true) {
+            if (Object.entries(resp).length >= 1) {
                 // return add_users(users);
                 dispatch(load_currGrocList_success(resp));
             } else {
@@ -718,6 +735,31 @@ export const search_recipes = (search) => (dispatch) => {
             "category": "recingred",
             "keywords": search,
         })
+    })
+        .then(resp => resp.json())
+        .then(resp => {
+            // console.log(JSON.stringify(resp));
+            if (resp.length >= 0) {
+                // return add_users(users);
+                dispatch(load_explore_recipes_success(resp));
+            } else {
+                dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
+            }
+        })
+        .catch(err => {
+            alert(err);
+            dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
+            console.log(err)
+        });
+}
+
+export const complex_search_recipes = (search) => (dispatch) => {
+    // alert(search);
+    dispatch(load_explore_recipes_inProgress(true));
+
+    return fetch(baseUrl + `recingred/compsearch/`, {
+        method: "POST",
+        body: JSON.stringify(search)
     })
         .then(resp => resp.json())
         .then(resp => {

@@ -377,6 +377,15 @@ a.nav-link:hover {
   height: 40px;
 }
 
+.search-bar .MuiOutlinedInput-adornedEnd {
+  padding: 0px;
+}
+
+#single-search-input-helper-text {
+  color:#1a535c;
+  
+}
+
 /********* My Grocery List Page *********/ 
 .grocery-list-tile {
   justify-content: center;
@@ -557,16 +566,35 @@ input[type=checkbox]:checked + label.strikethrough{
 }
 
 .edit-button {
-  width: 80px;
+  width: 120px;
   height: 40px;
   border-radius: 20px;
   margin-right: 15px;
+  
 }
 
 .reset-button {
-  width: 80px;
+  width: 120px;
   height: 40px;
   border-radius: 20px;
+  margin-right: 40px;
+}
+
+.minus-button{
+
+  border-radius: 10px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: #ff6b6b;
+  color: #f7fff7;
+  border: #212529;
+  border-width: 10px;
+}
+
+.plus-button{
+  border-radius: 10px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 
@@ -695,6 +723,24 @@ input[type=checkbox]:checked + label.strikethrough{
   margin-right: 40px;
 }
 
+.grocList-recipe-tile {
+  margin: 5% 0;
+  height: 95%;
+}
+
+.grocList-confirm-button {
+  float: right;
+  width: 120px;
+  height: 40px;
+  border-radius: 20px;
+}
+
+.grocList-cancel-button {
+  width: 120px;
+  height: 40px;
+  border-radius: 20px;
+}
+
 .delete-ingredient {
   background-color: transparent;
   border: 0;
@@ -781,6 +827,20 @@ input[type=checkbox]:checked + label.strikethrough{
     position: absolute;
     right: -2%;
     bottom: 40px;
+  }
+
+  .grocList-confirm-button {
+    float: right;
+    width: 120px;
+    height: 40px;
+    border-radius: 20px;
+  }
+  
+  .grocList-cancel-button {
+    width: 120px;
+    height: 40px;
+    border-radius: 20px;
+   
   }
 
   .grocery-list-tile-name {

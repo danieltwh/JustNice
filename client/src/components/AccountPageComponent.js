@@ -36,6 +36,18 @@ const required = value => value && (value.length);
 const email_re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
 
+function getCurrentDate(separator = '') {
+
+    var newDate = new Date()
+    var date = newDate.getDate();
+    var month = newDate.getMonth() + 1;
+    var year = newDate.getFullYear();
+    var h = newDate.getHours();
+    var m = newDate.getMinutes();
+    var s = newDate.getSeconds();
+
+    return `${year}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${date}${separator}${h}${separator}${m}${separator}${s}`
+}
 
 class AccountPage extends Component {
     constructor(props) {
@@ -48,7 +60,7 @@ class AccountPage extends Component {
             password: "",
             confirm_password: "",
             image: "",
-            change: false
+            change: getCurrentDate()
             , validate: {
                 first_name: "has-success",
                 last_name: "has-success",
@@ -65,14 +77,14 @@ class AccountPage extends Component {
 
     componentDidMount() {
 
-        if (this.props.images.profile.inProgress === "idle" || this.props.images.profile.inProgress === "failed" ) {
+        if (this.props.images.profile.inProgress === "idle" || this.props.images.profile.inProgress === "failed") {
             // alert("Getting recipe image")
             this.props.load_profile_image(this.props.login.user.id);
         }
     }
 
-    componentWillUnmount(){
-        if(this.props.login.inProgress !== "login_success"){
+    componentWillUnmount() {
+        if (this.props.login.inProgress !== "login_success") {
             this.props.login_edit_reset();
         }
     }
@@ -265,14 +277,14 @@ class AccountPage extends Component {
         // alert(this.state.password === "");
         // alert(this.props.login.user.password);
 
-        if(this.state.password===""){
-            this.props.login_edit_attempt(this.props.login.user.id, this.state.first_name, this.state.last_name, this.state.email, this.state.username, 
+        if (this.state.password === "") {
+            this.props.login_edit_attempt(this.props.login.user.id, this.state.first_name, this.state.last_name, this.state.email, this.state.username,
                 this.props.login.user.password);
         } else {
-            this.props.login_edit_attempt(this.props.login.user.id, this.state.first_name, this.state.last_name, this.state.email, this.state.username, 
+            this.props.login_edit_attempt(this.props.login.user.id, this.state.first_name, this.state.last_name, this.state.email, this.state.username,
                 this.state.password);
         }
-        
+
     }
 
     validate() {
@@ -497,33 +509,34 @@ class AccountPage extends Component {
 
         var newImage = this.state.image;
 
-        
+
 
         this.props.load_profile_image_reset();
 
-        this.props.update_profile_image(this.props.login.user.id, newImage).then(() => this.setState({ "image": null, "change": !this.state.change }));
+        this.props.update_profile_image(this.props.login.user.id, newImage).then(() => this.setState({ "image": null, "change": this.getCurrentDate() }));
 
     }
 
     renderProfileImage() {
-        
+
         return (
             <div className="row">
 
                 <div className="col-6" style={{ paddingRight: "5px" }} >
+
                     <Image onClick={() => console.log('onClick')} src={(this.props.images.profile.inProgress === "success") ? `${baseUrl}${this.props.images.profile.url}?${this.state.change}` : ""}
                         aspectRatio={(1 / 1)} />
                 </div>
 
                 <div className="col-6" style={{ display: "flex", alignItems: "center", flexWrap: "wrap", paddingLeft: "0px" }}>
-                        <FormGroup>
-                            <Input id="recipe-image-upload" type="file" className="" onChange={event => this.changeImage(event)} 
-                                onClick={e => (e.target.value = null)}
-                            />
-                            <button type=" " className="upload-button btn btn-primary"
-                                onClick={(event) => this.uploadImage(event)}
-                            ><FontAwesomeIcon icon="upload" />&nbsp; Upload</button>
-                        </FormGroup>
+                    <FormGroup>
+                        <Input id="recipe-image-upload" type="file" className="" onChange={event => this.changeImage(event)}
+                            onClick={e => (e.target.value = null)}
+                        />
+                        <button type=" " className="upload-button btn btn-primary"
+                            onClick={(event) => this.uploadImage(event)}
+                        ><FontAwesomeIcon icon="upload" />&nbsp; Upload</button>
+                    </FormGroup>
                 </div>
             </div>
         )
@@ -531,7 +544,7 @@ class AccountPage extends Component {
 
     render() {
 
-        if(this.props.login.inProgress === "update_success"){
+        if (this.props.login.inProgress === "update_success") {
             return (<Redirect to="/explore" />)
         }
         return (

@@ -115,10 +115,10 @@ export default function ExplorePage() {
             dispatch(load_explore_recipes());
         }
 
-        if (curr_recipe.inProgress !== "idle") {
-            dispatch(get_recipe_reset())
-            dispatch(load_recipe_image_reset())
-        }
+        // if (curr_recipe.inProgress !== "idle") {
+        //     dispatch(get_recipe_reset())
+        //     dispatch(load_recipe_image_reset())
+        // }
 
         // return () => {
         //     if(recipes.inProgress === "success"){

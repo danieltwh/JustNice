@@ -296,12 +296,12 @@ class Header extends Component {
 
           <Dropdown className="profile-icon">
             <Dropdown.Toggle className="btn profile-border" variant="light" id="dropdown-basic" style={{
-              borderColor: "transparent", backgroundColor: "transparent", padding: "0px"
+              borderColor: "rgba(0, 0, 0, 0.30)", borderWidth: "medium", backgroundColor: "transparent", padding: "0px"
             }} >
               {/* <Image src={(this.props.images.profile.inProgress === "success") ? `${baseUrl}${this.props.images.profile.url}` : ""}
                         aspectRatio={(1 / 1)} /> */}
               <Avatar width="100%" src={(this.props.images.profile.inProgress === "success") ? `${baseUrl}${this.props.images.profile.url}?${this.getCurrentDate()}` : ""}
-                style={{ borderColor: "rgba(0, 0, 0, 0.15)" }}
+                style={{ borderColor: "rgba(0, 0, 0, 0.30)" }}
               />
             </Dropdown.Toggle>
 
