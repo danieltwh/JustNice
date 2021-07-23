@@ -288,7 +288,10 @@ export default function SearchBar() {
             />
 
 
-            <Button color="primary" onClick={(e) => handleClickOpen()}>Advance Search</Button>
+            <Button id="advance-search-button" style={{color: "#f7fff7", textTransform: "capitalize", font: "inherit", fontSize: "14px"}} 
+            onClick={(e) => handleClickOpen()}>
+                Advance Search
+            </Button>
 
             <Dialog onClose={(e) => handleClose()} aria-labelledby="customized-dialog-title" open={open}>
                 <DialogTitle id="customized-dialog-title" onClose={e => handleClose()} color="primary"
