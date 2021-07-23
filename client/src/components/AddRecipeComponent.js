@@ -151,6 +151,11 @@ class AddRecipe extends Component {
             newToAdd[name] = 0;
         }
         newToAdd[name] = Math.max(0, newToAdd[name] + incr);
+
+        if (newToAdd[name] === 0){
+            delete newToAdd[name];
+        }
+
         this.setState({ toAdd: newToAdd });
     }
 

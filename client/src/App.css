@@ -377,6 +377,15 @@ a.nav-link:hover {
   height: 40px;
 }
 
+.search-bar .MuiOutlinedInput-adornedEnd {
+  padding: 0px;
+}
+
+#single-search-input-helper-text {
+  color:#1a535c;
+  
+}
+
 /********* My Grocery List Page *********/ 
 .grocery-list-tile {
   justify-content: center;

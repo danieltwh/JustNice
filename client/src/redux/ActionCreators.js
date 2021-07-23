@@ -307,7 +307,8 @@ export const update_recipe = (newRecipe, user_id) => (dispatch) => {
         "ingredients": ingredients
     }
 
-    alert(JSON.stringify(newRecipe));
+    // alert(JSON.stringify(newRecipe));
+    alert(JSON.stringify(toSend));
 
     if (newRecipe.rec_id === "new") {
         return fetch(baseUrl + "recingred/recipe/", {
@@ -734,6 +735,31 @@ export const search_recipes = (search) => (dispatch) => {
             "category": "recingred",
             "keywords": search,
         })
+    })
+        .then(resp => resp.json())
+        .then(resp => {
+            // console.log(JSON.stringify(resp));
+            if (resp.length >= 0) {
+                // return add_users(users);
+                dispatch(load_explore_recipes_success(resp));
+            } else {
+                dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
+            }
+        })
+        .catch(err => {
+            alert(err);
+            dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
+            console.log(err)
+        });
+}
+
+export const complex_search_recipes = (search) => (dispatch) => {
+    // alert(search);
+    dispatch(load_explore_recipes_inProgress(true));
+
+    return fetch(baseUrl + `recingred/compsearch/`, {
+        method: "POST",
+        body: JSON.stringify(search)
     })
         .then(resp => resp.json())
         .then(resp => {

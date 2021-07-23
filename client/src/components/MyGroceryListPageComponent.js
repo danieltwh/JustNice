@@ -188,7 +188,7 @@ class MyGroceryListPage extends Component {
 
                 <div className="grocery-list-options-button" id="grocery-list-options-button">
 
-                    <Fab color="primary" aria-label="add" onClick={() => this.props.create_new_GrocList(this.props.login.user.id, this.props.groceryList.groceryList.length + 1)}>
+                    <Fab color="primary" aria-label="add" onClick={e => this.createNewGrocList(e)} >
                         <AddIcon />
                     </Fab>
 

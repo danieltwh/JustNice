@@ -141,6 +141,21 @@ class Main extends Component {
       
     }
 
+    atGroceryList(){
+      if(this.props.recipes.inProgress !== "idle"){
+        this.props.load_explore_recipes_reset();
+      }
+
+      if(this.props.my_recipes.inProgress !== "not-loaded"){
+        this.props.load_myrecipes_reset();
+      }
+
+      if(this.props.curr_recipe.inProgress !== "idle"){
+        this.props.get_recipe_reset();
+        this.props.load_recipe_image_reset();
+      }
+    }
+
     atCurrGrocList(){
       if(this.props.recipes.inProgress !== "idle"){
         this.props.load_explore_recipes_reset();
@@ -171,12 +186,14 @@ class Main extends Component {
       if (this.props.login.user) {
         if(this.props.location.pathname === "/explore"){
           this.atExplore();
-        } else if(this.props.location.pathname.substring(0,5) === "/edit"){
+        } else if(this.props.location.pathname.substring(0,5) === "/edit" || this.props.location.pathname === "/newrecipe"){
           this.atEdit();
         } else if(this.props.location.pathname === "/myrecipes/"){
           this.atMyRecipe();
         } else if(this.props.location.pathname === "/account"){
           this.atAccount();
+        } else  if (this.props.location.pathname === "/grocerylist"){
+          this.atGroceryList();
         } else if(checkCurrGrocList.test(this.props.location.pathname)){
           this.atCurrGrocList();
         }
