@@ -1,14 +1,20 @@
 import React, {Component} from  'react';
-import {Card, CardImg, CardTitle} from 'reactstrap';
+import { Button, Card, CardImg, CardTitle} from 'reactstrap';
 import { Col, Row, Form, FormGroup, Label, Input } from 'reactstrap';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {withRouter} from 'react-router-dom';
 import {connect} from "react-redux";
 
 import AddRecipe from './AddRecipeComponent';
+import Loading from "./LoadingComponent";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { load_myrecipes, load_myrecipes_reset, load_currGrocList, load_currGrocList_reset } from "../redux/ActionCreators";
 import Add from '@material-ui/icons/Add';
+import Alert from '@material-ui/lab/Alert';
+// import Button from '@material-ui/core/Button';
+
 
 import { baseUrl } from '../shared/baseUrl';
 
@@ -47,6 +53,7 @@ class GroceryList extends Component {
 
         this.state = {
             isEdit: false,
+            resetConfirm: false,
             grocery: this.props.curr_grocList.grocery,
             toUpdate: {}
         }
@@ -213,6 +220,56 @@ class GroceryList extends Component {
         return (result);
     }
 
+    resetConfirm(event) {
+        event.preventDefault();
+
+        this.setState({resetConfirm: !this.state.resetConfirm})
+    }
+
+    reset(event) {
+        event.preventDefault();
+        
+
+        if (this.props.curr_grocList.inProgress === "success" && Object.entries(this.props.curr_grocList.grocery).length >= 0 ) {
+            // alert("Reseting Current Grocery List");
+
+            var categories = {...this.props.curr_grocList.grocery};
+            delete categories["list_name"];
+
+            var newToUpdate = {};
+
+            for(var category in categories){
+                var currCat = categories[category]
+                for(var item in currCat){
+                    var currIngred = currCat[item];
+                    console.log(JSON.stringify(currIngred));
+                    newToUpdate[currIngred.ingred_id] = false
+                }
+            }
+            
+            this.setState({toUpdate: newToUpdate});
+            
+            var finalToUpdate = {};
+
+            for(var name in newToUpdate){
+                finalToUpdate[name] = (newToUpdate[name]) ? "True" : "False"
+            }
+
+            // alert(JSON.stringify(finalToUpdate));
+               
+            return fetch(baseUrl + `groclist/update/${this.props.login.user.id}/${this.props.groc_id}/`, {
+                method: "PUT",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(finalToUpdate)
+            })
+            .then(resp => this.props.load_currGrocList(this.props.login.user.id, this.props.groc_id))
+            .catch(err => {
+                console.log(err)});         
+        // } else if (this.props.curr_grocList.inProgress === "success") {
+        //     this.props.load_currGrocList_reset();
+        }
+    }
+
     
 
     render() {
@@ -225,11 +282,43 @@ class GroceryList extends Component {
             <form>
 
                 <div className="container-fluid grocery-list-table">
+
+                   
+
+
                     <div className="row groceryList-title">
                         <div className="ml-auto mr-auto">
                             <h2>{(this.props.curr_grocList.inProgress === "success") ? this.props.curr_grocList.grocery["list_name"] : "Grocery list"}</h2>
                         </div>
                     </div>
+
+                     {(() => {
+                        if (this.props.curr_grocList.inProgress === "failed") {
+                            return (
+                                <>
+                                    <Alert severity="error">{this.props.groceryList.errMess}</Alert>
+                                </>
+                            )
+
+                        } else if (this.props.curr_grocList.inProgress === "loading") {
+                            return (
+                                <>
+                                    <Alert severity="info">Hold on...Serving up your grocery list soon!</Alert>
+                                    <Loading />
+                                </>
+                            )
+                        } else if (Object.entries(this.props.curr_grocList.grocery).length === 1) {
+                            
+                            return (
+                                <Alert severity="info">
+                                    You don't seem to have any groceries. Edit your list here!
+                                    <Button onClick={(e) => this.toggleEdit(e) } 
+                                    variant="contained" color="primary" style={{ marginLeft: "15px" }}>Edit Grocery List</Button>
+                                </Alert>
+                            )
+                        }
+                    })()}
+                    
                     <div className="row">
                         {/* <RenderGrocery groceryList={this.props.curr_grocList.grocery} />  */}
                         {this.RenderGrocery(this.state.grocery)}
@@ -246,14 +335,41 @@ class GroceryList extends Component {
 
             <div style={{position: "relative", width: "100%", height: "100px"}}>
                 <div className="edit-reset-button">
-                    <button className="edit-button btn btn-info" onClick={this.toggleEdit}><span>Edit</span></button>
-                    <button className="reset-button btn btn-danger"><span>Reset</span></button>
+                    <button className="reset-button btn btn-danger" onClick={e => this.resetConfirm(e)}>
+                        <span><FontAwesomeIcon icon="redo" />&nbsp; <strong>Reset</strong></span>
+                    </button>
+
+                    <button className="edit-button btn btn-info" onClick={this.toggleEdit}>
+                        <span><FontAwesomeIcon icon="edit" />&nbsp; <strong>Edit</strong></span>
+                    </button>
                 </div>
             </div>
 
             <AddRecipe isEdit={this.state.isEdit} toggleEdit={this.toggleEdit} grocListName={this.props.curr_grocList.grocery.list_name} groc_id={this.props.groc_id} /> 
 
-            
+            <Modal size="md" isOpen={this.state.resetConfirm} toggle={event => this.resetConfirm(event)} className="">
+                
+                    <ModalHeader toggle={event => this.resetConfirm(event)}>
+                        Reset Confirmation
+                    </ModalHeader>
+                    <ModalBody style={{fontSize: "large", textAlign: "center"}}>
+                        Are you sure you want to reset this grocery list?
+                    </ModalBody>
+                    <ModalFooter style={{ overflow: "auto", justifyContent: "center" }}>
+                        <div style={{ width: "80%" }}>
+                            <Button className="grocList-cancel-button" color="secondary" onClick={event => this.resetConfirm(event)}>
+                                <FontAwesomeIcon icon="times" />&nbsp; <strong>Cancel</strong>
+                            </Button>
+
+
+                            <Button type="submit" className="grocList-confirm-button" color="success" onClick={event => this.reset(event)}>
+                                <FontAwesomeIcon icon="check" />&nbsp; <strong>Confirm</strong>
+                            </Button>
+                        </div>
+
+                    </ModalFooter>
+                
+            </Modal>
 
             </>
             

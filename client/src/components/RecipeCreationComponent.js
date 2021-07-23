@@ -44,6 +44,18 @@ const mapDispatchToProps = (dispatch) => ({
     load_recipe_image_reset: () => dispatch(load_recipe_image_reset()),
 });
 
+function getCurrentDate(separator = '') {
+
+    var newDate = new Date()
+    var date = newDate.getDate();
+    var month = newDate.getMonth() + 1;
+    var year = newDate.getFullYear();
+    var h = newDate.getHours();
+    var m = newDate.getMinutes();
+    var s = newDate.getSeconds();
+
+    return `${year}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${date}${separator}${h}${separator}${m}${separator}${s}`
+}
 
 class RecipeCreationPage extends Component {
     constructor(props) {
@@ -63,7 +75,7 @@ class RecipeCreationPage extends Component {
                     ...ingredient, "isValid": "valid"
                 })),
                 "image": null,
-                "change": false,
+                "change": getCurrentDate(),
             }
         } else {
             this.state = {
@@ -155,7 +167,7 @@ class RecipeCreationPage extends Component {
 
         this.props.load_recipe_image_reset();
 
-        this.props.update_recipe_image(this.props.rec_id, newImage).then(() => this.setState({ "image": null, change: !this.state.change }));
+        this.props.update_recipe_image(this.props.rec_id, newImage).then(() => this.setState({ "image": null, change: this.getCurrentDate() }));
     }
 
     getCurrentDate(separator = '') {
