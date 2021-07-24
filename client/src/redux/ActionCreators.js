@@ -76,7 +76,7 @@ export const add_users = (users) => ({
 });
 
 export const signup_attempt = (first_name, last_name, email, username, password) => (dispatch) => {
-    // dispatch(login_inProgress())
+    dispatch(signup_inProgress())
 
     return fetch(baseUrl + "user/"
         , {
@@ -108,14 +108,14 @@ export const signup_success = (user) => ({
 
 export const signup_failed = (errMess) => ({
     type: ActionTypes.SIGNUP_FAILED,
-    payload: "Failed"
+    payload: "Failed to signup. Please try again."
 });
 
 export const login_edit_attempt = (userId, first_name, last_name, email, username, password) => (dispatch) => {
 
     dispatch(login_edit_inProgress(true));
 
-    alert(password);
+    // alert(password);
 
     var newInfo = {
         "id": userId,
@@ -127,7 +127,7 @@ export const login_edit_attempt = (userId, first_name, last_name, email, usernam
     }
 
 
-    alert(JSON.stringify(newInfo));
+    // alert(JSON.stringify(newInfo));
 
     return fetch(baseUrl + "user/"
         , {
@@ -308,7 +308,7 @@ export const update_recipe = (newRecipe, user_id) => (dispatch) => {
     }
 
     // alert(JSON.stringify(newRecipe));
-    alert(JSON.stringify(toSend));
+    // alert(JSON.stringify(toSend));
 
     if (newRecipe.rec_id === "new") {
         return fetch(baseUrl + "recingred/recipe/", {
@@ -388,6 +388,45 @@ export const update_recipe_success = () => ({
     type: ActionTypes.UPDATE_RECIPE_SUCCESS
 });
 
+/***** Delete Recipe *********/
+export const delete_recipe = (userId, recipeId) => (dispatch) => {
+    dispatch(delete_recipe_inProgress())
+    
+    return fetch(baseUrl + "recingred/recipe/", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            "rec_id": recipeId,
+        })
+    })
+    .then(resp => resp.json())
+    .then(resp => {
+        if(resp.status === "Deleted successfully"){
+            dispatch(load_myrecipes(userId))
+        } else {
+            dispatch(delete_recipe_failed("Failed to delete recipe. Please try again."))
+        }
+    })
+    .catch(err => {
+        dispatch(delete_recipe_failed(err));
+        console.log(err);
+    })
+}
+
+export const delete_recipe_inProgress = () => ({
+    type: ActionTypes.DELETE_RECIPE_IN_PROGRESS
+});
+
+export const delete_recipe_failed = (errMess) => ({
+    type: ActionTypes.DELETE_RECIPE_FAILED,
+    payload: errMess
+});
+
+export const udelete_recipe_success = () => ({
+    type: ActionTypes.DELETE_RECIPE_SUCCESS
+});
+
+
 
 /***** Loading My Grocery List *********/
 export const load_myGrocList = (user_id) => (dispatch) => {
@@ -404,7 +443,8 @@ export const load_myGrocList = (user_id) => (dispatch) => {
             }
         })
         .catch(err => {
-            alert(err);
+            // alert(err);
+            load_myGrocList_failed(err)
             console.log(err)
         });
 
@@ -477,7 +517,8 @@ export const load_currGrocList = (user_id, grocList_id) => (dispatch) => {
             }
         })
         .catch(err => {
-            alert(err);
+            // alert(err);
+            dispatch(load_currGrocList_failed(err));
             console.log(err)
         });
 }
@@ -525,7 +566,7 @@ export const load_profile_image = (userId) => (dispatch) => {
         })
         .catch(err => {
             dispatch(load_profile_image_failed(err));
-            alert(err);
+            // alert(err);
             console.log(err)
         });
 }
@@ -551,7 +592,7 @@ export const load_profile_image_reset = () => ({
 export const update_profile_image = (userId, newImage) => (dispatch) => {
     dispatch(update_profile_image_inProgress(true));
 
-    alert(newImage);
+    // alert(newImage);
     var formData = new FormData();
 
     formData.append("pic", newImage);
@@ -574,7 +615,7 @@ export const update_profile_image = (userId, newImage) => (dispatch) => {
         })
         .catch(err => {
             dispatch(update_profile_image_failed("Failed to update image. Please try again."));
-            alert(err);
+            // alert(err);
             console.log(err)
         });
 }
@@ -614,7 +655,7 @@ export const load_recipe_image = (recipeId) => (dispatch) => {
         })
         .catch(err => {
             dispatch(load_recipe_image_failed(err));
-            alert(err);
+            // alert(err);
             console.log(err)
         });
 }
@@ -640,7 +681,7 @@ export const load_recipe_image_reset = () => ({
 export const update_recipe_image = (recipeId, newImage) => (dispatch) => {
     dispatch(update_recipe_image_inProgress(true));
 
-    alert(newImage);
+    // alert(newImage);
     var formData = new FormData();
 
     formData.append("pic", newImage);
@@ -663,7 +704,7 @@ export const update_recipe_image = (recipeId, newImage) => (dispatch) => {
         })
         .catch(err => {
             dispatch(update_recipe_image_failed("Failed to update image. Please try again."));
-            alert(err);
+            // alert(err);
             console.log(err)
         });
 }
@@ -699,7 +740,7 @@ export const load_explore_recipes = () => (dispatch) => {
             }
         })
         .catch(err => {
-            alert(err);
+            // alert(err);
             dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
             console.log(err)
         });
@@ -747,7 +788,7 @@ export const search_recipes = (search) => (dispatch) => {
             }
         })
         .catch(err => {
-            alert(err);
+            // alert(err);
             dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
             console.log(err)
         });
@@ -772,7 +813,7 @@ export const complex_search_recipes = (search) => (dispatch) => {
             }
         })
         .catch(err => {
-            alert(err);
+            // alert(err);
             dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
             console.log(err)
         });

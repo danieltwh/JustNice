@@ -37,10 +37,15 @@ export const ConfigureStore = () => {
     );
 
     store.subscribe(throttle(() => {
+        var loginState = store.getState().login;
+        // alert("Saving state")
+       
         saveState({
             login: store.getState().login,
             images: store.getState().images,
         });
+        
+
     }, 1000));
     
     return store;

@@ -93,6 +93,7 @@ class Main extends Component {
     }
 
     atMyRecipe(){
+      // alert("at myrecipe")
       if(this.props.curr_recipe.inProgress !== "idle"){
         this.props.get_recipe_reset();
         this.props.load_recipe_image_reset();
@@ -188,7 +189,7 @@ class Main extends Component {
           this.atExplore();
         } else if(this.props.location.pathname.substring(0,5) === "/edit" || this.props.location.pathname === "/newrecipe"){
           this.atEdit();
-        } else if(this.props.location.pathname === "/myrecipes/"){
+        } else if(this.props.location.pathname === "/myrecipes"){
           this.atMyRecipe();
         } else if(this.props.location.pathname === "/account"){
           this.atAccount();

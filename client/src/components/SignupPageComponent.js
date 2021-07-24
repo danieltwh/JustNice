@@ -3,15 +3,35 @@ import { Col, Row, Navbar, NavbarBrand, Button, Form, FormGroup, FormFeedback, F
 // import  {Form} from "react-bootstrap";
 import {LocalForm, Control, Errors} from "react-redux-form";
 import { Redirect } from 'react-router';
+import { withRouter } from 'react-router';
+import { connect } from "react-redux";
 
 import { baseUrl } from '../shared/baseUrl';
-import {login_success} from "../redux/ActionCreators";
+import {login_attempt, signup_attempt, signup_failed, signup_inProgress, signup_success} from "../redux/ActionCreators";
+import Loading from "./LoadingComponent";
+
+import Alert from '@material-ui/lab/Alert';
 
 const minLength = (len) => (value) => value && (value.length >= len);
 const maxLength = (len) => (value) => !(value) || (value.length <= len);
 const required = value => value && (value.length);
 const email_re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
+const mapStateToProps = state => {
+    return {
+        login: state.login
+    }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+    signup_attempt: (first_name, last_name, email, username, password) => dispatch(signup_attempt(first_name, last_name, email, username, password)),
+    signup_success: () => dispatch(signup_success()),
+    signup_inProgress: () => dispatch(signup_inProgress()),
+    signup_failed: () => dispatch(signup_failed("Signup failed. Please try again.")),
+    login_attempt: (username, password) => dispatch(login_attempt(username, password)),
+
+    
+});
 
 
 class SignupPage extends Component {
@@ -234,6 +254,12 @@ class SignupPage extends Component {
 
         // alert("Firstname: " + this.state.first_name + " Lastname: " + this.state.last_name + " Email: " + this.state.email +
         // " Username: " + this.state.username + " Password: " + this.state.password)
+
+        var username = this.state.username;
+        var password = this.state.password; 
+
+        this.props.signup_inProgress();
+
         return fetch(baseUrl + "user/", {
             method: "POST",
             headers: {
@@ -251,12 +277,17 @@ class SignupPage extends Component {
         .then(resp => {
             console.log(JSON.stringify(resp));
             if (resp === "Added Successfully") {
-                const user = true;
-                this.props.signup_success(user);
-                <Redirect to="/explore" />
+                // this.props.signup_success().then(() => this.props.login_attempt(username, password))
+                // .then(() => <Redirect to="/explore" /> );
+
+                this.props.login_attempt(username, password)
+                .then(() => <Redirect to="/explore" /> );
             }
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            this.props.signup_failed();
+            console.log(err)
+        });
     }
 
     validate() {
@@ -461,6 +492,29 @@ class SignupPage extends Component {
                         <h2>Sign Up</h2>
                         <p>Please fill in this form to create an account!</p>
                         <hr />
+
+                        {(() => {
+                            if (this.props.login.inProgress === "signup_failed") {
+                                return <Alert severity="error">{(this.props.login.errMess !== null) ? 
+                                (this.props.login.errMess) : 
+                                "Failed to signup. Please try again"}</Alert>;
+                            } else if (this.props.login.inProgress === "signup_inProgress" || this.props.login.inProgress === "login_inProgress") {
+                                return (
+                                    <>
+                                        <Alert severity="info">Hold on...signup in progress!</Alert>
+                                        <Loading />
+                                    </>
+                                )
+                            } else if (this.props.login.inProgress === "login_success"){
+                                return (
+                                    <>
+                                        <Alert severity="success">Signup successful! Serving up some recipes now...</Alert>
+                                        <Loading />
+                                    </>
+                                )
+                            }
+                        })()}
+
                         {this.renderSignupForm()}
                     </div>
                 </div>
@@ -470,4 +524,4 @@ class SignupPage extends Component {
         );
     }
 }
-export default SignupPage;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignupPage));

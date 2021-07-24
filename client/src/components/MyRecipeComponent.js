@@ -5,10 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
+import { Redirect } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { load_myrecipes, load_myrecipes_reset, load_recipe_image_reset, get_recipe_reset, load_explore_recipes_reset } from "../redux/ActionCreators";
+import { load_myrecipes, load_myrecipes_reset, load_recipe_image_reset, get_recipe_reset, load_explore_recipes_reset, delete_recipe } from "../redux/ActionCreators";
 
 import { baseUrl } from "../shared/baseUrl";
 import Loading from "./LoadingComponent";
@@ -51,6 +53,8 @@ const mapDispatchToProps = (dispatch) => ({
     get_recipe_reset: () => dispatch(get_recipe_reset()),
     load_recipe_image_reset: () => dispatch(load_recipe_image_reset()),
     load_explore_recipes_reset: () => dispatch(load_explore_recipes_reset()),
+    delete_recipe: (userId, recipeId) => dispatch(delete_recipe(userId, recipeId)),
+
 
 });
 
@@ -67,9 +71,11 @@ function getCurrentDate(separator = '') {
     return `${year}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${date}${separator}${h}${separator}${m}${separator}${s}`
 }
 
-const RecipeTile = (recipe) => {
+const RecipeTile = ({userId, recipe}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [change, setChange] = React.useState(getCurrentDate());
+
+    const dispatch = useDispatch();
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -79,35 +85,40 @@ const RecipeTile = (recipe) => {
         setAnchorEl(null);
     };
 
+    const handleDelete = (event, userId, recipeId) => {
+        event.preventDefault();
+        dispatch(delete_recipe(userId, recipeId));
+    }
+
     console.log(JSON.stringify(recipe));
 
     return (
         <div key={recipe.rec_id} className="col-6 col-sm-4 col-lg-3 col-xl-2">
 
             <Card className="recipe-tile" style={{ height: "95%", }}>
-                <Link to={`/myrecipes/${parseInt(recipe.recipe.rec_id, 10)}`} style={{ textDecoration: "none", color: "inherit" }}>
+                <Link to={`/myrecipes/${parseInt(recipe.rec_id, 10)}`} style={{ textDecoration: "none", color: "inherit" }}>
                     <CardContent>
                         <Typography style={{ fontSize: "20px", padding: "0" }}>
-                            {recipe.recipe.rec_name}
+                            {recipe.rec_name}
                         </Typography>
                     </CardContent>
 
 
 
-                    <Image className="recipe-tile-img" src={`${baseUrl}${recipe.recipe.url}?${change}`} alt={recipe.recipe.rec_name} />
+                    <Image className="recipe-tile-img" src={`${baseUrl}${recipe.url}?${change}`} alt={recipe.rec_name} />
                     <CardContent style={{ padding: "2px 10px 5px 10px", alignItems: "center", }}>
                         <Grid container rowSpacing={2} columnSpacing={4} direction="row" justifyContent="center" alignItems="flex-start">
                             <Grid item xs={6} sm={6}>
                                 {/* <Paper > */}
                                 <Typography variant="body2" color="textSecondary" component="p">
-                                    Time: {recipe.recipe.cooking_time}min
+                                    Time: {recipe.cooking_time}min
                                 </Typography>
                                 {/* </Paper> */}
                             </Grid>
                             <Grid style={{ textAlign: "center" }} item xs={6} sm={6} >
                                 {/* <Paper > */}
                                 <Typography variant="body2" color="textSecondary" component="p">
-                                    Pax: {recipe.recipe.serving_pax}
+                                    Pax: {recipe.serving_pax}
                                 </Typography>
                                 {/* </Paper> */}
                             </Grid>
@@ -115,7 +126,7 @@ const RecipeTile = (recipe) => {
                             <Grid item xs={12} sm={12} md={12}>
                                 {/* <Paper > */}
                                 <Typography variant="body2" color="textSecondary" component="p">
-                                    Cuisine: {recipe.recipe.cuisine}
+                                    Cuisine: {recipe.cuisine}
                                 </Typography>
                                 {/* </Paper> */}
 
@@ -149,13 +160,13 @@ const RecipeTile = (recipe) => {
                         }}
                         style={{ marginRight: "20px" }}
                         TransitionComponent={Fade}>
-                        <Link to={`/edit/${parseInt(recipe.recipe.rec_id, 10)}`} style={{ textDecoration: "none", color: "inherit" }}>
+                        <Link to={`/edit/${parseInt(recipe.rec_id, 10)}`} style={{ textDecoration: "none", color: "inherit" }}>
                             <MenuItem >
                                 Edit
                             </MenuItem>
                         </Link>
 
-                        <MenuItem onClick={handleClose}>Delete</MenuItem>
+                        <MenuItem onClick={e => handleDelete(e, userId, recipe.rec_id)}>Delete</MenuItem>
                     </Menu>
 
 
@@ -270,7 +281,7 @@ class MyRecipePage extends Component {
     }
 
     renderRecipes(recipes) {
-        const recipesTiles = recipes.map(recipe => <RecipeTile recipe={recipe} />);
+        const recipesTiles = recipes.map(recipe => <RecipeTile userId={this.props.login.user.id} recipe={recipe} />);
 
         return recipesTiles;
     }
@@ -296,7 +307,28 @@ class MyRecipePage extends Component {
                             return (
                                 <Alert severity="info">
                                     Ohhh no... You don't seem to have any recipes. Create one here!
-                                    <Button variant="contained" color="primary" style={{ marginLeft: "15px" }}>Create Recipe</Button>
+                                    <Link to="/newrecipe">
+                                        <Button variant="contained" color="primary" style={{ marginLeft: "15px" }}>Create Recipe</Button>
+                                    </Link>
+                                </Alert>
+                            )
+                        } else if (this.props.my_recipes.inProgress === "delete_inProgress") {
+                            return (
+                                <>
+                                    <Alert severity="info">Deleting the recipe...</Alert>
+                                    <Loading />
+                                </>
+                            )
+                        } else if (this.props.my_recipes.inProgress === "delete_failed") {
+                            return (
+                                <Alert severity="error">
+                                    Failed to delete recipe. Please try again.
+                                </Alert>
+                            )
+                        } else if (this.props.my_recipes.inProgress === "delete_success"){
+                            return (
+                                <Alert severity="success">
+                                    Successfully deleted recipe
                                 </Alert>
                             )
                         }

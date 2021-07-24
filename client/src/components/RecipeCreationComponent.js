@@ -285,14 +285,14 @@ class RecipeCreationPage extends Component {
                             <Input type="select" name="cuisine" value={this.state.cuisine}
                                 onChange={e => this.handleChange(e)}>
 
-                                <option value="chinese">Chinese</option>
-                                <option value="western">Western</option>
-                                <option value="japanese">Japanese</option>
-                                <option value="korean">Korean</option>
-                                <option value="indian">Indian</option>
-                                <option value="thai">Thai</option>
-                                <option value="mexican">Mexican</option>
-                                <option value="others">Others</option>
+                                <option value="Chinese">Chinese</option>
+                                <option value="Western">Western</option>
+                                <option value="Japanese">Japanese</option>
+                                <option value="Korean">Korean</option>
+                                <option value="Indian">Indian</option>
+                                <option value="Thai">Thai</option>
+                                <option value="Mexican">Mexican</option>
+                                <option value="Others">Others</option>
                             </Input>
                         </FormGroup>
                     </div>
@@ -303,12 +303,12 @@ class RecipeCreationPage extends Component {
                             <Input type="select" name="rec_type" value={this.state.rec_type}
                                 onChange={e => this.handleChange(e)}>
 
-                                <option value="breakfast">Breakfast</option>
-                                <option value="lunch">Lunch</option>
-                                <option value="dinner">Dinner</option>
-                                <option value="dessert">Dessert</option>
-                                <option value="brunch">Brunch</option>
-                                <option value="snack">Snack</option>
+                                <option value="Breakfast">Breakfast</option>
+                                <option value="Lunch">Lunch</option>
+                                <option value="Dinner">Dinner</option>
+                                <option value="Dessert">Dessert</option>
+                                <option value="Brunch">Brunch</option>
+                                <option value="Snack">Snack</option>
                             </Input>
                         </FormGroup>
                     </div>

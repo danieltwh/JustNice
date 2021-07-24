@@ -19,6 +19,16 @@ export const Login = (state = {
             return { ...state, inProgress: "login_failed", user: false, errMess: action.payload };
 
 
+        case ActionTypes.SIGNUP_SUCCESS:
+            return { ...state, inProgress: "signup_success", user: false, errMess: null };
+
+        case ActionTypes.SIGNUP_IN_PROGRESS:
+            return { ...state, inProgress: "signup_inProgress", user: false, errMess: null };
+
+        case ActionTypes.SIGNUP_FAILED:
+            return { ...state, inProgress: "signup_failed", user: false, errMess: action.payload };
+
+
         case ActionTypes.LOGIN_EDIT_SUCCESS:
             return { ...state, inProgress: "update_success", user: action.payload, errMess: null };
 
@@ -29,7 +39,7 @@ export const Login = (state = {
             return { ...state, inProgress: "update_failed", errMess: action.payload };
 
         case ActionTypes.LOGIN_EDIT_RESET:
-            return { ...state, inProgress: "login_success", errMess: null};
+            return { ...state, inProgress: "login_success", errMess: null };
 
 
 
