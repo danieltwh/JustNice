@@ -126,6 +126,8 @@ class LoginPage extends Component {
                                         <Loading />
                                     </>
                                 )
+                            } else if (this.props.login.inProgress === "login_success"){
+                                return <Alert severity="success">Login successful! Serving up some recipes now...</Alert>
                             }
                         })()}
                         <Form className="form" onSubmit={(event) => this.handleLogin(event)}>

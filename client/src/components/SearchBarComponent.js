@@ -177,52 +177,85 @@ export default function SearchBar() {
 
     const handleSingleSearch = (event) => {
         event.preventDefault();
-        // alert(JSON.stringify([open, search, cookingTime, servingPax, cuisine, recType]));
+        if (location.pathname === "/explore") {
+            // alert(JSON.stringify([open, search, cookingTime, servingPax, cuisine, recType]));
+            const onlySpaces = /^\s*$/
 
-        const onlySpaces = /^\s*$/
-
-        if (search === "" || onlySpaces.test(search)) {
-            setSearch("")
-            setSearchErr("single-search-empty")
+            if (search === "" || onlySpaces.test(search)) {
+                setSearch("")
+                setAdvanceSearch("")
+                setSearchErr("single-search-empty")
+            } else {
+                dispatch(search_recipes(search));
+                setSearch("");
+                setAdvanceSearch("")
+            }
         } else {
-            dispatch(search_recipes(search));
-            setSearch("");
+            setSearch("")
+            setAdvanceSearch("")
+            setSearchErr("not-explore")
         }
+
+
+
 
 
     };
 
     const handleComplexSearch = (event) => {
         event.preventDefault();
-        var toSend = []
-        // if(cookingTime !== null){
-        //     toSend.push({"category": "cooking_time", "keywords": cookingTime});
-        // }
 
-        if (servingPax !== null) {
-            toSend.push({ "category": "serving_pax", "keywords": servingPax });
-        }
+        if (location.pathname === "/explore"){
+            var toSend = []
+            if(cookingTime !== null){
+                toSend.push({"category": "cooking_time", "keywords": cookingTime});
+            }
 
-        if (cuisine !== "") {
-            toSend.push({ "category": "cuisine", "keywords": cuisine });
-        }
+            if (servingPax !== null) {
+                toSend.push({ "category": "serving_pax", "keywords": servingPax });
+            }
 
-        if (recType !== "") {
-            toSend.push({ "category": "rec_type", "keywords": recType });
-        }
+            if (cuisine !== "") {
+                toSend.push({ "category": "cuisine", "keywords": cuisine });
+            }
 
-        const onlySpaces = /^\s*$/
+            if (recType !== "") {
+                toSend.push({ "category": "rec_type", "keywords": recType });
+            }
 
-        var canSubmit = true;
+            const onlySpaces = /^\s*$/
 
-        if (advanceSearch !== "" || onlySpaces.test(advanceSearch)) {
-            setSearchErr("complex-search-empty");
-            setAdvanceSearch("")
-            canSubmit = false;
-        }
+            var canSubmit = true;  
+            
+            
 
-        if (toSend.length > 0 && canSubmit) {
-            handleClose();
+            if (advanceSearch === "") {
+                
+            } else if (onlySpaces.test(advanceSearch)) {
+                setSearchErr("complex-search-empty");
+                setAdvanceSearch("")
+                canSubmit = false;
+            } else {
+                toSend.push({ "category": "search", "keywords": advanceSearch });
+            }
+
+            if (toSend.length > 0 && canSubmit) {
+                handleClose();
+
+                // Reset the states
+                setSearch("")
+                setAdvanceSearch("");
+                setCookingTime(null);
+                setServingPax(null);
+                setCuisine("");
+                setRecType("");
+
+                // alert(JSON.stringify(toSend));
+                dispatch(complex_search_recipes(toSend))
+            }
+        } else {
+            setSearchErr("not-explore")
+            // handleClose();
 
             // Reset the states
             setSearch("")
@@ -231,20 +264,37 @@ export default function SearchBar() {
             setServingPax(null);
             setCuisine("");
             setRecType("");
-
-            // alert(JSON.stringify(toSend));
-            dispatch(complex_search_recipes(toSend))
+            
         }
+        
 
 
     }
 
     const handleSubmit = () => {
-        alert(JSON.stringify([open, search, cookingTime, servingPax, cuisine, recType]));
+        // alert(JSON.stringify([open, search, cookingTime, servingPax, cuisine, recType]));
         // dispatch(search_recipes(search));
     };
 
+    const getSingleSearchError = () => {
+        if (searchErr === "single-search-empty") {
+            return ("Error: No value keyed in!")
+        }else if (searchErr === "not-explore"){
+            return ("Search is unavailable here")
+        } else {
+            return ("");
+        }
+    }
 
+    const getComplexSearchError = () => {
+        if (searchErr === "single-search-empty") {
+            return ("Error: No value keyed in!")
+        }else if (searchErr === "not-explore"){
+            return ("Search is unavailable here")
+        } else {
+            return ("");
+        }
+    }
 
     console.log(JSON.stringify([open, search, cookingTime, servingPax, cuisine, recType]));
     // console.log(search);
@@ -269,8 +319,8 @@ export default function SearchBar() {
 
             <TextField id="single-search-input" style={{ padding: "0px" }}
                 value={search} onChange={(e) => { setSearch(e.target.value); setAdvanceSearch(e.target.value); setSearchErr("") }}
-                error={searchErr === "single-search-empty"}
-                helperText={(searchErr === "single-search-empty") ? ("Error: No value keyed in!") : ""}
+                error={searchErr === "single-search-empty" || searchErr === "not-explore"}
+                helperText={getSingleSearchError()}
                 placeholder="Search" variant="outlined" color="primary" size="small"
                 InputLabelProps={{
                     shrink: true,
@@ -288,8 +338,8 @@ export default function SearchBar() {
             />
 
 
-            <Button id="advance-search-button" style={{color: "#f7fff7", textTransform: "capitalize", font: "inherit", fontSize: "14px"}} 
-            onClick={(e) => handleClickOpen()}>
+            <Button id="advance-search-button" style={{ color: "#f7fff7", textTransform: "capitalize", font: "inherit", fontSize: "14px" }}
+                onClick={(e) => handleClickOpen()}>
                 Advance Search
             </Button>
 
@@ -303,9 +353,9 @@ export default function SearchBar() {
                         <Grid container spacing={2}>
 
                             <Grid container item xs={12} className={classes.gridRow}>
-                                <TextField fullWidth label="Search" value={advanceSearch} onChange={(e) => {setAdvanceSearch(e.target.value); setSearchErr("")}}
-                                    error={searchErr === "complex-search-empty"}
-                                    helperText={(searchErr === "complex-search-empty") ? ("Error: No value keyed in!") : ""}
+                                <TextField fullWidth label="Search" value={advanceSearch} onChange={(e) => { setAdvanceSearch(e.target.value); setSearchErr("") }}
+                                    error={searchErr === "complex-search-empty" || searchErr === "not-explore"}
+                                    helperText={getComplexSearchError()}
                                     placeholder="Recipe / Ingredients" variant="outlined" color="primary" size="small"
                                     InputLabelProps={{ shrink: true, }} />
                             </Grid>
@@ -358,14 +408,14 @@ export default function SearchBar() {
                                                 <MenuItem value="">
                                                     <em>None</em>
                                                 </MenuItem>
-                                                <MenuItem value="chinese">Chinese</MenuItem>
-                                                <MenuItem value="western">Western</MenuItem>
-                                                <MenuItem value="japanese">Japanese</MenuItem>
-                                                <MenuItem value="korean">Korean</MenuItem>
-                                                <MenuItem value="indian">Indian</MenuItem>
-                                                <MenuItem value="thai">Thai</MenuItem>
-                                                <MenuItem value="mexican">Mexican</MenuItem>
-                                                <MenuItem value="others">Others</MenuItem>
+                                                <MenuItem value="Chinese">Chinese</MenuItem>
+                                                <MenuItem value="Western">Western</MenuItem>
+                                                <MenuItem value="Japanese">Japanese</MenuItem>
+                                                <MenuItem value="Korean">Korean</MenuItem>
+                                                <MenuItem value="Indian">Indian</MenuItem>
+                                                <MenuItem value="Thai">Thai</MenuItem>
+                                                <MenuItem value="Mexican">Mexican</MenuItem>
+                                                <MenuItem value="Others">Others</MenuItem>
                                             </Select>
                                             {/* <FormHelperText>Label + placeholder</FormHelperText> */}
                                         </FormControl>
@@ -386,12 +436,12 @@ export default function SearchBar() {
                                                 <MenuItem value="">
                                                     <em>None</em>
                                                 </MenuItem>
-                                                <MenuItem value="breakfast">Breakfast</MenuItem>
-                                                <MenuItem value="lunch">Lunch</MenuItem>
-                                                <MenuItem value="dinner">Dinner</MenuItem>
-                                                <MenuItem value="dessert">Dessert</MenuItem>
-                                                <MenuItem value="brunch">Brunch</MenuItem>
-                                                <MenuItem value="snack">Snack</MenuItem>
+                                                <MenuItem value="Breakfast">Breakfast</MenuItem>
+                                                <MenuItem value="Lunch">Lunch</MenuItem>
+                                                <MenuItem value="Dinner">Dinner</MenuItem>
+                                                <MenuItem value="Dessert">Dessert</MenuItem>
+                                                <MenuItem value="Brunch">Brunch</MenuItem>
+                                                <MenuItem value="Snack">Snack</MenuItem>
 
                                             </Select>
                                             {/* <FormHelperText>Label + placeholder</FormHelperText> */}

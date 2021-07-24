@@ -69,7 +69,7 @@ const useStyles = makeStyles({
     },
 
     recipeDetails: {
-        padding: "2px 10px 5px 10px",
+        padding: "2px 10px 5px 10px !important",
         alignItems: "center",
 
     },
@@ -79,7 +79,14 @@ const useStyles = makeStyles({
 
     },
     paxDetails: {
-        textAlign: "center",
+        textAlign: "left",
+        paddingLeft: "5px",
+    },
+
+    recTypeDetails: {
+        textAlign: "left",
+        paddingLeft: "5px",
+
     },
 
     cardBottom: {
@@ -161,10 +168,18 @@ export default function ExplorePage() {
                                         {/* </Paper> */}
                                     </Grid>
 
-                                    <Grid item xs={12} sm={12} md={12}>
+                                    <Grid item xs={6} sm={6} md={6}>
                                         {/* <Paper > */}
                                         <Typography variant="body2" color="textSecondary" component="p">
                                             Cuisine: {recipe.cuisine}
+                                        </Typography>
+                                        {/* </Paper> */}
+
+                                    </Grid>
+                                    <Grid className={classes.recTypeDetails} item xs={6} sm={6} md={6}>
+                                        {/* <Paper > */}
+                                        <Typography variant="body2" color="textSecondary" component="p">
+                                            Type: {recipe.rec_type}
                                         </Typography>
                                         {/* </Paper> */}
 
