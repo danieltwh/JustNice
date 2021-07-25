@@ -277,12 +277,13 @@ class AccountPage extends Component {
         // alert(this.state.password === "");
         // alert(this.props.login.user.password);
 
-        if (this.state.password === "") {
-            this.props.login_edit_attempt(this.props.login.user.id, this.state.first_name, this.state.last_name, this.state.email, this.state.username,
-                this.props.login.user.password);
-        } else {
+        console.log(this.state.password)
+
+        if (this.state.password !== "" && this.state.validate.password === "has-success" && this.state.validate.confirm_password === "has-success") {
             this.props.login_edit_attempt(this.props.login.user.id, this.state.first_name, this.state.last_name, this.state.email, this.state.username,
                 this.state.password);
+        } else {
+            this.props.login_edit_attempt(this.props.login.user.id, this.state.first_name, this.state.last_name, this.state.email, this.state.username);
         }
 
     }
@@ -433,6 +434,7 @@ class AccountPage extends Component {
                         valid={this.state.validate.password === "has-success"}
                         invalid={this.state.validate.password === "has-danger" || this.state.validate.password === "white-space"}
                         onChange={(e) => {
+                            // console.log(e.target.value);
                             this.validatePassword(e);
                             this.handleChange(e);
                             // this.validateConfirmPassword(e);

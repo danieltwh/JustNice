@@ -29,7 +29,8 @@ import SignupPage from "./SignupPageComponent";
 
 
 import {login_attempt, login_success, signout, load_myrecipes, get_recipe} from "../redux/ActionCreators";
-import {  load_myrecipes_reset, load_recipe_image_reset, get_recipe_reset, load_explore_recipes_reset, load_myGrocList_reset } from "../redux/ActionCreators";
+import {  load_myrecipes_reset, load_recipe_image_reset, get_recipe_reset, load_explore_recipes_reset, load_myGrocList_reset, 
+load_recipe_image_success, load_recipe_image_default } from "../redux/ActionCreators";
 
 
 
@@ -41,7 +42,8 @@ const mapStateToProps = state => {
     my_recipes: state.my_recipes,
     curr_recipe: state.curr_recipe,
     groceryList: state.groceryList,
-    curr_grocList : state.curr_grocList
+    curr_grocList : state.curr_grocList,
+    images: state.images,
   }
 }
 
@@ -54,7 +56,11 @@ const mapDispatchToProps = (dispatch) => ({
 
   load_myrecipes_reset: () => { dispatch(load_myrecipes_reset()) },
   get_recipe_reset: () => dispatch(get_recipe_reset()),
+  
   load_recipe_image_reset: () => dispatch(load_recipe_image_reset()),
+  load_recipe_image_success: (details) => dispatch(load_recipe_image_success(details)),
+  load_recipe_image_default: () => dispatch(load_recipe_image_default()),
+
   load_explore_recipes_reset: () => dispatch(load_explore_recipes_reset()),
   load_myGrocList_reset: () => dispatch(load_myGrocList_reset()),
 });
@@ -90,6 +96,10 @@ class Main extends Component {
       if(this.props.groceryList.inProgress !== "idle") {
             this.props.load_myGrocList_reset();
       }
+
+      if(this.props.images.recipe.inProgress !== "idle") {
+        this.props.load_recipe_image_reset();
+      }
     }
 
     atMyRecipe(){
@@ -106,6 +116,41 @@ class Main extends Component {
       if(this.props.groceryList.inProgress !== "idle") {
             this.props.load_myGrocList_reset();
       }
+
+      if(this.props.images.recipe.inProgress !== "idle") {
+        this.props.load_recipe_image_reset();
+      }
+    }
+
+    atNewRecipe(){
+      if(this.props.recipes.inProgress !== "idle"){
+        this.props.load_explore_recipes_reset();
+      }
+
+      if(this.props.my_recipes.inProgress !== "not-loaded"){
+        this.props.load_myrecipes_reset();
+      }
+
+      if(this.props.groceryList.inProgress !== "idle") {
+        this.props.load_myGrocList_reset();
+      }
+
+      if(this.props.images.recipe.inProgress !== "default" ) {
+        this.props.load_recipe_image_default();
+      }      
+
+      // if(this.props.images.recipe.inProgress !== "idle" ) {
+      //   this.props.load_recipe_image_reset();
+      // }
+
+      // if(this.props.images.recipe.inProgress !== "idle") {
+
+      //   // this.props.load_recipe_image_reset();
+      //   var dummy = {filename: "",
+      //   status: "default",
+      //   url: "/media/default.jpg"}
+      //   this.props.load_recipe_image_success(dummy)
+      // }
     }
 
     atEdit(){
@@ -139,6 +184,10 @@ class Main extends Component {
       if(this.props.groceryList.inProgress !== "idle") {
             this.props.load_myGrocList_reset();
       }
+
+      if(this.props.images.recipe.inProgress !== "idle") {
+        this.props.load_recipe_image_reset();
+      }
       
     }
 
@@ -153,6 +202,10 @@ class Main extends Component {
 
       if(this.props.curr_recipe.inProgress !== "idle"){
         this.props.get_recipe_reset();
+        this.props.load_recipe_image_reset();
+      }
+
+      if(this.props.images.recipe.inProgress !== "idle") {
         this.props.load_recipe_image_reset();
       }
     }
@@ -174,6 +227,10 @@ class Main extends Component {
       if(this.props.groceryList.inProgress !== "idle") {
             this.props.load_myGrocList_reset();
       }
+
+      if(this.props.images.recipe.inProgress !== "idle") {
+        this.props.load_recipe_image_reset();
+      }
     }
 
     render() {
@@ -187,9 +244,11 @@ class Main extends Component {
       if (this.props.login.user) {
         if(this.props.location.pathname === "/explore"){
           this.atExplore();
-        } else if(this.props.location.pathname.substring(0,5) === "/edit" || this.props.location.pathname === "/newrecipe"){
+        } else if (this.props.location.pathname === "/newrecipe"){
+          this.atNewRecipe()
+        } else if(this.props.location.pathname.substring(0,5) === "/edit"){
           this.atEdit();
-        } else if(this.props.location.pathname === "/myrecipes"){
+        } else if(this.props.location.pathname === "/myrecipes" || this.props.location.pathname === "/myrecipes/" ){
           this.atMyRecipe();
         } else if(this.props.location.pathname === "/account"){
           this.atAccount();

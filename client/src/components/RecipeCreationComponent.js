@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 
 import {
     get_recipe, get_recipe_reset, update_recipe, load_recipe_image,
-    update_recipe_image, load_recipe_image_reset
+    update_recipe_image, load_recipe_image_reset, load_recipe_image_success
 } from '../redux/ActionCreators';
 
 import Alert from '@material-ui/lab/Alert';
@@ -32,6 +32,7 @@ const mapStateToProps = state => {
         login: state.login,
         curr_recipe: state.curr_recipe,
         images: state.images,
+
     }
 }
 
@@ -42,9 +43,10 @@ const mapDispatchToProps = (dispatch) => ({
     load_recipe_image: (recipeId) => dispatch(load_recipe_image(recipeId)),
     update_recipe_image: (recipeId, image) => dispatch(update_recipe_image(recipeId, image)),
     load_recipe_image_reset: () => dispatch(load_recipe_image_reset()),
+    load_recipe_image_success: (details) => dispatch(load_recipe_image_success(details)),
 });
 
-function getCurrentDate(separator = '') {
+function getCurrentDateFunc(separator = '') {
 
     var newDate = new Date()
     var date = newDate.getDate();
@@ -60,6 +62,7 @@ function getCurrentDate(separator = '') {
 class RecipeCreationPage extends Component {
     constructor(props) {
         super(props);
+        console.log(getCurrentDateFunc());
         if (this.props.rec_id !== "new" && this.props.curr_recipe.recipe !== null && (this.props.curr_recipe.inProgress === "success" || this.props.curr_recipe.inProgress === "updating" ||
             this.props.curr_recipe.inProgress === "update_failed")) {
             this.state = {
@@ -75,7 +78,7 @@ class RecipeCreationPage extends Component {
                     ...ingredient, "isValid": "valid"
                 })),
                 "image": null,
-                "change": getCurrentDate(),
+                "change": getCurrentDateFunc(),
             }
         } else {
             this.state = {
@@ -84,8 +87,8 @@ class RecipeCreationPage extends Component {
                 "rec_instructions": "",
                 "cooking_time": 60,
                 "serving_pax": 1,
-                "cuisine": "chinese",
-                "rec_type": "breakfast",
+                "cuisine": "Chinese",
+                "rec_type": "Breakfast",
                 "isPublished": false,
                 "ingredient": []
             }
@@ -106,10 +109,10 @@ class RecipeCreationPage extends Component {
             this.props.get_recipe(this.props.rec_id);
         }
 
-        if (this.props.images.recipe.inProgress === "idle") {
+        if ((this.props.images.recipe.inProgress === "idle" || this.props.images.recipe.inProgress === "default") && this.props.location.pathname !== "/newrecipe") {
             // alert("Getting recipe image")
             this.props.load_recipe_image(this.props.rec_id);
-        }
+        }     
 
         if (this.rec_instructions) {
             this.trackContent(this.rec_instructions)
@@ -130,9 +133,6 @@ class RecipeCreationPage extends Component {
             this.props.get_recipe_reset()
             this.props.load_recipe_image_reset()
         }
-
-
-
     }
 
     handleChange(event) {
@@ -191,7 +191,9 @@ class RecipeCreationPage extends Component {
                 <div className="row">
 
                     <div className="col-6" style={{ paddingRight: "5px" }} >
-                        <Image onClick={() => console.log('onClick')} src={(this.props.images.recipe.inProgress === "success") ? `${baseUrl}${this.props.images.recipe.url}?${this.state.change}` : ""}
+                        <Image onClick={() => console.log('onClick')} src={(this.props.images.recipe.inProgress === "success" || this.props.images.recipe.inProgress === "default") ? 
+                        `${baseUrl}${this.props.images.recipe.url}?${this.state.change}` : 
+                        ""}
                             aspectRatio={(1 / 1)} />
                     </div>
 
