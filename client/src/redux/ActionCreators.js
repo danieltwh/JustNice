@@ -115,15 +115,16 @@ export const login_edit_attempt = (userId, first_name, last_name, email, usernam
 
     dispatch(login_edit_inProgress(true));
 
-    // alert(password);
-
     var newInfo = {
         "id": userId,
         "first_name": first_name,
         "last_name": last_name,
         "email": email,
         "username": username,
-        "password": password
+    }
+
+    if (password !== null) {
+        newInfo["password"] = password
     }
 
 
@@ -676,6 +677,10 @@ export const load_recipe_image_failed = (errMess) => ({
 
 export const load_recipe_image_reset = () => ({
     type: ActionTypes.LOAD_RECIPE_IMG_RESET
+})
+
+export const load_recipe_image_default = () => ({
+    type: ActionTypes.LOAD_RECIPE_IMG_DEFAULT
 })
 
 export const update_recipe_image = (recipeId, newImage) => (dispatch) => {

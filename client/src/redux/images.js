@@ -53,6 +53,12 @@ export const Images = (state = {
         case ActionTypes.LOAD_RECIPE_IMG_RESET:
             return { ...state, recipe: { inProgress: "idle", errMess: null } };
 
+        case ActionTypes.LOAD_RECIPE_IMG_DEFAULT:
+            return { ...state, recipe: { inProgress: "default", errMess: null, filename: "",
+                status: "default",
+                url: "/media/default.jpg", 
+            }};
+
 
         case ActionTypes.UPDATE_RECIPE_IMG_SUCCESS:
             return { ...state, recipe: { inProgress: "update-success", ...action.payload } };
