@@ -90,7 +90,7 @@ const RecipeTile = ({ userId, recipe }) => {
         dispatch(delete_recipe(userId, recipeId));
     }
 
-    console.log(JSON.stringify(recipe));
+    //console.log(JSON.stringify(recipe));
 
     return (
         <div key={recipe.rec_id} className="col-6 col-sm-4 col-lg-3 col-xl-2">

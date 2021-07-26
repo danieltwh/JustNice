@@ -184,8 +184,12 @@ class AccountPage extends Component {
                         return resp;
                     }
                 })
-                .then(resp => console.log(resp))
-                .catch(err => console.log(err));
+                .then(resp => {
+                    // console.log(resp)
+                })
+                .catch(err => {
+                    // console.log(err)
+                });
         }
     }
 
@@ -203,12 +207,12 @@ class AccountPage extends Component {
         if (value.length === 0) {
             this.setState({ confirm_password: "", validate: { ...this.state.validate, password: "idle", confirm_password: "idle" } });
         } else if (!no_whitespace.test(value)) {
-            console.log("here");
+            //console.log("here");
             this.setState({ validate: { ...this.state.validate, password: "white-space" } });
         } else if (confirmPassword !== value) {
-            console.log(this.state.confirm_password);
-            console.log(value);
-            console.log(this.state.confirm_password !== value);
+            //console.log(this.state.confirm_password);
+            //console.log(value);
+            //console.log(this.state.confirm_password !== value);
             this.setState({ validate: { ...this.state.validate, password: "has-success", confirm_password: "password-mismatch" } });
         } else {
             this.setState({ validate: { ...this.state.validate, password: "has-success", confirm_password: "has-success" } });
@@ -277,7 +281,7 @@ class AccountPage extends Component {
         // alert(this.state.password === "");
         // alert(this.props.login.user.password);
 
-        console.log(this.state.password)
+        //console.log(this.state.password)
 
         if (this.state.password !== "" && this.state.validate.password === "has-success" && this.state.validate.confirm_password === "has-success") {
             this.props.login_edit_attempt(this.props.login.user.id, this.state.first_name, this.state.last_name, this.state.email, this.state.username,
@@ -302,7 +306,7 @@ class AccountPage extends Component {
     }
 
     renderSignupForm() {
-        console.log(JSON.stringify(this.state))
+        //console.log(JSON.stringify(this.state))
 
         // const validation = this.validate();
         // console.log(JSON.stringify(validation))
@@ -526,7 +530,7 @@ class AccountPage extends Component {
 
                 <div className="col-6" style={{ paddingRight: "5px" }} >
 
-                    <Image onClick={() => console.log('onClick')} src={(this.props.images.profile.inProgress === "success") ? `${baseUrl}${this.props.images.profile.url}?${this.state.change}` : ""}
+                    <Image  src={(this.props.images.profile.inProgress === "success") ? `${baseUrl}${this.props.images.profile.url}?${this.state.change}` : ""}
                         aspectRatio={(1 / 1)} />
                 </div>
 

@@ -50,7 +50,7 @@ const RenderIngredients = ({ rec_ingredients }) => {
         )
     }
 
-    console.log(JSON.stringify(rec_ingredients))
+    //console.log(JSON.stringify(rec_ingredients))
     const ingredients = rec_ingredients.map(mapIngredientToList)
 
     return (
@@ -156,7 +156,7 @@ const RenderSteps = ({ rec_steps }) => {
 
     const steps = rec_steps
     return (
-        <div className="recipe-details-steps">
+        <div className="recipe-details-steps" >
             <p style={{ "white-space": "pre-line" }}>
                 {steps}
             </p>
@@ -176,8 +176,8 @@ class RecipeDetailsPage extends Component {
 
     componentDidMount() {
         if (this.props.curr_recipe.inProgress === "idle") {
-            console.log(JSON.stringify(this.props.rec_id))
-            console.log("Getting data now!")
+            //console.log(JSON.stringify(this.props.rec_id))
+            //console.log("Getting data now!")
             this.props.get_recipe(this.props.rec_id)
         }
 

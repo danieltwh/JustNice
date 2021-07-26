@@ -106,7 +106,9 @@ class GroceryList extends Component {
                 body: JSON.stringify(finalToUpdate)
             })
             .then(resp => this.props.load_currGrocList_reset())
-            .catch(err => console.log(err));
+            .catch(err => {
+                //console.log(err)
+            });
         } else if (this.props.curr_grocList.inProgress === "success") {
             this.props.load_currGrocList_reset();
         }
@@ -116,7 +118,7 @@ class GroceryList extends Component {
         if (!nextState.isEdit) {
             return true;
         } else  if (nextState.toUpdate !== this.state.toUpdate) {
-            console.log("toUpdate changed so updating component")
+            //console.log("toUpdate changed so updating component")
             return true;
         }else if (this.state.isEdit && nextProps.grocery === this.props.grocery) {
             // If the modal is open and grocery list is the same,
@@ -141,14 +143,14 @@ class GroceryList extends Component {
 
     whenEditOpen() {
         if (this.props.my_recipes.inProgress === "not-loaded") {
-            console.log(this.props.my_recipes.inProgress);
+            ////console.log(this.props.my_recipes.inProgress);
             // this.props.load_myrecipes(1);
         }   
     }
 
     whenEditClose() {
         if (this.props.my_recipes.inProgress === "success" && this.props.my_recipes.my_recipes.length >= 1 ) {
-            console.log(this.props.my_recipes.inProgress);
+            //console.log(this.props.my_recipes.inProgress);
             this.props.load_myrecipes_reset();
         }  
     }
@@ -159,24 +161,24 @@ class GroceryList extends Component {
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const { name } = target;
 
-        console.log(`Changing ${name} to ${value}`);
+        //console.log(`Changing ${name} to ${value}`);
 
         var newToUpdate = {...this.state.toUpdate};
         newToUpdate[name] = value;
         this.setState({toUpdate: newToUpdate});
-        console.log(`Changed ${name} to ${value}`);
+        //console.log(`Changed ${name} to ${value}`);
     }
 
     handleIngredBought_Div(name) {
         // event.preventDefault();
         var newValue = (name in this.state.toUpdate) ? !this.state.toUpdate[name] : true;
 
-        console.log(`Changing ${name} to ${newValue}`);
+        //console.log(`Changing ${name} to ${newValue}`);
 
         var newToUpdate = {...this.state.toUpdate};
         newToUpdate[name] = newValue;
         this.setState({toUpdate: newToUpdate});
-        console.log(`Changed ${name} to ${newValue}`);
+        //console.log(`Changed ${name} to ${newValue}`);
     }
 
     IngredientItem(category, props) {
@@ -242,7 +244,7 @@ class GroceryList extends Component {
                 var currCat = categories[category]
                 for(var item in currCat){
                     var currIngred = currCat[item];
-                    console.log(JSON.stringify(currIngred));
+                    //console.log(JSON.stringify(currIngred));
                     newToUpdate[currIngred.ingred_id] = false
                 }
             }
@@ -264,7 +266,8 @@ class GroceryList extends Component {
             })
             .then(resp => this.props.load_currGrocList(this.props.login.user.id, this.props.groc_id))
             .catch(err => {
-                console.log(err)});         
+                //console.log(err)
+            });         
         // } else if (this.props.curr_grocList.inProgress === "success") {
         //     this.props.load_currGrocList_reset();
         }
@@ -274,7 +277,7 @@ class GroceryList extends Component {
 
     render() {
         const groceryListRecipes = this.props.recipes.filter(recipe => recipe.id===1)[0];
-        console.log(JSON.stringify(this.state));
+        //console.log(JSON.stringify(this.state));
 
         return (
             <>

@@ -296,10 +296,10 @@ export default function SearchBar() {
         }
     }
 
-    console.log(JSON.stringify([open, search, cookingTime, servingPax, cuisine, recType]));
+    //console.log(JSON.stringify([open, search, cookingTime, servingPax, cuisine, recType]));
     // console.log(search);
 
-    console.log(location.pathname === "/explore")
+    //console.log(location.pathname === "/explore")
 
     return (
         <div className={classes.root}>
