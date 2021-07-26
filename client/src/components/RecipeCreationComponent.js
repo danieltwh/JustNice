@@ -145,6 +145,18 @@ class RecipeCreationPage extends Component {
         });
     }
 
+    handleIntegerChange(event) {
+        const { target } = event;
+        var value = target.type === 'checkbox' ? target.checked : target.value;
+        const { name } = target;
+
+        value = Math.floor(value);
+
+        this.setState({
+            [name]: value,
+        });
+    }
+
     handleSubmit(event) {
         event.preventDefault();
         var final = Object.assign({}, this.state);
@@ -255,9 +267,9 @@ class RecipeCreationPage extends Component {
                                 <InputGroupAddon addonType="prepend">
                                     <InputGroupText><FontAwesomeIcon icon="clock" /></InputGroupText>
                                 </InputGroupAddon>
-                                <Input placeholder="mins" min={0} max={100} type="number"
+                                <Input placeholder="mins" min={1} max={999} type="number"
                                     name="cooking_time" value={this.state.cooking_time}
-                                    onChange={e => this.handleChange(e)}
+                                    onChange={e => this.handleIntegerChange(e)}
                                 />
                             </InputGroup>
                         </FormGroup>
@@ -271,9 +283,9 @@ class RecipeCreationPage extends Component {
                                 <InputGroupAddon addonType="prepend">
                                     <InputGroupText><FontAwesomeIcon icon="user" /></InputGroupText>
                                 </InputGroupAddon>
-                                <Input placeholder="Pax" min={0} max={100} type="number"
+                                <Input placeholder="Pax" min={1} max={999} type="number"
                                     name="serving_pax" value={this.state.serving_pax}
-                                    onChange={e => this.handleChange(e)}
+                                    onChange={e => this.handleIntegerChange(e)}
                                 />
                             </InputGroup>
                         </FormGroup>

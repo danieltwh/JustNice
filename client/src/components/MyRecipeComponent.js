@@ -71,7 +71,7 @@ function getCurrentDate(separator = '') {
     return `${year}${separator}${month < 10 ? `0${month}` : `${month}`}${separator}${date}${separator}${h}${separator}${m}${separator}${s}`
 }
 
-const RecipeTile = ({userId, recipe}) => {
+const RecipeTile = ({ userId, recipe }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [change, setChange] = React.useState(getCurrentDate());
 
@@ -115,7 +115,7 @@ const RecipeTile = ({userId, recipe}) => {
                                 </Typography>
                                 {/* </Paper> */}
                             </Grid>
-                            <Grid style={{ textAlign: "center" }} item xs={6} sm={6} >
+                            <Grid style={{ textAlign: "center" }} item xs={6} sm={6} style={{textAlign: "left",paddingLeft: "5px",}} >
                                 {/* <Paper > */}
                                 <Typography variant="body2" color="textSecondary" component="p">
                                     Pax: {recipe.serving_pax}
@@ -123,7 +123,7 @@ const RecipeTile = ({userId, recipe}) => {
                                 {/* </Paper> */}
                             </Grid>
 
-                            <Grid item xs={12} sm={12} md={12}>
+                            <Grid item xs={6} sm={6}  >
                                 {/* <Paper > */}
                                 <Typography variant="body2" color="textSecondary" component="p">
                                     Cuisine: {recipe.cuisine}
@@ -131,6 +131,15 @@ const RecipeTile = ({userId, recipe}) => {
                                 {/* </Paper> */}
 
                             </Grid>
+
+                            <Grid item xs={6} sm={6} style={{textAlign: "left",paddingLeft: "5px",}} >
+                                {/* <Paper > */}
+                                <Typography variant="body2" color="textSecondary" component="p">
+                                    Type: {recipe.rec_type}
+                                </Typography>
+                                {/* </Paper> */}
+                            </Grid>
+
                         </Grid>
                         {/* <Typography variant="body2" color="textSecondary" component="p">
                             Cooking Time: {recipe.cooking_time}min &nbsp;&nbsp;&nbsp; Pax: {recipe.serving_pax} <br/>
@@ -325,7 +334,7 @@ class MyRecipePage extends Component {
                                     Failed to delete recipe. Please try again.
                                 </Alert>
                             )
-                        } else if (this.props.my_recipes.inProgress === "delete_success"){
+                        } else if (this.props.my_recipes.inProgress === "delete_success") {
                             return (
                                 <Alert severity="success">
                                     Successfully deleted recipe

@@ -236,7 +236,7 @@ export default function SearchBar() {
                 setAdvanceSearch("")
                 canSubmit = false;
             } else {
-                toSend.push({ "category": "search", "keywords": advanceSearch });
+                toSend.push({ "category": "recingred", "keywords": advanceSearch });
             }
 
             if (toSend.length > 0 && canSubmit) {
