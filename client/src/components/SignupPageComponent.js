@@ -153,8 +153,12 @@ class SignupPage extends Component {
                     return resp;
                 }   
             })
-            .then(resp => console.log(resp))
-            .catch(err => console.log(err));
+            .then(resp => {
+                // console.log(resp)
+            })
+            .catch(err => {
+                // console.log(err)
+            });
         }
     }
 
@@ -172,12 +176,12 @@ class SignupPage extends Component {
         if (value.length ===0 ){
             this.setState({validate: {...this.state.validate, password:"has-danger"}});
         } else if (!no_whitespace.test(value)){
-            console.log("here");
+            //console.log("here");
             this.setState({validate: {...this.state.validate, password:"white-space"}});
         } else if (confirmPassword !== value) {
-            console.log(this.state.confirm_password);
-            console.log(value);
-            console.log(this.state.confirm_password !== value); 
+            //console.log(this.state.confirm_password);
+            //console.log(value);
+            //console.log(this.state.confirm_password !== value); 
             this.setState({validate: {...this.state.validate,  password: "has-success", confirm_password:"password-mismatch"}});
         } else {
             this.setState({validate: {...this.state.validate, password:"has-success", confirm_password: "has-success"}});
@@ -275,7 +279,7 @@ class SignupPage extends Component {
         })
         .then(resp => resp.json())
         .then(resp => {
-            console.log(JSON.stringify(resp));
+            //console.log(JSON.stringify(resp));
             if (resp === "Added Successfully") {
                 // this.props.signup_success().then(() => this.props.login_attempt(username, password))
                 // .then(() => <Redirect to="/explore" /> );
@@ -286,7 +290,7 @@ class SignupPage extends Component {
         })
         .catch(err => {
             this.props.signup_failed();
-            console.log(err)
+            //console.log(err)
         });
     }
 
@@ -304,10 +308,10 @@ class SignupPage extends Component {
     }
 
     renderSignupForm() {
-        console.log(JSON.stringify(this.state))
+        //console.log(JSON.stringify(this.state))
         
         // const validation = this.validate();
-        // console.log(JSON.stringify(validation))
+        // //console.log(JSON.stringify(validation))
 
         const canSubmit = (this.state.validate.first_name === "has-success" && this.state.validate.last_name === "has-success" &&
             this.state.validate.email === "has-success"  && this.state.validate.username === "has-success" && this.state.validate.password === "has-success" &&

@@ -99,7 +99,7 @@ class Header extends Component {
   }
 
   toggleProfile() {
-    console.log("triggered")
+    //console.log("triggered")
     this.setState({ isProfileOpen: !this.state.isProfileOpen });
   }
 
@@ -111,7 +111,7 @@ class Header extends Component {
 
   blurToggleProfile(event) {
     event.preventDefault();
-    console.log('triggered')
+    //console.log('triggered')
     if (this.state.isProfileOpen) {
       this.setState({ isProfileOpen: !this.state.isProfileOpen });
     }
@@ -120,8 +120,8 @@ class Header extends Component {
   submitSearch(event) {
     event.preventDefault();
     this.setState({ search: null });
-    console.log("Searching for: " + this.state.search);
-    alert("Searching for: " + this.state.search);
+    //console.log("Searching for: " + this.state.search);
+    // alert("Searching for: " + this.state.search);
   }
 
   getCurrentDate(separator = '') {
