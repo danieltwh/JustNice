@@ -358,6 +358,8 @@ class RecipeCreationPage extends Component {
                             this.trackContent(this.rec_instructions)
                             this.handleChange(e)
                         }}
+                        style={{minHeight: "180px"}}
+                        
                     ></textarea>
                 </div>
             </FormGroup>

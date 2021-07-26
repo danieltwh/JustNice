@@ -14,6 +14,9 @@ import { get_recipe, get_recipe_reset } from "../redux/ActionCreators";
 import Loading from "./LoadingComponent";
 import { baseUrl } from '../shared/baseUrl';
 
+import Alert from '@material-ui/lab/Alert';
+import Image from "material-ui-image";
+
 const mapStateToProps = state => {
     return {
         curr_recipe: state.curr_recipe
@@ -27,12 +30,12 @@ const mapDispatchToProps = (dispatch) => ({
 
 function toTitleCase(str) {
     return str.replace(
-      /\w\S*/g,
-      function(txt) {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-      }
+        /\w\S*/g,
+        function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        }
     );
-  }
+}
 
 const RenderIngredients = ({ rec_ingredients }) => {
     if (rec_ingredients.length <= 0) {
@@ -72,7 +75,10 @@ const RenderTitle = ({ rec_id, rec_name, rec_img }) => {
     const recipeTiles = (
         <div key={rec_id} className="recipe-details-title">
             <div className="row">
-                <img className="recipe-tile-img col-6" src={rec_img} alt={rec_name} style={{ paddingRight: "5px" }} />
+                <div className="col-6" style={{ paddingRight: "5px" }} >
+                    <Image src={rec_img} alt={rec_name} aspectRatio={(1 / 1)} />
+                </div>
+
                 <div className="col-6" style={{ display: "flex", alignItems: "center", flexWrap: "wrap", paddingLeft: "0px" }}>
                     <div>
                         <h3 style={{ verticalAlign: "middle", margin: "0" }}>{rec_name}</h3>
@@ -135,9 +141,9 @@ const RenderInformation = ({ cooking_time, serving_pax, cuisine, rec_type, isPub
                     <div style={{ fontSize: "16px" }}>
                         <strong>Privacy Setting</strong>
                     </div>
-                    {(isPublished) ? 
-                    <><FontAwesomeIcon icon="lock-open" />&nbsp; Public</> : 
-                    <><FontAwesomeIcon icon="lock" />&nbsp; Private</>}
+                    {(isPublished) ?
+                        <><FontAwesomeIcon icon="lock-open" />&nbsp; Public</> :
+                        <><FontAwesomeIcon icon="lock" />&nbsp; Private</>}
                 </div>
 
             </div>
@@ -193,6 +199,23 @@ class RecipeDetailsPage extends Component {
         } else {
             return (
                 <div className="container-fluid">
+
+                    {(() => {
+                        if (this.props.curr_recipe.inProgress === "failed") {
+                            return (
+                                <Alert severity="error">{this.props.curr_recipe.errMess}</Alert>
+                            )
+
+                        } else if (this.props.curr_recipe.inProgress === "inProgress") {
+                            return (
+                                <>
+                                    <Alert severity="info">Hold on...Serving up the recipe soon!</Alert>
+                                    <Loading />
+                                </>
+                            )
+                        }
+                    })()}
+
 
                     <div className="row">
                         <div className="col-12 col-md-6 recipe-details-left-box">
