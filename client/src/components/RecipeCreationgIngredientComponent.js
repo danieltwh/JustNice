@@ -55,7 +55,7 @@ class RecipeIngredients extends Component {
     }
 
     handleSubmit() {
-        console.log(JSON.stringify(this.state))
+        //console.log(JSON.stringify(this.state))
         alert(JSON.stringify(this.state))
     }
 
@@ -122,7 +122,7 @@ class RecipeIngredients extends Component {
     }
 
     handleIngredientUnitChange(id, name, isValid, newValue) {
-        console.log("Ingredient unit changing..");
+        //console.log("Ingredient unit changing..");
         var newList  = this.state.ingredients.map(ingredient => {
             if (ingredient.ingred_id === id) {
                 var validity;
@@ -395,7 +395,7 @@ class RecipeIngredients extends Component {
 
     render() {
 
-        console.log(JSON.stringify(this.state.ingredients))
+        //console.log(JSON.stringify(this.state.ingredients))
         return (
             <div className="recipe-details-ingredient-box">
                 

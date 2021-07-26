@@ -62,7 +62,7 @@ function getCurrentDateFunc(separator = '') {
 class RecipeCreationPage extends Component {
     constructor(props) {
         super(props);
-        console.log(getCurrentDateFunc());
+        //console.log(getCurrentDateFunc());
         if (this.props.rec_id !== "new" && this.props.curr_recipe.recipe !== null && (this.props.curr_recipe.inProgress === "success" || this.props.curr_recipe.inProgress === "updating" ||
             this.props.curr_recipe.inProgress === "update_failed")) {
             this.state = {
@@ -203,7 +203,7 @@ class RecipeCreationPage extends Component {
                 <div className="row">
 
                     <div className="col-6" style={{ paddingRight: "5px" }} >
-                        <Image onClick={() => console.log('onClick')} src={(this.props.images.recipe.inProgress === "success" || this.props.images.recipe.inProgress === "default") ? 
+                        <Image src={(this.props.images.recipe.inProgress === "success" || this.props.images.recipe.inProgress === "default") ? 
                         `${baseUrl}${this.props.images.recipe.url}?${this.state.change}` : 
                         ""}
                             aspectRatio={(1 / 1)} />
@@ -398,7 +398,7 @@ class RecipeCreationPage extends Component {
 
         test = test || this.state.rec_name === "";
         test = test || this.state.rec_instructions === "";
-        console.log(test);
+        //console.log(test);
         return test;
     }
 
@@ -407,9 +407,9 @@ class RecipeCreationPage extends Component {
         //     <Loading />
         // );
 
-        console.log(JSON.stringify(this.state))
-        console.log(JSON.stringify(this.props.images.recipe.url))
-        console.log(JSON.stringify(this.state.image))
+        //console.log(JSON.stringify(this.state))
+        //console.log(JSON.stringify(this.props.images.recipe.url))
+        //console.log(JSON.stringify(this.state.image))
 
         if (this.props.curr_recipe.inProgress === "loading") {
             return (

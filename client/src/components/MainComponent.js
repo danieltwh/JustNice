@@ -234,8 +234,8 @@ class Main extends Component {
     }
 
     render() {
-      console.log(JSON.stringify(this.props))
-      console.log(JSON.stringify(this.props.location.pathname))
+      //console.log(JSON.stringify(this.props))
+      //console.log(JSON.stringify(this.props.location.pathname))
 
       const checkCurrGrocList = /\/grocerylist\/\d/
       // console.log(this.props.location.pathname.test(checkCurrGrocList));
@@ -296,7 +296,7 @@ class Main extends Component {
           </div>
         );
       } else {
-        console.log("Not Login")
+        //console.log("Not Login")
         return (
           <div style={{padding:"0"}}>
             <PublicHeader/>

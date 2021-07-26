@@ -39,7 +39,7 @@ export const login_attempt = (username, password) => (dispatch) => {
             return response.json()
         })
         .then(resp => {
-            console.log(resp);
+            //console.log(resp);
             if (resp.status === 1) {
                 // return add_users(users);
                 dispatch(login_success(resp.user));
@@ -52,7 +52,7 @@ export const login_attempt = (username, password) => (dispatch) => {
         })
         .catch(error => {
             dispatch(login_failed("Failed to login. Please try again"));
-            console.log(error.message)
+            //console.log(error.message)
         });
 };
 
@@ -94,7 +94,9 @@ export const signup_attempt = (first_name, last_name, email, username, password)
         .then(response => {
             return response.json()
         })
-        .catch(error => console.log(error.message));
+        .catch(error => {
+            //console.log(error.message)
+        });
 };
 
 export const signup_inProgress = () => ({
@@ -148,7 +150,9 @@ export const login_edit_attempt = (userId, first_name, last_name, email, usernam
                 dispatch(login_edit_failed(response.message));
             }
         })
-        .catch(error => console.log(error.message));
+        .catch(error => {
+            //console.log(error.message);
+        })
 };
 
 export const login_edit_inProgress = () => ({
@@ -171,7 +175,7 @@ export const login_edit_reset = (errMess) => ({
 
 
 export const signout = () => {
-    console.log("signout triggered")
+    //console.log("signout triggered")
 
     return ({
         type: ActionTypes.SIGNOUT
@@ -190,7 +194,7 @@ export const load_myrecipes = (user_id) => (dispatch) => {
     })
         .then(resp => resp.json())
         .then(resp => {
-            console.log(resp);
+            //console.log(resp);
             if (resp.length >= 0) {
                 // return add_users(users);
                 dispatch(load_myrecipes_success(resp));
@@ -230,7 +234,7 @@ export const get_recipe = (rec_id) => (dispatch) => {
     })
         .then(resp => resp.json())
         .then(resp => {
-            // console.log(JSON.stringify(resp));
+            // //console.log(JSON.stringify(resp));
             if (true) {
                 // return add_users(users);
                 dispatch(get_recipe_success(resp));
@@ -240,7 +244,7 @@ export const get_recipe = (rec_id) => (dispatch) => {
         })
         .catch(err => {
             dispatch(get_recipe_failed("Error"));
-            console.log(err)
+            //console.log(err)
         });
 }
 
@@ -330,7 +334,7 @@ export const update_recipe = (newRecipe, user_id) => (dispatch) => {
             .catch(err => {
                 // alert(err);
                 dispatch(update_recipe_failed("Error"))
-                console.log(err)
+                //console.log(err)
             });
     } else {
         return fetch(baseUrl + "recingred/recipe/", {
@@ -371,7 +375,7 @@ export const update_recipe = (newRecipe, user_id) => (dispatch) => {
             .catch(err => {
                 // alert(err);
                 dispatch(update_recipe_failed("Failed to update recipe. Please try again."));
-                console.log(err)
+                //console.log(err)
             });
     }
 }
@@ -410,7 +414,7 @@ export const delete_recipe = (userId, recipeId) => (dispatch) => {
     })
     .catch(err => {
         dispatch(delete_recipe_failed(err));
-        console.log(err);
+        //console.log(err);
     })
 }
 
@@ -446,7 +450,7 @@ export const load_myGrocList = (user_id) => (dispatch) => {
         .catch(err => {
             // alert(err);
             load_myGrocList_failed(err)
-            console.log(err)
+            //console.log(err)
         });
 
 }
@@ -486,7 +490,7 @@ export const create_new_GrocList = (user_id, list_id) => (dispatch) => {
     })
         .then(resp => resp.json())
         .then(resp => {
-            console.log(JSON.stringify(resp));
+            //console.log(JSON.stringify(resp));
             if (resp.status === "New list created") {
                 // return add_users(users);
                 // dispatch(load_myGrocList(user_id));
@@ -499,7 +503,7 @@ export const create_new_GrocList = (user_id, list_id) => (dispatch) => {
         .catch(err => {
             // alert(err);
             dispatch(load_myGrocList_failed("Failed to create new list. Please try again."));
-            console.log(err)
+            //console.log(err)
         });
 }
 
@@ -520,7 +524,7 @@ export const load_currGrocList = (user_id, grocList_id) => (dispatch) => {
         .catch(err => {
             // alert(err);
             dispatch(load_currGrocList_failed(err));
-            console.log(err)
+            //console.log(err)
         });
 }
 
@@ -562,13 +566,13 @@ export const load_profile_image = (userId) => (dispatch) => {
     })
         .then(resp => resp.json())
         .then(resp => {
-            console.log(JSON.stringify(resp));
+            //console.log(JSON.stringify(resp));
             dispatch(load_profile_image_success(resp));
         })
         .catch(err => {
             dispatch(load_profile_image_failed(err));
             // alert(err);
-            console.log(err)
+            //console.log(err)
         });
 }
 
@@ -605,7 +609,7 @@ export const update_profile_image = (userId, newImage) => (dispatch) => {
     })
         .then(resp => resp.json())
         .then(resp => {
-            console.log(JSON.stringify(resp));
+            //console.log(JSON.stringify(resp));
             if (resp.status === "new") {
                 dispatch(load_profile_image_success(resp));
                 return resp;
@@ -617,7 +621,7 @@ export const update_profile_image = (userId, newImage) => (dispatch) => {
         .catch(err => {
             dispatch(update_profile_image_failed("Failed to update image. Please try again."));
             // alert(err);
-            console.log(err)
+            //console.log(err)
         });
 }
 
@@ -651,13 +655,13 @@ export const load_recipe_image = (recipeId) => (dispatch) => {
     })
         .then(resp => resp.json())
         .then(resp => {
-            console.log(JSON.stringify(resp));
+            //console.log(JSON.stringify(resp));
             dispatch(load_recipe_image_success(resp));
         })
         .catch(err => {
             dispatch(load_recipe_image_failed(err));
             // alert(err);
-            console.log(err)
+            //console.log(err)
         });
 }
 
@@ -698,7 +702,7 @@ export const update_recipe_image = (recipeId, newImage) => (dispatch) => {
     })
         .then(resp => resp.json())
         .then(resp => {
-            console.log(JSON.stringify(resp));
+            //console.log(JSON.stringify(resp));
             if (resp.status === "new") {
                 dispatch(load_recipe_image_success(resp));
                 return resp;
@@ -710,7 +714,7 @@ export const update_recipe_image = (recipeId, newImage) => (dispatch) => {
         .catch(err => {
             dispatch(update_recipe_image_failed("Failed to update image. Please try again."));
             // alert(err);
-            console.log(err)
+            //console.log(err)
         });
 }
 
@@ -736,7 +740,7 @@ export const load_explore_recipes = () => (dispatch) => {
     return fetch(baseUrl + `recingred/search/`)
         .then(resp => resp.json())
         .then(resp => {
-            // console.log(JSON.stringify(resp));
+            // //console.log(JSON.stringify(resp));
             if (resp.length > 0) {
                 // return add_users(users);
                 dispatch(load_explore_recipes_success(resp));
@@ -747,7 +751,7 @@ export const load_explore_recipes = () => (dispatch) => {
         .catch(err => {
             // alert(err);
             dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
-            console.log(err)
+            //console.log(err)
         });
 
 }
@@ -795,7 +799,7 @@ export const search_recipes = (search) => (dispatch) => {
         .catch(err => {
             // alert(err);
             dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
-            console.log(err)
+            //console.log(err)
         });
 }
 
@@ -820,7 +824,7 @@ export const complex_search_recipes = (search) => (dispatch) => {
         .catch(err => {
             // alert(err);
             dispatch(load_explore_recipes_failed("Sorry, failed to load recipes. Please try again!"));
-            console.log(err)
+            //console.log(err)
         });
 }
 

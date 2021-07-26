@@ -66,7 +66,7 @@ class AddRecipe extends Component {
 
     componentDidMount() {
         if (this.props.my_recipes.inProgress === "not-loaded") {
-            console.log(this.props.my_recipes.inProgress);
+            //console.log(this.props.my_recipes.inProgress);
             this.props.load_myrecipes(this.props.login.user.id);
         }
     }
@@ -186,17 +186,19 @@ class AddRecipe extends Component {
         })
             .then(resp => resp.json())
             .then(resp => {
-                console.log(JSON.stringify(resp));
+                //console.log(JSON.stringify(resp));
                 if (resp.status === "Successfully updated") {
                     this.props.load_currGrocList(this.props.login.user.id, this.props.groc_id);
                 } else {
                 }
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                //console.log(err)
+            });
     }
 
     render() {
-        console.log(JSON.stringify(this.state));
+        //console.log(JSON.stringify(this.state));
         return (
             <Modal size="xl" isOpen={this.props.isEdit} toggle={event => this.props.toggleEdit(event)} className="">
                 <form onSubmit={event => this.handleSubmit(event)}>
