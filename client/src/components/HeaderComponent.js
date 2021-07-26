@@ -296,7 +296,7 @@ class Header extends Component {
 
           <Dropdown className="profile-icon">
             <Dropdown.Toggle className="btn profile-border" variant="light" id="dropdown-basic" style={{
-              borderColor: "rgba(0, 0, 0, 0.30)", borderWidth: "medium", backgroundColor: "transparent", padding: "0px"
+              borderColor: "rgba(0, 0, 0, 0.30)", borderWidth: "medium", backgroundColor: "#FFFFFF", padding: "0px"
             }} >
               {/* <Image src={(this.props.images.profile.inProgress === "success") ? `${baseUrl}${this.props.images.profile.url}` : ""}
                         aspectRatio={(1 / 1)} /> */}
