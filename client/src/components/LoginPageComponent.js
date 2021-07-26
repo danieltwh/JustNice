@@ -90,7 +90,7 @@ class LoginPage extends Component {
         if (value.length === 0) {
             this.setState({ validate: { ...this.state.validate, password: "has-danger" } });
         } else if (!no_whitespace.test(value)) {
-            console.log("here");
+            //console.log("here");
             this.setState({ validate: { ...this.state.validate, password: "white-space" } });
         } else {
             this.setState({ validate: { ...this.state.validate, password: "has-success", confirm_password: "has-success" } });
@@ -99,12 +99,12 @@ class LoginPage extends Component {
 
     isDisabled() {
         var test = (this.state.validate.username !== "has-success" || this.state.validate.password !== "has-success")
-        console.log(test);
+        //console.log(test);
         return test;
     }
 
     renderLoginForm() {
-        console.log(JSON.stringify(this.state));
+        //console.log(JSON.stringify(this.state));
 
         const loginDisabled = this.isDisabled();
 

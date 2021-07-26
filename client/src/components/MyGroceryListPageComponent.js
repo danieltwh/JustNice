@@ -80,7 +80,7 @@ class MyGroceryListPage extends Component {
     openOptions(event) {
         event.preventDefault();
         event.stopPropagation();
-        // console.log("open Options")
+        // //console.log("open Options")
         this.setState({ isOptionsOpen: true }, () => {
             document.addEventListener("click", this.closeOptions);
         });
@@ -88,10 +88,10 @@ class MyGroceryListPage extends Component {
 
     closeOptions(event) {
         event.stopPropagation();
-        // console.log(document.getElementById("grocery-list-options").contains(event.target));
+        // //console.log(document.getElementById("grocery-list-options").contains(event.target));
         if (this.optionsMenu !== event.target && !this.optionsMenu.contains(event.target)) {
-            // console.log("close Options")
-            // console.log(this.optionsMenu)
+            // //console.log("close Options")
+            // //console.log(this.optionsMenu)
             this.setState({ isOptionsOpen: false }, () => {
                 document.removeEventListener("click", this.closeOptions);
             });
@@ -142,7 +142,7 @@ class MyGroceryListPage extends Component {
     }
 
     render() {
-        console.log(this.state);
+        //console.log(this.state);
         if(Boolean(this.state.newList)){
             // alert("triggered")
             return (<Redirect to={`/grocerylist/${this.state.newList}`} />)
