@@ -61,9 +61,9 @@ class PublicHeader extends Component {
                       <NavLink className="nav-link" to="/home">Home</NavLink>
                     </NavItem>
 
-                    <NavItem>
+                    {/* <NavItem>
                       <NavLink className="nav-link" to="/aboutus">About Us</NavLink>
-                    </NavItem>
+                    </NavItem> */}
 
                     {/* <NavItem>
                       <NavLink className="nav-link" to="/myrecipes/" >My Recipe</NavLink>

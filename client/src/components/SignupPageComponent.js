@@ -479,10 +479,11 @@ class SignupPage extends Component {
                     })()}
                 </FormGroup>
         
-                <FormGroup check>
+                {/* <FormGroup check>
                     <Input type="checkbox" name="check" id="exampleCheck"/>
                     <Label for="exampleCheck" check>I accept the Terms of Use & Privacy Policy</Label>
-                </FormGroup>
+                </FormGroup> */}
+                
                 <button type="submit" className="signup-button btn btn-primary pull-right" disabled={!canSubmit}>Sign Up</button>
             </Form>
         )

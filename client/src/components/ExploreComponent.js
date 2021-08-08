@@ -61,8 +61,6 @@ const useStyles = makeStyles({
         transform: 'scale(0.8)',
     },
     title: {
-        fontSize: 20,
-        padding: 0,
     },
     pos: {
         marginBottom: 12,
@@ -143,62 +141,63 @@ export default function ExplorePage() {
 
                     <Card className="recipe-tile" style={{ height: "95%", }}>
                     <Link to={`/explore/${parseInt(recipe.rec_id, 10)}`} style={{ textDecoration: "none", color: "inherit" }}>
-                        <CardContent>
-                            <Typography className={classes.title}>
+                        <CardContent >
+                            <Typography className="recipe-tile-title">
                                 {recipe.rec_name}
                             </Typography>
                         </CardContent>
 
                         
-                            <Image className="recipe-tile-img" src={baseUrl + recipe.url} alt={recipe.rec_name} />
-                            <CardContent className={classes.recipeDetails}>
-                                <Grid container rowSpacing={2} columnSpacing={4} direction="row" justifyContent="center" alignItems="flex-start">
-                                    <Grid item xs={6} sm={6}>
-                                        {/* <Paper > */}
-                                        <Typography variant="body2" color="textSecondary" component="p">
-                                            Time: {recipe.cooking_time}min
-                                        </Typography>
-                                        {/* </Paper> */}
-                                    </Grid>
-                                    <Grid className={classes.paxDetails} item xs={6} sm={6} >
-                                        {/* <Paper > */}
-                                        <Typography variant="body2" color="textSecondary" component="p">
-                                            Pax: {recipe.serving_pax}
-                                        </Typography>
-                                        {/* </Paper> */}
-                                    </Grid>
-
-                                    <Grid item xs={6} sm={6} md={6}>
-                                        {/* <Paper > */}
-                                        <Typography variant="body2" color="textSecondary" component="p">
-                                            Cuisine: {recipe.cuisine}
-                                        </Typography>
-                                        {/* </Paper> */}
-
-                                    </Grid>
-                                    <Grid className={classes.recTypeDetails} item xs={6} sm={6} md={6}>
-                                        {/* <Paper > */}
-                                        <Typography variant="body2" color="textSecondary" component="p">
-                                            Type: {recipe.rec_type}
-                                        </Typography>
-                                        {/* </Paper> */}
-
-                                    </Grid>
+                        <Image className="recipe-tile-img" src={baseUrl + recipe.url} alt={recipe.rec_name} />
+                        <CardContent className="recipe-tile-details-box">
+                            <Grid container rowSpacing={2} columnSpacing={4} direction="row" justifyContent="center" alignItems="flex-start">
+                                <Grid item xs={6} sm={6}>
+                                    {/* <Paper > */}
+                                    <Typography variant="body2" color="textSecondary" component="p" className="recipe-tile-details">
+                                        Time: {recipe.cooking_time}min
+                                    </Typography>
+                                    {/* </Paper> */}
                                 </Grid>
-                                {/* <Typography variant="body2" color="textSecondary" component="p">
-                            Cooking Time: {recipe.cooking_time}min &nbsp;&nbsp;&nbsp; Pax: {recipe.serving_pax} <br/>
-                            Cuisine: {recipe.cuisine}
-                            </Typography> */}
-                            </CardContent>
-                        </Link>
+                                <Grid className={classes.paxDetails} item xs={6} sm={6} >
+                                    {/* <Paper > */}
+                                    <Typography variant="body2" color="textSecondary" component="p" className="recipe-tile-details">
+                                        Pax: {recipe.serving_pax}
+                                    </Typography>
+                                    {/* </Paper> */}
+                                </Grid>
 
-                        <CardActions className={classes.cardBottom}>
-                            <Grid container direction="row" justify="flex-end" alignItems="flex-end">
-                                <Grid item>
-                                    <Button size="small" color="primary">Share</Button>
+                                <Grid item xs={6} sm={6} md={6}>
+                                    {/* <Paper > */}
+                                    <Typography variant="body2" color="textSecondary" component="p" className="recipe-tile-details">
+                                        Cuisine: {recipe.cuisine}
+                                    </Typography>
+                                    {/* </Paper> */}
+
+                                </Grid>
+                                <Grid className={classes.recTypeDetails} item xs={6} sm={6} md={6}>
+                                    {/* <Paper > */}
+                                    <Typography variant="body2" color="textSecondary" component="p" className="recipe-tile-details">
+                                        Type: {recipe.rec_type}
+                                    </Typography>
+                                    {/* </Paper> */}
+
                                 </Grid>
                             </Grid>
-                        </CardActions>
+                            {/* <Typography variant="body2" color="textSecondary" component="p">
+                        Cooking Time: {recipe.cooking_time}min &nbsp;&nbsp;&nbsp; Pax: {recipe.serving_pax} <br/>
+                        Cuisine: {recipe.cuisine}
+                        </Typography> */}
+                        </CardContent>
+                    </Link>
+
+                    
+                    <CardActions className={classes.cardBottom}>
+                        <Grid container direction="row" justify="flex-end" alignItems="flex-end">
+                            <Grid item>
+                                <Button size="small" color="primary">Share</Button>
+                            </Grid>
+                        </Grid>
+                    </CardActions>
 
 
                         {/* <CardActions>

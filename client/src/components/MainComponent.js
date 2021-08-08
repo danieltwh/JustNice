@@ -303,7 +303,7 @@ class Main extends Component {
             <Switch>
               <Route path="/login" component={() => <LoginPage login_attempt={this.props.login_attempt} />} />
               <Route path="/home" component={() => <PublicHomePage />} />
-              <Route path="/aboutus" component={() => <PublicAboutUsPage />} />
+              {/* <Route path="/aboutus" component={() => <PublicAboutUsPage />} /> */}
               <Route path="/signup" component={() => <SignupPage signup_success={this.props.signup_success}/>} />
               <Redirect to="/home" />
             </Switch>
