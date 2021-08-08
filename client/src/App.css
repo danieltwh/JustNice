@@ -3,6 +3,10 @@
   background-repeat: no-repeat;
 } */
 
+.tab {
+  margin-left: 10px;
+}
+
 .row-header{
   margin:0px auto;
   padding:0px auto;
@@ -25,9 +29,15 @@
   background-color: #e9ecef;
   text-decoration: none;
 }
+
 .recipe-tile-title {
-  font-size: 20px;
-  }
+  font-size: 18px;
+  padding: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 27px;
+}
 
 .recipe-tile-img {
   width: 100%;
@@ -42,6 +52,21 @@
   height: 171px
 } */
 
+
+.recipe-tile-details-box {
+  padding: 2px 10px 4px 10px !important;
+  align-items: center;
+  height: 60px;
+}
+
+.recipe-tile-details {
+  /* white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 17px; */
+}
+
+
 .share-button{
   color: 'white';
   background-color: 'blue';
@@ -50,6 +75,12 @@
   float: 'right';
   position: 'relative';
   transform: 'translateY(-50%)';
+}
+
+.recipe-tile-edit-button {
+  position: relative;
+  right: 2px;
+  bottom: -2px;
 }
 
 .footer{
@@ -288,12 +319,25 @@ a.nav-link:hover {
   border-color: #f7fff7;
 }
 
-/********* Public Learn More *********/ 
-#publicpage-learnmore {
+/********* Public Page *********/ 
+.welcome {
+  color: #ffe66d ;
+}
+
+#publicpage-document {
   background-color: #4ecdc4;
   border-color: #f7fff7;
-  color: #f7fff7
+  color: #f7fff7;
+  margin-right: 20px;
 }
+
+#publicpage-videoposter {
+  background-color: #ff6b6b;
+  border-color: #f7fff7;
+  color: #f7fff7;
+  margin-right: 20px;
+}
+
 
 /********* Public Sign Up Form *********/ 
 
@@ -869,7 +913,34 @@ input[type=checkbox]:checked + label.strikethrough{
     margin-top: 10px;
     align-self: flex-start;
   }
-  
+
+  .recipe-tile-title {
+    font-size: 15px !important;
+    height: 27px;
+  }
+
+  .recipe-tile-details {
+    font-size: 12px !important;
+  }
+
+  .recipe-tile-edit-button {
+    font-size: 12px !important;
+    position: relative;
+    right: 2px;
+    bottom: 0px;
+  }
+
+  .recipe-tile-details-box {
+    padding: 2px 10px 4px 10px !important;
+    align-items: center;
+    height: 75px;
+  }
+
+  .welcome{
+    text-align: center;
+    font-size: 56px;
+ 
+  }
 
 
 }

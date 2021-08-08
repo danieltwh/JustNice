@@ -98,7 +98,7 @@ const RecipeTile = ({ userId, recipe }) => {
             <Card className="recipe-tile" style={{ height: "95%", }}>
                 <Link to={`/myrecipes/${parseInt(recipe.rec_id, 10)}`} style={{ textDecoration: "none", color: "inherit" }}>
                     <CardContent>
-                        <Typography style={{ fontSize: "20px", padding: "0" }}>
+                        <Typography className="recipe-tile-title">
                             {recipe.rec_name}
                         </Typography>
                     </CardContent>
@@ -106,18 +106,19 @@ const RecipeTile = ({ userId, recipe }) => {
 
 
                     <Image className="recipe-tile-img" src={`${baseUrl}${recipe.url}?${change}`} alt={recipe.rec_name} />
-                    <CardContent style={{ padding: "2px 10px 5px 10px", alignItems: "center", }}>
+                    <CardContent className="recipe-tile-details-box">
                         <Grid container rowSpacing={2} columnSpacing={4} direction="row" justifyContent="center" alignItems="flex-start">
                             <Grid item xs={6} sm={6}>
                                 {/* <Paper > */}
-                                <Typography variant="body2" color="textSecondary" component="p">
+                                <Typography variant="body2" color="textSecondary"  component="p"  
+                                className="recipe-tile-details" >
                                     Time: {recipe.cooking_time}min
                                 </Typography>
                                 {/* </Paper> */}
                             </Grid>
                             <Grid style={{ textAlign: "center" }} item xs={6} sm={6} style={{textAlign: "left",paddingLeft: "5px",}} >
                                 {/* <Paper > */}
-                                <Typography variant="body2" color="textSecondary" component="p">
+                                <Typography variant="body2" color="textSecondary" component="p" className="recipe-tile-details">
                                     Pax: {recipe.serving_pax}
                                 </Typography>
                                 {/* </Paper> */}
@@ -125,7 +126,7 @@ const RecipeTile = ({ userId, recipe }) => {
 
                             <Grid item xs={6} sm={6}  >
                                 {/* <Paper > */}
-                                <Typography variant="body2" color="textSecondary" component="p">
+                                <Typography variant="body2" color="textSecondary" component="p" className="recipe-tile-details">
                                     Cuisine: {recipe.cuisine}
                                 </Typography>
                                 {/* </Paper> */}
@@ -134,7 +135,7 @@ const RecipeTile = ({ userId, recipe }) => {
 
                             <Grid item xs={6} sm={6} style={{textAlign: "left",paddingLeft: "5px",}} >
                                 {/* <Paper > */}
-                                <Typography variant="body2" color="textSecondary" component="p">
+                                <Typography variant="body2" color="textSecondary" component="p" className="recipe-tile-details">
                                     Type: {recipe.rec_type}
                                 </Typography>
                                 {/* </Paper> */}
@@ -149,8 +150,8 @@ const RecipeTile = ({ userId, recipe }) => {
                 </Link>
 
 
-                <div>
-                    <Button variant="contained" color="primary" className="pull-right" onClick={handleClick}>
+                <div style={{ width: "100%", height: "30px"}}>
+                    <Button variant="contained" color="primary" className="pull-right recipe-tile-edit-button" onClick={handleClick}>
                         <FontAwesomeIcon icon="edit" size="sm" />&nbsp; Edit
                     </Button>
 
